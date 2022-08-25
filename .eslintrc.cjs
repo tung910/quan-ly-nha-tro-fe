@@ -23,6 +23,7 @@ module.exports = {
         },
     },
     rules: {
+        'linebreak-style': ['error', 'windows'],
         'comma-dangle': [
             'error',
             {
