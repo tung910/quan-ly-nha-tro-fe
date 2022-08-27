@@ -16,9 +16,9 @@ yarn install
 -   Format code
 
 ```bash
-npm run format
+npm run beautiful
 # or
-yarn format
+yarn beautiful
 ```
 
 -   Check format code
