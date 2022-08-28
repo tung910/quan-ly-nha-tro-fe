@@ -8,10 +8,17 @@
         "build": "tsc && vite build",
         "preview": "vite preview",
         "lint": "eslint . --ext ts --ext tsx --ext js",
-        "format": "prettier --write \"**/*.+(js|jsx|json|ts|tsx|css|md)\"",
         "check:types": "tsc --pretty --noEmit",
         "check:format": "prettier --check .",
-        "check": "npm run check:format && npm run check:lint && npm run check:types"
+        "beautiful": "lint-staged"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "src/**/*.{js,json,tsx,ts}": "prettier --single-quote --trailing-comma es5 --tab-width 4 --write"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^1.8.5",
@@ -32,6 +39,9 @@
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-react": "^7.30.1",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "husky": "^8.0.1",
+        "lint-staged": "^13.0.3",
         "prettier-eslint": "^15.0.1",
         "typescript": "^4.6.4",
         "vite": "^3.0.7"
