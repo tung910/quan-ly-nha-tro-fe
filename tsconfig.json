@@ -20,7 +20,7 @@
             "~/*": ["src/*"],
             "~/page/*": ["src/page/*"],
             "~/layouts/*": ["src/layouts/*"],
-            "~/components/*": ["src/components/*"],
+            "~/components/*": ["src/layout/*"],
             "~/assets/*": ["src/assets/*"],
             "~/modules/*": ["src/modules/*"],
             "~/features/*": ["src/features/*"],
