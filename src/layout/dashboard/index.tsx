@@ -1,5 +1,5 @@
 /* eslint-disable no-duplicate-imports */
-import './Dashboard.module.scss';
+import './Dashboard.scss';
 import {
     DesktopOutlined,
     FileOutlined,
