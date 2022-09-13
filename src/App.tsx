@@ -1,11 +1,9 @@
-import './App.scss';
-import 'antd/dist/antd.css';
-import Dashboard from './layout/dashboard';
+import MainLayout from './layout/main-layout';
 
 function App() {
     return (
         <div>
-            <Dashboard />
+            <MainLayout />
         </div>
     );
 }
