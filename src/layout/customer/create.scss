@@ -1,0 +1,33 @@
+p {
+    margin-top: 20px;
+}
+
+.form-create {
+    border: 1px solid rgb(205, 205, 205);
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.input-create {
+    width: 400px;
+}
+
+.ant-form-item-label > label {
+    height: auto;
+}
+
+.btn-back {
+    margin-left: 45%;
+}
+
+.btn-submit {
+    margin-left: 20px;
+    background: rgb(14, 220, 7);
+    color: white;
+}
+
+.title-create {
+    font-size: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
