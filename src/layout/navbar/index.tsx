@@ -26,6 +26,9 @@ const itemsMenu: MenuItem[] = [
     getItem('Nhà trọ', 'nha-tro', <UserOutlined />, [
         getItem('Phòng trọ', 'phong-tro'),
     ]),
+    getItem('Chỉ số điện', 'nha-tro'),
+    getItem('Chỉ số', 'nha-tro', <UserOutlined />),
+    getItem('Dịch vụ', 'nha-tro', <UserOutlined />),
 ];
 const Navbar = () => {
     return (
