@@ -20,10 +20,18 @@ const MainLayout: React.FC = () => {
                 trigger={null}
                 collapsible
                 collapsed={collapsed}
+                style={{
+                    overflow: 'auto',
+                    height: '100%',
+                    position: 'fixed',
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                }}
             >
                 <Navbar />
             </Sider>
-            <Layout>
+            <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
                 <Header
                     collapsed={collapsed}
                     setCollapsed={setCollapsed}

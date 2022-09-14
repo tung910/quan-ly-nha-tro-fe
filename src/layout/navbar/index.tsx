@@ -1,5 +1,14 @@
+import { useNavigate } from 'react-router-dom';
 import { Menu, MenuProps } from 'antd';
-import { PieChartOutlined, UserOutlined } from '@ant-design/icons';
+import {
+    PieChartOutlined,
+    CalculatorOutlined,
+    HomeOutlined,
+    SolutionOutlined,
+    ThunderboltOutlined,
+    SwapOutlined,
+    AlertOutlined,
+} from '@ant-design/icons';
 import classNames from 'classnames/bind';
 import styles from './Navbar.module.scss';
 
@@ -23,20 +32,27 @@ function getItem(
 
 const itemsMenu: MenuItem[] = [
     getItem('Trang chủ', '', <PieChartOutlined />),
-    getItem('Nhà trọ', 'nha-tro', <UserOutlined />, [
-        getItem('Phòng trọ', 'phong-tro'),
+    getItem('Nhà trọ', 'motel', <HomeOutlined />, [
+        getItem('Phòng trọ', 'motel-room'),
     ]),
-    getItem('Chỉ số điện', 'nha-tro'),
-    getItem('Chỉ số', 'nha-tro', <UserOutlined />),
-    getItem('Dịch vụ', 'nha-tro', <UserOutlined />),
+    getItem('Dịch vụ', 'service', <SolutionOutlined />),
+    getItem('Chỉ số điện', 'data-power', <ThunderboltOutlined />),
+    getItem('Chỉ số nước', 'data-water', <SwapOutlined />),
+    getItem('Phát sinh', 'other-fee', <AlertOutlined />),
+    getItem('Tính tiền', 'calculator-money', <CalculatorOutlined />),
 ];
 const Navbar = () => {
+    const navigate = useNavigate();
+    const handlerNavigate = ({ key }: { key: string }) => {
+        navigate(key);
+    };
     return (
         <nav>
             <div className={cx('logo')}></div>
             <Menu
                 theme='light'
-                defaultSelectedKeys={['1']}
+                onClick={handlerNavigate}
+                defaultSelectedKeys={['']}
                 mode='inline'
                 items={itemsMenu}
             />
