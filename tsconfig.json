@@ -28,6 +28,6 @@
             "~/app/*": ["src/app/*"]
         }
     },
-    "include": ["src"],
+    "include": ["src", "declaration.d.ts"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }

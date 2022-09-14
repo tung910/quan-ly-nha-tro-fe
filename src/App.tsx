@@ -1,13 +1,19 @@
-import './App.scss';
-import 'antd/dist/antd.css';
-import Dashboard from './layout/dashboard';
+import MainLayout from './layout/main-layout';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import CreateCustomer from './pages/customer/Create';
 
 function App() {
     return (
-        <div>
-            <Dashboard />
-        </div>
+        <BrowserRouter>
+            <Routes>
+                <Route path='/' element={<MainLayout />}>
+                    <Route
+                        path='/customer/create'
+                        element={<CreateCustomer />}
+                    ></Route>
+                </Route>
+            </Routes>
+        </BrowserRouter>
     );
 }
-
 export default App;
