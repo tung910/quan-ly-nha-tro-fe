@@ -15,24 +15,16 @@ import {
 import {
     MenuProps,
     Button,
-    Table,
     Breadcrumb,
     Layout,
     Menu,
-    Card,
-    Col,
-    Row,
-    Statistic,
-    Input,
     Badge,
     Avatar,
     Image,
     DatePicker,
     Dropdown,
 } from 'antd';
-import React, { useState } from 'react';
-import type { ColumnsType } from 'antd/es/table';
-import moment from 'moment';
+import { useState } from 'react';
 const { Header, Content, Footer, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -50,44 +42,6 @@ function getItem(
         label,
     } as MenuItem;
 }
-
-interface DataType {
-    key: React.Key;
-    name: string;
-    age: number;
-    address: string;
-}
-
-const columns: ColumnsType<DataType> = [
-    {
-        title: 'Name',
-        dataIndex: 'name',
-    },
-    {
-        title: 'Age',
-        dataIndex: 'age',
-    },
-    {
-        title: 'Address',
-        dataIndex: 'address',
-    },
-    {
-        title: 'Action',
-        dataIndex: '',
-        render: () => <Button type='primary'>Xem chi tiết</Button>,
-    },
-];
-const data: DataType[] = [];
-for (let i = 0; i < 46; i++) {
-    data.push({
-        key: i,
-        name: `Edward King ${i}`,
-        age: 32,
-        address: `London, Park Lane no. ${i}`,
-    });
-}
-const { RangePicker } = DatePicker;
-const dateFormat = 'YYYY/MM/DD';
 
 const items: MenuItem[] = [
     getItem('Option 1', '1', <PieChartOutlined />),
@@ -149,11 +103,6 @@ const menu = (
 
 const Dashboard: React.FC = () => {
     const [collapsed, setCollapsed] = useState(false);
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
-    const rowSelection = {
-        selectedRowKeys,
-    };
     return (
         <Layout style={{ width: '1500px' }}>
             <Sider
@@ -207,94 +156,6 @@ const Dashboard: React.FC = () => {
                             Dashboard
                         </Breadcrumb.Item>
                     </Breadcrumb>
-                    <div
-                        className='site-layout-background'
-                        style={{ padding: 24 }}
-                    >
-                        <div className='site-statistic-demo-card'>
-                            <Row gutter={16}>
-                                <Col span={6}>
-                                    <Card>
-                                        <Statistic
-                                            title='Active'
-                                            value={11.28}
-                                            precision={2}
-                                            valueStyle={{ color: '#3f8600' }}
-                                            prefix={<ArrowUpOutlined />}
-                                            suffix='%'
-                                        />
-                                    </Card>
-                                </Col>
-                                <Col span={6}>
-                                    <Card>
-                                        <Statistic
-                                            title='Idle'
-                                            value={9.3}
-                                            precision={2}
-                                            valueStyle={{ color: '#cf1322' }}
-                                            prefix={<ArrowDownOutlined />}
-                                            suffix='%'
-                                        />
-                                    </Card>
-                                </Col>
-                                <Col span={6}>
-                                    <Card>
-                                        <Statistic
-                                            title='Idle'
-                                            value={9.3}
-                                            precision={2}
-                                            valueStyle={{ color: '#cf1322' }}
-                                            prefix={<ArrowDownOutlined />}
-                                            suffix='%'
-                                        />
-                                    </Card>
-                                </Col>
-                                <Col span={6}>
-                                    <Card>
-                                        <Statistic
-                                            title='Idle'
-                                            value={9.3}
-                                            precision={2}
-                                            valueStyle={{ color: '#cf1322' }}
-                                            prefix={<ArrowDownOutlined />}
-                                            suffix='%'
-                                        />
-                                    </Card>
-                                </Col>
-                            </Row>
-                        </div>
-                        <div style={{ marginTop: '30px' }}>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <div>
-                                    <h2>Thống Kê Nhà Trọ</h2>
-                                </div>
-                                <div>
-                                    <RangePicker
-                                        style={{ display: 'flex' }}
-                                        defaultValue={[
-                                            moment('2015/01/01', dateFormat),
-                                            moment('2015/01/01', dateFormat),
-                                        ]}
-                                        format={dateFormat}
-                                    />
-                                </div>
-                            </div>
-                            <Table
-                                rowSelection={rowSelection}
-                                columns={columns}
-                                dataSource={data}
-                            />
-                        </div>
-                        <Button disabled type='primary'>
-                            Xóa
-                        </Button>
-                    </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
                     Ant Design ©2018 Created by Ant UED
