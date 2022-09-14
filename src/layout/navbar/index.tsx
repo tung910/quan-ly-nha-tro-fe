@@ -30,11 +30,9 @@ const itemsMenu: MenuItem[] = [
 const Navbar = () => {
     return (
         <nav>
-            <div className={cx('logo')}>
-                <p className='title-logo'>Nhà Trọ Vương Anh</p>
-            </div>
+            <div className={cx('logo')}></div>
             <Menu
-                theme='dark'
+                theme='light'
                 defaultSelectedKeys={['1']}
                 mode='inline'
                 items={itemsMenu}
