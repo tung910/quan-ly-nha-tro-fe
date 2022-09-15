@@ -1,6 +1,6 @@
 import { Form, Input, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 interface DataType {
     key: React.Key;
     name: string;
@@ -37,32 +37,6 @@ const columns: ColumnsType<DataType> = [
     },
 ];
 
-const data: DataType[] = [
-    {
-        key: '1',
-        name: 'Điện',
-        price: 3000,
-        number: 1,
-    },
-    {
-        key: '2',
-        name: 'Nước',
-        price: 20000,
-        number: 1,
-    },
-    {
-        key: '3',
-        name: 'Gửi xe máy',
-        price: 80000,
-        number: 1,
-    },
-    {
-        key: '4',
-        name: 'Rác',
-        price: 50000,
-        number: 1,
-    },
-];
 const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
         selectedRows;
@@ -76,6 +50,22 @@ const ServiceCustomer = () => {
     const [selectionType, setSelectionType] = useState<'checkbox' | 'radio'>(
         'checkbox'
     );
+
+    const [state, setstate] = useState([]);
+    useEffect(() => {
+        const getData = fetch('http://localhost:3001/service')
+            .then((res) => res.json())
+            .then((data) =>
+                setstate(
+                    data.map((row: any) => ({
+                        name: row.name,
+                        price: row.price,
+                        number: row.number,
+                    }))
+                )
+            );
+    }, []);
+
     return (
         <div className={cx('service')}>
             <Table
@@ -84,7 +74,7 @@ const ServiceCustomer = () => {
                     ...rowSelection,
                 }}
                 columns={columns}
-                dataSource={data}
+                dataSource={state}
             />
         </div>
     );
