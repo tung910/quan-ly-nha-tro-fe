@@ -1,4 +1,5 @@
 import { Tabs } from 'antd';
+import MemberCustomer from '~/modules/member-customer/MemberCustomer';
 import ServiceCustomer from '~/modules/service-customer/ServiceCustomer';
 import FormCreate from '~/modules/tenant-infor/FormCreate';
 const { TabPane } = Tabs;
@@ -12,6 +13,9 @@ const TabsCreate = () => {
                 </TabPane>
                 <TabPane tab='Dịch vụ' key='tab-b'>
                     <ServiceCustomer />
+                </TabPane>
+                <TabPane tab='Thành viên' key='tab-c'>
+                    <MemberCustomer />
                 </TabPane>
             </Tabs>
         </div>
