@@ -7,10 +7,10 @@ import styles from './AddMotel.module.scss';
 import classNames from 'classnames/bind';
 import { addMotel } from '~/api/Motel';
 import { useNavigate } from 'react-router-dom';
+const cx = classNames.bind(styles);
 
 const AddMotel = () => {
     const [form] = Form.useForm();
-    const cx = classNames.bind(styles);
     const navigate = useNavigate();
     const onFinish = async (values: MotelType) => {
         const add = async () => {

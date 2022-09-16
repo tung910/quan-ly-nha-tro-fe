@@ -15,9 +15,9 @@ import { getAllMotel, removeMotel } from '~/api/Motel';
 import { MotelType } from '~/types/Model';
 import styles from './Motel.module.scss';
 import classNames from 'classnames/bind';
-const Motel = () => {
-    const cx = classNames.bind(styles);
+const cx = classNames.bind(styles);
 
+const Motel = () => {
     const [motels, setMotels] = useState<MotelType[]>([]);
     useEffect(() => {
         const getMotels = async () => {

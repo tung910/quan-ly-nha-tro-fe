@@ -8,11 +8,11 @@ import classNames from 'classnames/bind';
 import { addMotel, getMotel, updateMotel } from '~/api/Motel';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+const cx = classNames.bind(styles);
 
 const EditMotel = () => {
     const [form] = Form.useForm<MotelType>();
     const id = (useParams().id as string) || '';
-    const cx = classNames.bind(styles);
     const navigate = useNavigate();
 
     const onFinish = async (values: MotelType) => {
