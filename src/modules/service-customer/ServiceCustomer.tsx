@@ -37,41 +37,38 @@ const columns: ColumnsType<DataType> = [
     },
 ];
 
-const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
-        selectedRows;
-    },
-    getCheckboxProps: (record: DataType) => ({
-        name: record.name,
-    }),
-};
-
 const ServiceCustomer = () => {
-    const [selectionType, setSelectionType] = useState<'checkbox' | 'radio'>(
-        'checkbox'
-    );
-
+    const [selectedRow, setSelectedRow] = useState<any[]>([]);
     const [state, setstate] = useState([]);
+
     useEffect(() => {
         const getData = fetch('http://localhost:3001/service')
             .then((res) => res.json())
             .then((data) =>
                 setstate(
                     data.map((row: any) => ({
+                        key: row.key,
                         name: row.name,
                         price: row.price,
                         number: row.number,
                     }))
                 )
             );
+        const dataSelected = state.map((item: DataType) => item.key);
+        console.log(dataSelected);
+        setSelectedRow(dataSelected);
     }, []);
 
+    // useEffect(() => {}, []);
+    const handleSelectRows = (selectedRowKeys: any[], selectedRows: any) => {
+        setSelectedRow(selectedRowKeys);
+    };
     return (
         <div className={cx('service')}>
             <Table
                 rowSelection={{
-                    type: selectionType,
-                    ...rowSelection,
+                    onChange: handleSelectRows,
+                    selectedRowKeys: selectedRow,
                 }}
                 columns={columns}
                 dataSource={state}
