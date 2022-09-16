@@ -1,6 +1,6 @@
 import styles from './Create.module.scss';
 import classNames from 'classnames/bind';
-import CustomerRedirect from '.';
+import CustomerRedirect from './index';
 const cx = classNames.bind(styles);
 
 const CreateCustomer = () => {
