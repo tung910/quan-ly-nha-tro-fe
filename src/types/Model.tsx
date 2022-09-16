@@ -1,5 +1,5 @@
 export type MotelType = {
-    id: number;
+    id: string;
     name: string;
     province: string;
     district: string;

@@ -18,36 +18,16 @@
   },
   "motels": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Nhà 1"
     },
     {
-      "id": 2,
-      "name": "Nhà 2"
-    },
-    {
-      "name": "Nhà 3",
-      "province": "Hà Nội",
-      "district": "Thạch Thất",
-      "ward": "Thất Thạch",
-      "address": "Ngõ 168",
-      "id": 3
-    },
-    {
-      "name": "Nhà 4",
-      "province": "Hà Nội",
-      "district": "Ha Noi",
-      "ward": "Thạch Thất",
-      "address": "Thất thạch",
-      "id": 4
-    },
-    {
-      "name": "Nhà 5",
-      "province": "Hà Nội",
-      "district": "Tahaha",
-      "ward": "âsasasas",
-      "address": "âsasasasa",
-      "id": 5
+      "name": "Nhà 2",
+      "province": "aaaaaa",
+      "district": "aaaaa",
+      "ward": "aaaaaa",
+      "address": "aaaaaaaaa",
+      "id": "GUD90II"
     }
   ]
 }

@@ -7,3 +7,6 @@ export const getAllMotel = () => {
 export const addMotel = (motel: MotelType) => {
     return instance.post('/motels', motel);
 };
+export const removeMotel = (id: string) => {
+    return instance.delete(`/motels/${id}`);
+};

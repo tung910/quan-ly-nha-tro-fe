@@ -11,7 +11,7 @@ import {
     CloseSquareOutlined,
     DeleteOutlined,
 } from '@ant-design/icons';
-import { getAllMotel } from '~/api/Motel';
+import { getAllMotel, removeMotel } from '~/api/Motel';
 import { MotelType } from '~/types/Model';
 import styles from './Motel.module.scss';
 import classNames from 'classnames/bind';
@@ -26,6 +26,13 @@ const Motel = () => {
         };
         getMotels();
     }, []);
+    const onRemoveMotel = async (id: string) => {
+        const confirm = window.confirm('Bạn muốn xóa không?');
+        if (confirm) {
+            await removeMotel(id);
+            setMotels(motels.filter((item) => item.id !== id));
+        }
+    };
     return (
         <div>
             <div className={cx('button-motel')}>
@@ -36,25 +43,35 @@ const Motel = () => {
                 >
                     Thêm nhà trọ
                 </Button>
-                <Button type='primary' icon={<DeleteOutlined />} danger>
-                    Xóa nhà trọ
-                </Button>
-                <Button
-                    className={cx('btn-edit-motel')}
-                    type='primary'
-                    icon={<EditOutlined />}
-                >
-                    Sửa nhà trọ
-                </Button>
-                <Button type='primary' icon={<CloseSquareOutlined />}>
-                    Thêm phòng trọ
-                </Button>
             </div>
             <Tabs defaultActiveKey='1'>
                 {motels &&
                     motels.map((item, index) => {
                         return (
                             <Tabs.TabPane tab={item.name} key={index}>
+                                <div className={cx('button-motel')}>
+                                    <Button
+                                        type='primary'
+                                        icon={<DeleteOutlined />}
+                                        danger
+                                        onClick={() => onRemoveMotel(item.id)}
+                                    >
+                                        Xóa nhà trọ
+                                    </Button>
+                                    <Button
+                                        className={cx('btn-edit-motel')}
+                                        type='primary'
+                                        icon={<EditOutlined />}
+                                    >
+                                        Sửa nhà trọ
+                                    </Button>
+                                    <Button
+                                        type='primary'
+                                        icon={<CloseSquareOutlined />}
+                                    >
+                                        Thêm phòng trọ
+                                    </Button>
+                                </div>
                                 <Card
                                     title='Phòng 1'
                                     hoverable
