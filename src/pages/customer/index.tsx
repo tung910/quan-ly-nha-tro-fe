@@ -3,7 +3,7 @@ import ServiceCustomer from '~/modules/service-customer/ServiceCustomer';
 import FormCreate from '~/modules/customer/CreateCustomer';
 const { TabPane } = Tabs;
 
-const CustomerRedirect = () => {
+const Customer = () => {
     return (
         <div>
             <Tabs>
@@ -18,4 +18,4 @@ const CustomerRedirect = () => {
     );
 };
 
-export default CustomerRedirect;
+export default Customer;

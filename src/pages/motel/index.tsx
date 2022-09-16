@@ -1,20 +1,16 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
-
+import { useEffect, useState } from 'react';
 import { Tabs, Card, Button, Row, Col } from 'antd';
+import classNames from 'classnames/bind';
+import { Link } from 'react-router-dom';
 import {
     EditOutlined,
-    EllipsisOutlined,
-    SettingOutlined,
     PlusSquareOutlined,
-    CloseSquareOutlined,
     DeleteOutlined,
 } from '@ant-design/icons';
 import { getAllMotel, removeMotel } from '~/api/Motel';
 import { MotelType } from '~/types/Model';
 import styles from './Motel.module.scss';
-import classNames from 'classnames/bind';
+
 const cx = classNames.bind(styles);
 
 const Motel = () => {
@@ -84,7 +80,9 @@ const Motel = () => {
                                             type='primary'
                                             icon={<PlusSquareOutlined />}
                                         >
-                                            Thêm khách
+                                            <Link to='/customer/create'>
+                                                Thêm khách
+                                            </Link>
                                         </Button>
                                     </Col>
                                     <p>Số lượng khách</p>
