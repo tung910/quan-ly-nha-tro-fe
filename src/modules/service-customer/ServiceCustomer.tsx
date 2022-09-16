@@ -1,6 +1,7 @@
 import { Form, Input, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
+import { getService } from '../../api/customer';
 interface DataType {
     key: React.Key;
     name: string;
@@ -42,21 +43,15 @@ const ServiceCustomer = () => {
     const [state, setstate] = useState([]);
 
     useEffect(() => {
-        const getData = fetch('http://localhost:3001/service')
-            .then((res) => res.json())
-            .then((data) =>
-                setstate(
-                    data.map((row: any) => ({
-                        key: row.key,
-                        name: row.name,
-                        price: row.price,
-                        number: row.number,
-                    }))
-                )
-            );
-        const dataSelected = state.map((item: DataType) => item.key);
-        console.log(dataSelected);
-        setSelectedRow(dataSelected);
+        const getServices = async () => {
+            const { data } = await getService();
+            setstate(data);
+        };
+        getServices();
+        // console.log(state);
+        // const dataSelected = state.map((item: DataType) => item.key);
+        // console.log(dataSelected);
+        // setSelectedRow([...dataSelected]);
     }, []);
 
     // useEffect(() => {}, []);
