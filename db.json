@@ -1,0 +1,65 @@
+{
+    "customer": [
+        {
+            "name": "Nguyễn Xuân Tường",
+            "cmnd": "323423",
+            "gender": "Nam",
+            "dateLevel": "12",
+            "PhoneNumber": "0359282859",
+            "issuedBy": "3",
+            "address": "Nam cao",
+            "email": "ssdad",
+            "datePicker": "2022-09-16",
+            "birthplace": "3",
+            "numberRoom": 1,
+            "priceRoom": 3000000,
+            "startDay": "2015-06-06",
+            "deposit": 0,
+            "PaymentPeriod": "Kỳ 30",
+            "payment": 1,
+            "carNumber": "12",
+            "Image": "C:\\fakepath\\img-prd15-1_3821eeb607ce48979ffb31fd1d8fcb51_db73283132f14ad781ff2982a16a6d6b_master.jpg",
+            "id": 2
+        }
+    ],
+    "service": [
+        {
+            "key": "1",
+            "name": "Điện",
+            "price": 3000,
+            "number": 1
+        },
+        {
+            "key": "2",
+            "name": "Nước",
+            "price": 20000,
+            "number": 1
+        },
+        {
+            "key": "3",
+            "name": "Gửi xe máy",
+            "price": 80000,
+            "number": 1
+        },
+        {
+            "key": "4",
+            "name": "Rác",
+            "price": 50000,
+            "number": 1
+        }
+    ],
+    "motels": [
+        {
+            "id": "1",
+            "name": "Nhà 1"
+        },
+        {
+            "name": "Nhà 2 ",
+            "province": "aaaaaa",
+            "district": "aaaaa",
+            "ward": "aaaaaa",
+            "address": "aaaaaaaaa",
+            "id": "GUD90II"
+        }
+    ]
+}
