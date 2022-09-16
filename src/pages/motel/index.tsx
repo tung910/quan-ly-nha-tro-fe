@@ -62,6 +62,7 @@ const Motel = () => {
                                         className={cx('btn-edit-motel')}
                                         type='primary'
                                         icon={<EditOutlined />}
+                                        href={`/motel-room/edit-motel/${item.id}`}
                                     >
                                         Sửa nhà trọ
                                     </Button>

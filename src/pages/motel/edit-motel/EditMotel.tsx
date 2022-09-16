@@ -3,30 +3,45 @@
 import { Button, Form, Input, Space, Breadcrumb, Layout, Row, Col } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
 import { MotelType } from '~/types/Model';
-import styles from './AddMotel.module.scss';
+import styles from './EditMotel.module.scss';
 import classNames from 'classnames/bind';
-import { addMotel } from '~/api/Motel';
-import { useNavigate } from 'react-router-dom';
+import { addMotel, getMotel, updateMotel } from '~/api/Motel';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
-const AddMotel = () => {
-    const [form] = Form.useForm();
+const EditMotel = () => {
+    const [form] = Form.useForm<MotelType>();
+    const id = (useParams().id as string) || '';
     const cx = classNames.bind(styles);
     const navigate = useNavigate();
+
     const onFinish = async (values: MotelType) => {
-        const add = async () => {
-            await addMotel(values);
-            alert('Bạn thêm thành công!');
+        values.id = id;
+
+        try {
+            await updateMotel(values);
+            alert('Bạn sửa thành công!');
             navigate('/motel-room');
-        };
-        add();
+        } catch (error) {
+            alert(error);
+        }
     };
+
+    useEffect(() => {
+        const readMotel = async () => {
+            const { data } = await getMotel(id);
+            form.setFieldsValue(data);
+        };
+
+        readMotel();
+    }, []);
     return (
         <div>
             <Content>
                 <div>
                     <h2>Thêm mới nhà trọ</h2>
                 </div>
-                <div className={cx('form-add')}>
+                <div className={cx('form-edit')}>
                     <Form
                         autoComplete='off'
                         layout='vertical'
@@ -138,7 +153,7 @@ const AddMotel = () => {
                         <Form.Item className={cx('button')}>
                             <Space>
                                 <Button type='primary' htmlType='submit'>
-                                    Thêm mới
+                                    Cập nhật
                                 </Button>
                             </Space>
                         </Form.Item>
@@ -149,4 +164,4 @@ const AddMotel = () => {
     );
 };
 
-export default AddMotel;
+export default EditMotel;
