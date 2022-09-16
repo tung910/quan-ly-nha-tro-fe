@@ -2,7 +2,7 @@ import { Tabs } from 'antd';
 import ContractCustomer from '~/modules/contract-customer/ContractCustomer';
 import MemberCustomer from '~/modules/member-customer/MemberCustomer';
 import ServiceCustomer from '~/modules/service-customer/ServiceCustomer';
-import FormCreate from '~/modules/tenant-infor/CreateCustomer';
+import FormCreate from '~/modules/tenant-infor/FormCreate';
 const { TabPane } = Tabs;
 
 const CustomerRedirect = () => {
