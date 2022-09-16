@@ -1,15 +1,22 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { Tabs, Card } from 'antd';
+
+import { Tabs, Card, Button } from 'antd';
 import {
     EditOutlined,
     EllipsisOutlined,
     SettingOutlined,
+    PlusSquareOutlined,
+    CloseSquareOutlined,
 } from '@ant-design/icons';
 import { getAllMotel } from '~/api/Motel';
 import { MotelType } from '~/types/Model';
+import styles from './Motel.module.scss';
+import classNames from 'classnames/bind';
 const Motel = () => {
+    const cx = classNames.bind(styles);
+
     const [motels, setMotels] = useState<MotelType[]>([]);
     useEffect(() => {
         const getMotels = async () => {
@@ -20,6 +27,18 @@ const Motel = () => {
     }, []);
     return (
         <div>
+            <div className={cx('button-motel')}>
+                <Button
+                    href='/motel-room/add-motel'
+                    type='primary'
+                    icon={<PlusSquareOutlined />}
+                >
+                    Thêm nhà trọ
+                </Button>
+                <Button type='primary' icon={<CloseSquareOutlined />} danger>
+                    Xóa nhà trọ
+                </Button>{' '}
+            </div>
             <Tabs defaultActiveKey='1'>
                 {motels &&
                     motels.map((item, index) => {
