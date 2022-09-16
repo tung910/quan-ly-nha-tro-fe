@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import SignIn from './feature/signin';
 import MainLayout from './layout/main-layout';
 import routes from './routes';
 
@@ -22,6 +23,7 @@ function App() {
                         );
                     })}
                 </Route>
+                <Route path='/login' element={<SignIn />} />
             </Routes>
         </BrowserRouter>
     );
