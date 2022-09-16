@@ -47,6 +47,19 @@
             "price": 50000,
             "number": 1
         }
+    ],
+    "motels": [
+        {
+            "id": "1",
+            "name": "Nhà 1"
+        },
+        {
+            "name": "Nhà 2 ",
+            "province": "aaaaaa",
+            "district": "aaaaa",
+            "ward": "aaaaaa",
+            "address": "aaaaaaaaa",
+            "id": "GUD90II"
+        }
     ]
 }
-
