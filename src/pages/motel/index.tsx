@@ -9,6 +9,7 @@ import {
     SettingOutlined,
     PlusSquareOutlined,
     CloseSquareOutlined,
+    DeleteOutlined,
 } from '@ant-design/icons';
 import { getAllMotel } from '~/api/Motel';
 import { MotelType } from '~/types/Model';
@@ -35,9 +36,19 @@ const Motel = () => {
                 >
                     Thêm nhà trọ
                 </Button>
-                <Button type='primary' icon={<CloseSquareOutlined />} danger>
+                <Button type='primary' icon={<DeleteOutlined />} danger>
                     Xóa nhà trọ
-                </Button>{' '}
+                </Button>
+                <Button
+                    className={cx('btn-edit-motel')}
+                    type='primary'
+                    icon={<EditOutlined />}
+                >
+                    Sửa nhà trọ
+                </Button>
+                <Button type='primary' icon={<CloseSquareOutlined />}>
+                    Thêm phòng trọ
+                </Button>
             </div>
             <Tabs defaultActiveKey='1'>
                 {motels &&
