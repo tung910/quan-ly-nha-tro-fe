@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 
-import { Tabs, Card, Button } from 'antd';
+import { Tabs, Card, Button, Row, Col } from 'antd';
 import {
     EditOutlined,
     EllipsisOutlined,
@@ -53,8 +53,8 @@ const Motel = () => {
                                     <Button
                                         type='primary'
                                         icon={<DeleteOutlined />}
-                                        danger
                                         onClick={() => onRemoveMotel(item.id)}
+                                        danger
                                     >
                                         Xóa nhà trọ
                                     </Button>
@@ -68,7 +68,7 @@ const Motel = () => {
                                     </Button>
                                     <Button
                                         type='primary'
-                                        icon={<CloseSquareOutlined />}
+                                        icon={<PlusSquareOutlined />}
                                     >
                                         Thêm phòng trọ
                                     </Button>
@@ -78,15 +78,36 @@ const Motel = () => {
                                     hoverable
                                     extra={<a href='#'>Xem chi tiết</a>}
                                     style={{ width: 300 }}
-                                    actions={[
-                                        <SettingOutlined key='setting' />,
-                                        <EditOutlined key='edit' />,
-                                        <EllipsisOutlined key='ellipsis' />,
-                                    ]}
                                 >
-                                    <p>Card content</p>
-                                    <p>Card content</p>
-                                    <p>Card content</p>
+                                    <Col span={8}>
+                                        <Button
+                                            type='primary'
+                                            icon={<PlusSquareOutlined />}
+                                        >
+                                            Thêm khách
+                                        </Button>
+                                    </Col>
+                                    <p>Số lượng khách</p>
+                                    <p>Giá phòng</p>
+                                    <Row>
+                                        <Col span={8}>
+                                            <Button
+                                                type='primary'
+                                                icon={<EditOutlined />}
+                                            >
+                                                Sửa
+                                            </Button>
+                                        </Col>
+                                        <Col span={8}>
+                                            <Button
+                                                type='primary'
+                                                icon={<DeleteOutlined />}
+                                                danger
+                                            >
+                                                Xóa
+                                            </Button>
+                                        </Col>
+                                    </Row>
                                 </Card>
                             </Tabs.TabPane>
                         );
