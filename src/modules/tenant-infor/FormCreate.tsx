@@ -4,6 +4,7 @@ import { useState } from 'react';
 import moment from 'moment';
 import styles from './FormCreate.module.scss';
 import classNames from 'classnames/bind';
+import { addCustomer } from '~/api/customer';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
@@ -30,20 +31,17 @@ const FormCreate = () => {
             datePicker: values['datePicker'].format('YYYY-MM-DD'),
             startDay: values['startDay'].format('YYYY-MM-DD'),
         };
-        const FormData = fetch('http://localhost:3001/customer', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(dataForm),
-        }).then((res) => res.json());
+        const FormData = async () => {
+            await addCustomer(dataForm);
+        };
+        FormData();
     };
     return (
         <Form
             className={cx('form-create')}
             autoComplete='off'
             form={form}
-            labelCol={{ span: 8 }}
+            labelCol={{ span: 9 }}
             wrapperCol={{ span: 16 }}
             style={{ marginTop: 20, padding: 20 }}
             onFinish={onFinish}

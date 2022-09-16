@@ -1,9 +1,9 @@
 import { Tabs } from 'antd';
 import ServiceCustomer from '~/modules/service-customer/ServiceCustomer';
-import FormCreate from '~/modules/customer/CreateCustomer';
+import FormCreate from '~/modules/tenant-infor/FormCreate';
 const { TabPane } = Tabs;
 
-const Customer = () => {
+const CustomerRedirect = () => {
     return (
         <div>
             <Tabs>
@@ -18,4 +18,4 @@ const Customer = () => {
     );
 };
 
-export default Customer;
+export default CustomerRedirect;
