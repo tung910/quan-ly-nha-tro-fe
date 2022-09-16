@@ -1,20 +1,16 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
-
-import { Tabs, Card, Button } from 'antd';
+import { useEffect, useState } from 'react';
+import { Tabs, Card, Button, Row, Col } from 'antd';
+import classNames from 'classnames/bind';
+import { Link } from 'react-router-dom';
 import {
     EditOutlined,
-    EllipsisOutlined,
-    SettingOutlined,
     PlusSquareOutlined,
-    CloseSquareOutlined,
     DeleteOutlined,
 } from '@ant-design/icons';
 import { getAllMotel, removeMotel } from '~/api/Motel';
 import { MotelType } from '~/types/Model';
 import styles from './Motel.module.scss';
-import classNames from 'classnames/bind';
+
 const cx = classNames.bind(styles);
 
 const Motel = () => {
@@ -53,8 +49,8 @@ const Motel = () => {
                                     <Button
                                         type='primary'
                                         icon={<DeleteOutlined />}
-                                        danger
                                         onClick={() => onRemoveMotel(item.id)}
+                                        danger
                                     >
                                         Xóa nhà trọ
                                     </Button>
@@ -68,7 +64,7 @@ const Motel = () => {
                                     </Button>
                                     <Button
                                         type='primary'
-                                        icon={<CloseSquareOutlined />}
+                                        icon={<PlusSquareOutlined />}
                                     >
                                         Thêm phòng trọ
                                     </Button>
@@ -78,15 +74,38 @@ const Motel = () => {
                                     hoverable
                                     extra={<a href='#'>Xem chi tiết</a>}
                                     style={{ width: 300 }}
-                                    actions={[
-                                        <SettingOutlined key='setting' />,
-                                        <EditOutlined key='edit' />,
-                                        <EllipsisOutlined key='ellipsis' />,
-                                    ]}
                                 >
-                                    <p>Card content</p>
-                                    <p>Card content</p>
-                                    <p>Card content</p>
+                                    <Col span={8}>
+                                        <Button
+                                            type='primary'
+                                            icon={<PlusSquareOutlined />}
+                                        >
+                                            <Link to='/customer/create'>
+                                                Thêm khách
+                                            </Link>
+                                        </Button>
+                                    </Col>
+                                    <p>Số lượng khách</p>
+                                    <p>Giá phòng</p>
+                                    <Row>
+                                        <Col span={8}>
+                                            <Button
+                                                type='primary'
+                                                icon={<EditOutlined />}
+                                            >
+                                                Sửa
+                                            </Button>
+                                        </Col>
+                                        <Col span={8}>
+                                            <Button
+                                                type='primary'
+                                                icon={<DeleteOutlined />}
+                                                danger
+                                            >
+                                                Xóa
+                                            </Button>
+                                        </Col>
+                                    </Row>
                                 </Card>
                             </Tabs.TabPane>
                         );
