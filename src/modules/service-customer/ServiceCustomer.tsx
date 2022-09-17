@@ -45,16 +45,12 @@ const ServiceCustomer = () => {
     useEffect(() => {
         const getServices = async () => {
             const { data } = await getService();
+            const dataSelected = data.map((item: DataType) => item.key);
+            setSelectedRow(dataSelected);
             setstate(data);
         };
         getServices();
-        // console.log(state);
-        // const dataSelected = state.map((item: DataType) => item.key);
-        // console.log(dataSelected);
-        // setSelectedRow([...dataSelected]);
     }, []);
-
-    // useEffect(() => {}, []);
     const handleSelectRows = (selectedRowKeys: any[], selectedRows: any) => {
         setSelectedRow(selectedRowKeys);
     };
