@@ -1,28 +1,15 @@
-import React from 'react';
 import styles from './signin.module.scss';
-import { useNavigate } from 'react-router-dom';
-import { login } from '~/api/auth';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { IUser } from '~/types/Auth';
+import { IUser } from '~/types/User.type';
 
-type InputUser = {
-    email: string;
-    password: string;
-};
 const LoginPage = () => {
-    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm();
     const onSubmit: SubmitHandler<any> = async (data: IUser) => {
-        // try {
-        await login(data);
-        // } catch (error) {
-        //     console.log(error);
-        // }
-        // alert('')
+        console.log(data);
     };
     return (
         <div className={styles['center']}>
@@ -30,18 +17,32 @@ const LoginPage = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles['txt_field']}>
                     <input
-                        type='text'
+                        type='email'
                         {...register('email', {
                             required: true,
                         })}
                     />
                     {errors?.email?.type === 'required' && (
                         <span className={styles['my-error']}>
-                            Email is required
+                            Vui lòng không bỏ trống trường này
                         </span>
                     )}
                     {/* <span></span> */}
                     <label htmlFor=''>Email đăng nhập</label>
+                </div>
+                <div className={styles['txt_field']}>
+                    <input
+                        type='number'
+                        {...register('phone', {
+                            required: true,
+                        })}
+                    />
+                    {errors?.email?.type === 'required' && (
+                        <span className={styles['my-error']}>
+                            Vui lòng không bỏ trống trường này
+                        </span>
+                    )}
+                    <label htmlFor=''>Số điện thoại</label>
                 </div>
                 <div className={styles['txt_field']}>
                     <input
@@ -52,7 +53,7 @@ const LoginPage = () => {
                     />
                     {errors?.password?.type === 'required' && (
                         <span className={styles['my-error']}>
-                            Password is required
+                            Vui lòng không bỏ trống trường này
                         </span>
                     )}
                     <label htmlFor=''>Mật khẩu</label>

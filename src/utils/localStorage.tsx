@@ -1,4 +1,4 @@
-import { IUser } from '../types/Auth';
+import { IUser } from '../types/User.type';
 export const authenticated = (user: IUser, next: () => void) => {
     localStorage.setItem('user', JSON.stringify(user));
     next();
