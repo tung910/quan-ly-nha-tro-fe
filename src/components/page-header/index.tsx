@@ -1,16 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, PageHeader } from 'antd';
 import classNames from 'classnames/bind';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './PageHeader.module.scss';
 const cx = classNames.bind(styles);
 
 export interface Props {
-    title: ReactNode | string;
+    title?: ReactNode | string;
     btn?: string;
-    iconButton?: any;
+    iconButton?: ReactNode;
     href?: string;
 }
 const HeaderPage = ({ title, btn, iconButton, href }: Props) => {

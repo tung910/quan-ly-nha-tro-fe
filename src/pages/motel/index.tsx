@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Tabs, Card, Button, Row, Col } from 'antd';
+import { Tabs, Button } from 'antd';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
 import {
     EditOutlined,
     PlusSquareOutlined,
@@ -11,6 +10,7 @@ import { getAllMotel, removeMotel } from '~/api/motel.api';
 import { MotelType } from '~/types/MotelType';
 import styles from './Motel.module.scss';
 import HeaderPage from '~/components/page-header';
+import CardItem from '~/components/card';
 
 const cx = classNames.bind(styles);
 
@@ -70,44 +70,12 @@ const Motel = () => {
                                         Thêm phòng trọ
                                     </Button>
                                 </div>
-                                <Card
-                                    title='Phòng 1'
-                                    hoverable
-                                    extra={<a href='#'>Xem chi tiết</a>}
-                                    style={{ width: 300 }}
-                                >
-                                    <Col span={8}>
-                                        <Button
-                                            type='primary'
-                                            icon={<PlusSquareOutlined />}
-                                        >
-                                            <Link to='/customer/create'>
-                                                Thêm khách
-                                            </Link>
-                                        </Button>
-                                    </Col>
-                                    <p>Số lượng khách</p>
-                                    <p>Giá phòng</p>
-                                    <Row>
-                                        <Col span={8}>
-                                            <Button
-                                                type='primary'
-                                                icon={<EditOutlined />}
-                                            >
-                                                Sửa
-                                            </Button>
-                                        </Col>
-                                        <Col span={8}>
-                                            <Button
-                                                type='primary'
-                                                icon={<DeleteOutlined />}
-                                                danger
-                                            >
-                                                Xóa
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                </Card>
+                                <div>
+                                    <CardItem
+                                        unitPrice={'10000000'}
+                                        totalCustomer={'2'}
+                                    />
+                                </div>
                             </Tabs.TabPane>
                         );
                     })}
