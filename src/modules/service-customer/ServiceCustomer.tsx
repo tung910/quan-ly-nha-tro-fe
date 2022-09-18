@@ -1,6 +1,7 @@
 import { Form, Input, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
+import { getService } from '../../api/customer';
 interface DataType {
     key: React.Key;
     name: string;
@@ -44,45 +45,61 @@ type Props = {
 const ServiceCustomer = ({ onGetService }: Props) => {
     const [selectedRow, setSelectedRow] = useState<any[]>([]);
     const [state, setstate] = useState([]);
-    const [getService, setGetService] = useState([]);
+    const [getServiceCustomer, setServiceCustomer] = useState([]);
     useEffect(() => {
-        const getData = fetch('http://localhost:3001/service')
-            .then((res) => res.json())
-            .then((data) => {
-                const dataSelected = data.map((item: DataType) => item.key);
-                setSelectedRow(dataSelected);
-                setstate(
-                    data.map((row: TypeServiceCustomer) => ({
-                        key: row.key,
-                        name: row.name,
-                        price: row.price,
-                        number: row.number,
-                    }))
-                );
-            });
+        const getServices = async () => {
+            const { data } = await getService();
+            const dataSelected = data.map(
+                (item: TypeServiceCustomer) => item.key
+            );
+            setSelectedRow(dataSelected);
+            setstate(data);
+        };
+        getServices();
     }, []);
     const handleSelectRows = (selectedRowKeys: any[], selectedRows: any) => {
-        setGetService(selectedRows);
+        setServiceCustomer(selectedRows);
         setSelectedRow(selectedRowKeys);
     };
 
     if (getService.length > 0) {
-        onGetService(getService);
+        onGetService(getServiceCustomer);
     } else {
         onGetService(state);
     }
-    return (
-        <div className={cx('service')}>
-            <Table
-                rowSelection={{
-                    onChange: handleSelectRows,
-                    selectedRowKeys: selectedRow,
-                }}
-                columns={columns}
-                dataSource={state}
-            />
-        </div>
-    );
+
+    const ServiceCustomer = () => {
+        const [selectedRow, setSelectedRow] = useState<any[]>([]);
+        const [state, setstate] = useState([]);
+
+        useEffect(() => {
+            const getServices = async () => {
+                const { data } = await getService();
+                const dataSelected = data.map((item: DataType) => item.key);
+                setSelectedRow(dataSelected);
+                setstate(data);
+            };
+            getServices();
+        }, []);
+        const handleSelectRows = (
+            selectedRowKeys: any[],
+            selectedRows: any
+        ) => {
+            setSelectedRow(selectedRowKeys);
+        };
+        return (
+            <div className={cx('service')}>
+                <Table
+                    rowSelection={{
+                        onChange: handleSelectRows,
+                        selectedRowKeys: selectedRow,
+                    }}
+                    columns={columns}
+                    dataSource={state}
+                />
+            </div>
+        );
+    };
 };
 
 export default ServiceCustomer;
