@@ -1,13 +1,14 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button, Form, Input, Space, Breadcrumb, Layout, Row, Col } from 'antd';
+import { Button, Form, Input, Space, Row, Col } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
-import { MotelType } from '~/types/Model';
+import { LeftCircleTwoTone } from '@ant-design/icons';
+
+import { MotelType } from '~/types/MotelType';
 import styles from './EditMotel.module.scss';
 import classNames from 'classnames/bind';
-import { addMotel, getMotel, updateMotel } from '~/api/Motel';
+import { getMotel, updateMotel } from '~/api/motel.api';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import HeaderPage from '~/components/page-header';
 const cx = classNames.bind(styles);
 
 const EditMotel = () => {
@@ -39,7 +40,12 @@ const EditMotel = () => {
         <div>
             <Content>
                 <div>
-                    <h2>Thêm mới nhà trọ</h2>
+                    <HeaderPage
+                        title={'Cập nhật nhà trọ'}
+                        btn=' Quay lại'
+                        iconButton={<LeftCircleTwoTone />}
+                        href='/motel-room'
+                    ></HeaderPage>
                 </div>
                 <div className={cx('form-edit')}>
                     <Form

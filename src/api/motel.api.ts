@@ -1,4 +1,4 @@
-import { MotelType } from '~/types/Model';
+import { MotelType } from '~/types/MotelType';
 import instance from './instance';
 
 export const getAllMotel = () => {

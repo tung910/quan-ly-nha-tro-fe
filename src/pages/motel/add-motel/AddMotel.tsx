@@ -1,12 +1,12 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button, Form, Input, Space, Breadcrumb, Layout, Row, Col } from 'antd';
+import { Button, Form, Input, Space, Row, Col } from 'antd';
+import { LeftCircleTwoTone } from '@ant-design/icons';
 import { Content } from 'antd/lib/layout/layout';
-import { MotelType } from '~/types/Model';
+import { MotelType } from '~/types/MotelType';
 import styles from './AddMotel.module.scss';
 import classNames from 'classnames/bind';
-import { addMotel } from '~/api/Motel';
+import { addMotel } from '~/api/motel.api';
 import { useNavigate } from 'react-router-dom';
+import HeaderPage from '~/components/page-header';
 const cx = classNames.bind(styles);
 
 const AddMotel = () => {
@@ -24,7 +24,12 @@ const AddMotel = () => {
         <div>
             <Content>
                 <div>
-                    <h2>Thêm mới nhà trọ</h2>
+                    <HeaderPage
+                        title={'Thêm mới nhà trọ'}
+                        btn=' Quay lại'
+                        iconButton={<LeftCircleTwoTone />}
+                        href='/motel-room'
+                    ></HeaderPage>
                 </div>
                 <div className={cx('form-add')}>
                     <Form

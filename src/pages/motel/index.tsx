@@ -7,9 +7,10 @@ import {
     PlusSquareOutlined,
     DeleteOutlined,
 } from '@ant-design/icons';
-import { getAllMotel, removeMotel } from '~/api/Motel';
-import { MotelType } from '~/types/Model';
+import { getAllMotel, removeMotel } from '~/api/motel.api';
+import { MotelType } from '~/types/MotelType';
 import styles from './Motel.module.scss';
+import HeaderPage from '~/components/page-header';
 
 const cx = classNames.bind(styles);
 
@@ -18,10 +19,12 @@ const Motel = () => {
     useEffect(() => {
         const getMotels = async () => {
             const { data } = await getAllMotel();
+
             setMotels(data);
         };
         getMotels();
     }, []);
+
     const onRemoveMotel = async (id: string) => {
         const confirm = window.confirm('Bạn muốn xóa không?');
         if (confirm) {
@@ -31,14 +34,12 @@ const Motel = () => {
     };
     return (
         <div>
-            <div className={cx('button-motel')}>
-                <Button
+            <div>
+                <HeaderPage
+                    btn=' Thêm nhà trọ'
+                    iconButton={<PlusSquareOutlined />}
                     href='/motel-room/add-motel'
-                    type='primary'
-                    icon={<PlusSquareOutlined />}
-                >
-                    Thêm nhà trọ
-                </Button>
+                />
             </div>
             <Tabs defaultActiveKey='1'>
                 {motels &&
