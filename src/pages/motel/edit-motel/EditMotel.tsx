@@ -1,6 +1,6 @@
 import { Button, Form, Input, Space, Row, Col } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
-import { LeftCircleTwoTone } from '@ant-design/icons';
+import { RollbackOutlined } from '@ant-design/icons';
 
 import { MotelType } from '~/types/MotelType';
 import styles from './EditMotel.module.scss';
@@ -39,14 +39,6 @@ const EditMotel = () => {
     return (
         <div>
             <Content>
-                <div>
-                    <HeaderPage
-                        title={'Cập nhật nhà trọ'}
-                        btn=' Quay lại'
-                        iconButton={<LeftCircleTwoTone />}
-                        href='/motel-room'
-                    ></HeaderPage>
-                </div>
                 <div className={cx('form-edit')}>
                     <Form
                         autoComplete='off'
@@ -55,6 +47,13 @@ const EditMotel = () => {
                         onFinish={onFinish}
                         wrapperCol={{ span: 20 }}
                     >
+                        <HeaderPage
+                            title={'Cập nhật nhà trọ'}
+                            btn1=' Quay lại'
+                            btn2=' Cập nhật'
+                            iconButton={<RollbackOutlined />}
+                            href='/motel-room'
+                        ></HeaderPage>
                         <Row gutter={[8, 8]}>
                             <Col span={12}>
                                 <Form.Item
@@ -156,13 +155,6 @@ const EditMotel = () => {
                                 </Form.Item>
                             </Col>
                         </Row>
-                        <Form.Item className={cx('button')}>
-                            <Space>
-                                <Button type='primary' htmlType='submit'>
-                                    Cập nhật
-                                </Button>
-                            </Space>
-                        </Form.Item>
                     </Form>
                 </div>
             </Content>

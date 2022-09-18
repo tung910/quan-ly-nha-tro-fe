@@ -5,17 +5,23 @@ import {
     DeleteOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import { ReactNode } from 'react';
+import styles from './Card.module.scss';
+import classNames from 'classnames/bind';
+
 export interface Props {
+    roomName?: ReactNode | string;
     unitPrice?: string;
     totalCustomer?: string;
 }
-const CardItem = ({ unitPrice, totalCustomer }: Props) => {
+const cx = classNames.bind(styles);
+const CardItem = ({ unitPrice, totalCustomer, roomName }: Props) => {
     return (
         <Card
-            title='Phòng 1'
+            className={cx('card-item')}
+            title={roomName}
             hoverable
             extra={<a href='#'>Xem chi tiết</a>}
-            style={{ width: 300 }}
         >
             <Col span={8}>
                 <Button type='primary' icon={<PlusSquareOutlined />}>
@@ -27,12 +33,12 @@ const CardItem = ({ unitPrice, totalCustomer }: Props) => {
             <p>Số lượng khách: {totalCustomer}</p>
             <p>Giá phòng: {unitPrice}</p>
             <Row>
-                <Col span={8}>
+                <Col span={12}>
                     <Button type='primary' icon={<EditOutlined />}>
                         Sửa
                     </Button>
                 </Col>
-                <Col span={8}>
+                <Col span={12}>
                     <Button type='primary' icon={<DeleteOutlined />} danger>
                         Xóa
                     </Button>

@@ -54,20 +54,44 @@
       "name": "Nhà 1"
     },
     {
-      "name": "Nhà 2 ",
+      "name": "Nhà 2 up",
       "province": "aaaaaa",
       "district": "aaaaa",
       "ward": "aaaaaa",
       "address": "aaaaaaaaa",
       "id": "GUD90II"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "1",
+      "name": "Nhà 1",
+      "motelId": "1"
     },
     {
-      "name": "Nhà 3",
-      "province": "11111111111111",
-      "district": "11111111111111",
-      "ward": "1111111111111",
-      "address": "11111111111111",
-      "id": "qGal2AS"
+      "id": "2",
+      "name": "Nhà 1",
+      "motelId": "1"
+    },
+    {
+      "id": "3",
+      "name": "Nhà 1",
+      "motelId": "1"
+    },
+    {
+      "id": "4",
+      "name": "Nhà 1",
+      "motelId": "1"
+    },
+    {
+      "id": "5",
+      "name": "Nhà 1",
+      "motelId": "1"
+    },
+    {
+      "id": "6",
+      "name": "Nhà 1",
+      "motelId": "1"
     }
   ]
 }

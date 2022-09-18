@@ -10,7 +10,7 @@ import { getAllMotel, removeMotel } from '~/api/motel.api';
 import { MotelType } from '~/types/MotelType';
 import styles from './Motel.module.scss';
 import HeaderPage from '~/components/page-header';
-import CardItem from '~/components/card';
+import ListRoom from '../room/ListRoom';
 
 const cx = classNames.bind(styles);
 
@@ -71,10 +71,7 @@ const Motel = () => {
                                     </Button>
                                 </div>
                                 <div>
-                                    <CardItem
-                                        unitPrice={'10000000'}
-                                        totalCustomer={'2'}
-                                    />
+                                    <ListRoom motelId={item.id} />
                                 </div>
                             </Tabs.TabPane>
                         );

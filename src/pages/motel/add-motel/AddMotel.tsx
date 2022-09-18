@@ -1,5 +1,5 @@
 import { Form, Input, Row, Col } from 'antd';
-import { LeftCircleTwoTone } from '@ant-design/icons';
+import { RollbackOutlined } from '@ant-design/icons';
 import { Content } from 'antd/lib/layout/layout';
 import { MotelType } from '~/types/MotelType';
 import styles from './AddMotel.module.scss';
@@ -36,7 +36,7 @@ const AddMotel = () => {
                             title={'Thêm mới nhà trọ'}
                             btn1=' Quay lại'
                             btn2=' Thêm mới'
-                            iconButton={<LeftCircleTwoTone />}
+                            iconButton={<RollbackOutlined />}
                             href='/motel-room'
                         ></HeaderPage>
                         <Row gutter={[8, 8]}>
