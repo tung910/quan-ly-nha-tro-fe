@@ -7,26 +7,35 @@ const cx = classNames.bind(styles);
 
 export interface Props {
     title?: ReactNode | string;
-    btn?: string;
+    btn1?: string;
+    btn2?: string;
     iconButton?: ReactNode;
     href?: string;
 }
-const HeaderPage = ({ title, btn, iconButton, href }: Props) => {
+const HeaderPage = ({ title, btn1, btn2, iconButton, href }: Props) => {
     return (
         <PageHeader
             ghost={false}
             title={title}
             extra={[
                 <Button
-                    type='primary'
                     key={1}
                     icon={iconButton}
                     size={'large'}
                     className={cx('button')}
                 >
-                    <Link style={{ color: 'white' }} to={`${href}`}>
-                        {btn}
+                    <Link style={{ color: 'black' }} to={`${href}`}>
+                        {btn1}
                     </Link>
+                </Button>,
+                <Button
+                    type='primary'
+                    key={2}
+                    size={'large'}
+                    htmlType='submit'
+                    className={cx('button')}
+                >
+                    {btn2}
                 </Button>,
             ]}
         ></PageHeader>

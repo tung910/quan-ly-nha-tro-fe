@@ -36,7 +36,7 @@ const Motel = () => {
         <div>
             <div>
                 <HeaderPage
-                    btn=' Thêm nhà trọ'
+                    btn1=' Thêm nhà trọ'
                     iconButton={<PlusSquareOutlined />}
                     href='/motel-room/add-motel'
                 />

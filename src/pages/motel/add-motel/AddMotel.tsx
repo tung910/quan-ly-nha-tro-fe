@@ -1,4 +1,4 @@
-import { Button, Form, Input, Space, Row, Col } from 'antd';
+import { Form, Input, Row, Col } from 'antd';
 import { LeftCircleTwoTone } from '@ant-design/icons';
 import { Content } from 'antd/lib/layout/layout';
 import { MotelType } from '~/types/MotelType';
@@ -23,14 +23,7 @@ const AddMotel = () => {
     return (
         <div>
             <Content>
-                <div>
-                    <HeaderPage
-                        title={'Thêm mới nhà trọ'}
-                        btn=' Quay lại'
-                        iconButton={<LeftCircleTwoTone />}
-                        href='/motel-room'
-                    ></HeaderPage>
-                </div>
+                <div></div>
                 <div className={cx('form-add')}>
                     <Form
                         autoComplete='off'
@@ -39,6 +32,13 @@ const AddMotel = () => {
                         onFinish={onFinish}
                         wrapperCol={{ span: 20 }}
                     >
+                        <HeaderPage
+                            title={'Thêm mới nhà trọ'}
+                            btn1=' Quay lại'
+                            btn2=' Thêm mới'
+                            iconButton={<LeftCircleTwoTone />}
+                            href='/motel-room'
+                        ></HeaderPage>
                         <Row gutter={[8, 8]}>
                             <Col span={12}>
                                 <Form.Item
@@ -140,13 +140,6 @@ const AddMotel = () => {
                                 </Form.Item>
                             </Col>
                         </Row>
-                        <Form.Item className={cx('button')}>
-                            <Space>
-                                <Button type='primary' htmlType='submit'>
-                                    Thêm mới
-                                </Button>
-                            </Space>
-                        </Form.Item>
                     </Form>
                 </div>
             </Content>
