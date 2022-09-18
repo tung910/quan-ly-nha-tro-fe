@@ -3,11 +3,11 @@ import { useState } from 'react';
 const { Option } = Select;
 
 const MemberCustomer = () => {
-    const [dataSource, setDataSource] = useState([]);
+    const [dataSource, setDataSource] = useState<any[]>([]);
     const [count, setCount] = useState(2);
 
-    const handleDelete = (key) => {
-        const newData = dataSource.filter((item) => item.key !== key);
+    const handleDelete = (key: any) => {
+        const newData = dataSource.filter((item: any) => item.key !== key);
         setDataSource(newData);
     };
 
@@ -43,7 +43,7 @@ const MemberCustomer = () => {
         {
             title: 'operation',
             dataIndex: 'operation',
-            render: (_, record) =>
+            render: (record: any) =>
                 dataSource.length >= 1 ? (
                     <Popconfirm
                         title='Sure to delete?'

@@ -9,6 +9,7 @@ interface DataType {
 }
 import styles from './Service.module.scss';
 import classNames from 'classnames/bind';
+import { TypeServiceCustomer } from '~/types/Customer';
 const cx = classNames.bind(styles);
 const columns: ColumnsType<DataType> = [
     {
@@ -36,42 +37,46 @@ const columns: ColumnsType<DataType> = [
         ),
     },
 ];
-
-const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
-        selectedRows;
-    },
-    getCheckboxProps: (record: DataType) => ({
-        name: record.name,
-    }),
+type Props = {
+    onGetService: (data: TypeServiceCustomer[]) => void;
 };
 
-const ServiceCustomer = () => {
-    const [selectionType, setSelectionType] = useState<'checkbox' | 'radio'>(
-        'checkbox'
-    );
-
+const ServiceCustomer = ({ onGetService }: Props) => {
+    const [selectedRow, setSelectedRow] = useState<any[]>([]);
     const [state, setstate] = useState([]);
+    const [getService, setGetService] = useState([]);
     useEffect(() => {
         const getData = fetch('http://localhost:3001/service')
             .then((res) => res.json())
-            .then((data) =>
+            .then((data) => {
+                const dataSelected = data.map((item: DataType) => item.key);
+                setSelectedRow(dataSelected);
                 setstate(
-                    data.map((row: any) => ({
+                    data.map((row: TypeServiceCustomer) => ({
+                        key: row.key,
                         name: row.name,
                         price: row.price,
                         number: row.number,
                     }))
-                )
-            );
+                );
+            });
     }, []);
+    const handleSelectRows = (selectedRowKeys: any[], selectedRows: any) => {
+        setGetService(selectedRows);
+        setSelectedRow(selectedRowKeys);
+    };
 
+    if (getService.length > 0) {
+        onGetService(getService);
+    } else {
+        onGetService(state);
+    }
     return (
         <div className={cx('service')}>
             <Table
                 rowSelection={{
-                    type: selectionType,
-                    ...rowSelection,
+                    onChange: handleSelectRows,
+                    selectedRowKeys: selectedRow,
                 }}
                 columns={columns}
                 dataSource={state}
