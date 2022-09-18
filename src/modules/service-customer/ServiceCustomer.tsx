@@ -67,39 +67,18 @@ const ServiceCustomer = ({ onGetService }: Props) => {
     } else {
         onGetService(state);
     }
-
-    const ServiceCustomer = () => {
-        const [selectedRow, setSelectedRow] = useState<any[]>([]);
-        const [state, setstate] = useState([]);
-
-        useEffect(() => {
-            const getServices = async () => {
-                const { data } = await getService();
-                const dataSelected = data.map((item: DataType) => item.key);
-                setSelectedRow(dataSelected);
-                setstate(data);
-            };
-            getServices();
-        }, []);
-        const handleSelectRows = (
-            selectedRowKeys: any[],
-            selectedRows: any
-        ) => {
-            setSelectedRow(selectedRowKeys);
-        };
-        return (
-            <div className={cx('service')}>
-                <Table
-                    rowSelection={{
-                        onChange: handleSelectRows,
-                        selectedRowKeys: selectedRow,
-                    }}
-                    columns={columns}
-                    dataSource={state}
-                />
-            </div>
-        );
-    };
+    return (
+        <div className={cx('service')}>
+            <Table
+                rowSelection={{
+                    onChange: handleSelectRows,
+                    selectedRowKeys: selectedRow,
+                }}
+                columns={columns}
+                dataSource={state}
+            />
+        </div>
+    );
 };
 
 export default ServiceCustomer;
