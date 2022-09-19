@@ -5,6 +5,7 @@ import Motel from '~/pages/motel';
 import AddMotel from '~/pages/motel/add-motel/AddMotel';
 import EditMotel from '~/pages/motel/edit-motel/EditMotel';
 import CustomerRedirect from '~/pages/customer';
+import ServicePage from '~/pages/service';
 
 export interface Route {
     path: string;
@@ -16,6 +17,7 @@ const routes: Route[] = [
     { path: '/motel-room', component: Motel },
     { path: '/motel-room/add-motel', component: AddMotel },
     { path: '/motel-room/edit-motel/:id', component: EditMotel },
+    { path: '/service', component: ServicePage },
 ];
 
 export default routes;

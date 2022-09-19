@@ -1,4 +1,6 @@
+/* eslint-disable camelcase */
 import axios from 'axios';
+import { STATUS_CODE } from '~/types/Api-Response.type';
 const baseURL = import.meta.env.VITE_BASE_URL;
 const instance = axios.create({
     baseURL,
@@ -14,7 +16,12 @@ instance.interceptors.request.use(
 );
 
 instance.interceptors.response.use(
-    (response) => response,
+    (response) => {
+        const { data } = response;
+        if ((data.status_code = STATUS_CODE.OK)) {
+            return data.result;
+        }
+    },
     (error) => {
         return Promise.reject(error);
     }
