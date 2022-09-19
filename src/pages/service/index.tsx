@@ -85,7 +85,7 @@ const ServicePage = () => {
                     title='Danh sách dịch vụ'
                     extra={[
                         <Button type='primary' key={1} icon={<PlusOutlined />}>
-                            <Link to='add'>Thêm dịch vụ</Link>
+                            <Link to='add-service'>Thêm dịch vụ</Link>
                         </Button>,
                     ]}
                 ></PageHeader>

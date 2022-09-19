@@ -1,6 +1,6 @@
 /* eslint-disable no-empty-pattern */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getAllService } from '~/api/service.api';
+import { createServiceAPI, getAllService } from '~/api/service.api';
 import { IService } from '~/types/Service.type';
 interface TypeInitialState {
     value: IService[];
@@ -11,8 +11,23 @@ const initialState: TypeInitialState = {
 export const fetchService = createAsyncThunk(
     'service/fetchService',
     async () => {
-        const response = await getAllService();
-        return response.data;
+        try {
+            const response = await getAllService();
+            return response.data;
+        } catch (error) {
+            return error;
+        }
+    }
+);
+export const createService = createAsyncThunk(
+    'service/createService',
+    async (data: IService) => {
+        try {
+            const response = await createServiceAPI(data);
+            return response.data;
+        } catch (error) {
+            return error;
+        }
     }
 );
 
