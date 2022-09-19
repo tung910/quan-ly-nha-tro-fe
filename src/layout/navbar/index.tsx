@@ -33,12 +33,12 @@ function getItem(
 
 const itemsMenu: MenuItem[] = [
     getItem('Trang chủ', '/', <PieChartOutlined />),
-    getItem('Nhà trọ', 'motel-room', <HomeOutlined />),
-    getItem('Dịch vụ', 'service', <SolutionOutlined />),
-    getItem('Chỉ số điện', 'data-power', <ThunderboltOutlined />),
-    getItem('Chỉ số nước', 'data-water', <SwapOutlined />),
-    getItem('Phát sinh', 'other-fee', <AlertOutlined />),
-    getItem('Tính tiền', 'calculator-money', <CalculatorOutlined />),
+    getItem('Nhà trọ', '/motel-room', <HomeOutlined />),
+    getItem('Dịch vụ', '/service', <SolutionOutlined />),
+    getItem('Chỉ số điện', '/data-power', <ThunderboltOutlined />),
+    getItem('Chỉ số nước', '/data-water', <SwapOutlined />),
+    getItem('Phát sinh', '/other-fee', <AlertOutlined />),
+    getItem('Tính tiền', '/calculator-money', <CalculatorOutlined />),
 ];
 const Navbar = () => {
     const navigate = useNavigate();
