@@ -10,6 +10,7 @@ interface DataType {
 }
 import styles from './Service.module.scss';
 import classNames from 'classnames/bind';
+import { TypeServiceCustomer } from '~/types/Customer';
 const cx = classNames.bind(styles);
 const columns: ColumnsType<DataType> = [
     {
@@ -37,23 +38,35 @@ const columns: ColumnsType<DataType> = [
         ),
     },
 ];
+type Props = {
+    onGetService: (data: TypeServiceCustomer[]) => void;
+};
 
-const ServiceCustomer = () => {
+const ServiceCustomer = ({ onGetService }: Props) => {
     const [selectedRow, setSelectedRow] = useState<any[]>([]);
     const [state, setstate] = useState([]);
-
+    const [getServiceCustomer, setServiceCustomer] = useState([]);
     useEffect(() => {
         const getServices = async () => {
             const { data } = await getService();
-            const dataSelected = data.map((item: DataType) => item.key);
+            const dataSelected = data.map(
+                (item: TypeServiceCustomer) => item.key
+            );
             setSelectedRow(dataSelected);
             setstate(data);
         };
         getServices();
     }, []);
     const handleSelectRows = (selectedRowKeys: any[], selectedRows: any) => {
+        setServiceCustomer(selectedRows);
         setSelectedRow(selectedRowKeys);
     };
+
+    if (getService.length > 0) {
+        onGetService(getServiceCustomer);
+    } else {
+        onGetService(state);
+    }
     return (
         <div className={cx('service')}>
             <Table

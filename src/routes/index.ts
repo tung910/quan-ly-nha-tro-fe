@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import CreateCustomer from '~/pages/customer/Create';
 import Dashboard from '~/pages/dashboard';
 import { ReactNode } from 'react';
 import Motel from '~/pages/motel';
 import AddMotel from '~/pages/motel/add-motel/AddMotel';
 import EditMotel from '~/pages/motel/edit-motel/EditMotel';
+import CustomerRedirect from '~/pages/customer';
 
 export interface Route {
     path: string;
@@ -12,7 +12,7 @@ export interface Route {
 }
 const routes: Route[] = [
     { path: '', component: Dashboard },
-    { path: '/customer/create', component: CreateCustomer },
+    { path: '/customer/create', component: CustomerRedirect },
     { path: '/motel-room', component: Motel },
     { path: '/motel-room/add-motel', component: AddMotel },
     { path: '/motel-room/edit-motel/:id', component: EditMotel },
