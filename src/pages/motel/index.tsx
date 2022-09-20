@@ -11,6 +11,7 @@ import { MotelType } from '~/types/MotelType';
 import styles from './Motel.module.scss';
 import HeaderPage from '~/components/page-header';
 import ListRoom from '../room/ListRoom';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -67,7 +68,12 @@ const Motel = () => {
                                         type='primary'
                                         icon={<PlusSquareOutlined />}
                                     >
-                                        Thêm phòng trọ
+                                        <Link
+                                            style={{ color: 'white' }}
+                                            to={'/motel-room/add-room'}
+                                        >
+                                            Thêm phòng trọ
+                                        </Link>
                                     </Button>
                                 </div>
                                 <div>

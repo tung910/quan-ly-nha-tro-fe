@@ -5,6 +5,7 @@ import { ReactNode } from 'react';
 import Motel from '~/pages/motel';
 import AddMotel from '~/pages/motel/add-motel/AddMotel';
 import EditMotel from '~/pages/motel/edit-motel/EditMotel';
+import AddRoom from '~/pages/room/add-room/AddRoom';
 
 export interface Route {
     path: string;
@@ -16,6 +17,7 @@ const routes: Route[] = [
     { path: '/motel-room', component: Motel },
     { path: '/motel-room/add-motel', component: AddMotel },
     { path: '/motel-room/edit-motel/:id', component: EditMotel },
+    { path: '/motel-room/add-room', component: AddRoom },
 ];
 
 export default routes;
