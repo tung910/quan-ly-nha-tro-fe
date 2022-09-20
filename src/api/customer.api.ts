@@ -6,12 +6,15 @@ export const addCustomer = (
     member: any,
     contract: any
 ) => {
-    return instance.post('/customer', [
-        {
+    return instance.post('/customer', {
+        data: {
             CustomerInfo: customer,
             Service: service,
             Member: member,
             Contract: contract,
         },
-    ]);
+    });
+};
+export const getService = () => {
+    return instance.get('/service');
 };

@@ -1,7 +1,7 @@
 import { Form, Input, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
-import { getService } from '../../api/customer';
+import { getService } from '../../api/customer.api';
 interface DataType {
     key: React.Key;
     name: string;

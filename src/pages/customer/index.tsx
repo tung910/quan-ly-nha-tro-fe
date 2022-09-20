@@ -8,7 +8,6 @@ import styles from './Create.module.scss';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
-import { useForm } from 'react-hook-form';
 import { addCustomer } from '~/api/customer.api';
 import { TypeCustomer, TypeServiceCustomer } from '~/types/Customer';
 const { TabPane } = Tabs;
@@ -36,15 +35,14 @@ const CustomerRedirect = () => {
     const onSubmitForm = (values: string | number, name: string) => {
         setTenantInfor({ ...tenantInfor, [name]: values });
     };
-    const { handleSubmit, control } = useForm();
 
     const [service, setService] = useState<TypeServiceCustomer[]>([]);
     const onGetService = (data: TypeServiceCustomer[]) => {
         setService(data);
     };
 
-    const [member, setMember] = useState([]);
-    const [contract, setContract] = useState([]);
+    const [member, setMember] = useState({});
+    const [contract, setContract] = useState({});
     const onSave = async () => {
         await addCustomer(tenantInfor, service, member, contract);
     };
