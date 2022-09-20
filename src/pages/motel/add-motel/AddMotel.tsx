@@ -101,7 +101,7 @@ const AddMotel = () => {
                             </Col>
                             <Col span={12}>
                                 <Form.Item
-                                    name='ward'
+                                    name='commune'
                                     label='Phường/Xã'
                                     rules={[
                                         {

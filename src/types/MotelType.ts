@@ -3,6 +3,6 @@ export type MotelType = {
     name: string;
     province: string;
     district: string;
-    ward: string;
+    commune: string;
     address: string;
 };

@@ -20,6 +20,7 @@ const Motel = () => {
     useEffect(() => {
         const getMotels = async () => {
             const { data } = await getAllMotel();
+            console.log(data);
 
             setMotels(data);
         };
