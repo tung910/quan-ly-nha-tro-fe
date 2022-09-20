@@ -1,6 +1,7 @@
 import { Form, Input, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
+import { getService } from '../../api/customer';
 interface DataType {
     key: React.Key;
     name: string;
@@ -9,6 +10,7 @@ interface DataType {
 }
 import styles from './Service.module.scss';
 import classNames from 'classnames/bind';
+import { TypeServiceCustomer } from '~/types/Customer';
 const cx = classNames.bind(styles);
 const columns: ColumnsType<DataType> = [
     {
@@ -36,42 +38,41 @@ const columns: ColumnsType<DataType> = [
         ),
     },
 ];
-
-const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
-        selectedRows;
-    },
-    getCheckboxProps: (record: DataType) => ({
-        name: record.name,
-    }),
+type Props = {
+    onGetService: (data: TypeServiceCustomer[]) => void;
 };
 
-const ServiceCustomer = () => {
-    const [selectionType, setSelectionType] = useState<'checkbox' | 'radio'>(
-        'checkbox'
-    );
-
+const ServiceCustomer = ({ onGetService }: Props) => {
+    const [selectedRow, setSelectedRow] = useState<any[]>([]);
     const [state, setstate] = useState([]);
+    const [getServiceCustomer, setServiceCustomer] = useState([]);
     useEffect(() => {
-        const getData = fetch('http://localhost:3001/service')
-            .then((res) => res.json())
-            .then((data) =>
-                setstate(
-                    data.map((row: any) => ({
-                        name: row.name,
-                        price: row.price,
-                        number: row.number,
-                    }))
-                )
+        const getServices = async () => {
+            const { data } = await getService();
+            const dataSelected = data.map(
+                (item: TypeServiceCustomer) => item.key
             );
+            setSelectedRow(dataSelected);
+            setstate(data);
+        };
+        getServices();
     }, []);
+    const handleSelectRows = (selectedRowKeys: any[], selectedRows: any) => {
+        setServiceCustomer(selectedRows);
+        setSelectedRow(selectedRowKeys);
+    };
 
+    if (getService.length > 0) {
+        onGetService(getServiceCustomer);
+    } else {
+        onGetService(state);
+    }
     return (
         <div className={cx('service')}>
             <Table
                 rowSelection={{
-                    type: selectionType,
-                    ...rowSelection,
+                    onChange: handleSelectRows,
+                    selectedRowKeys: selectedRow,
                 }}
                 columns={columns}
                 dataSource={state}

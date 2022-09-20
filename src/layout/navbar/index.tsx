@@ -1,4 +1,5 @@
-import { useNavigate } from 'react-router-dom';
+import { memo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Menu, MenuProps } from 'antd';
 import {
     PieChartOutlined,
@@ -31,18 +32,17 @@ function getItem(
 }
 
 const itemsMenu: MenuItem[] = [
-    getItem('Trang chủ', '', <PieChartOutlined />),
-    getItem('Nhà trọ', 'motel', <HomeOutlined />, [
-        getItem('Phòng trọ', 'motel-room'),
-    ]),
-    getItem('Dịch vụ', 'service', <SolutionOutlined />),
-    getItem('Chỉ số điện', 'data-power', <ThunderboltOutlined />),
-    getItem('Chỉ số nước', 'data-water', <SwapOutlined />),
-    getItem('Phát sinh', 'other-fee', <AlertOutlined />),
-    getItem('Tính tiền', 'calculator-money', <CalculatorOutlined />),
+    getItem('Trang chủ', '/', <PieChartOutlined />),
+    getItem('Nhà trọ', '/motel-room', <HomeOutlined />),
+    getItem('Dịch vụ', '/service', <SolutionOutlined />),
+    getItem('Chỉ số điện', '/data-power', <ThunderboltOutlined />),
+    getItem('Chỉ số nước', '/data-water', <SwapOutlined />),
+    getItem('Phát sinh', '/other-fee', <AlertOutlined />),
+    getItem('Tính tiền', '/calculator-money', <CalculatorOutlined />),
 ];
 const Navbar = () => {
     const navigate = useNavigate();
+    const { pathname } = useLocation();
     const handlerNavigate = ({ key }: { key: string }) => {
         navigate(key);
     };
@@ -52,7 +52,7 @@ const Navbar = () => {
             <Menu
                 theme='light'
                 onClick={handlerNavigate}
-                defaultSelectedKeys={['']}
+                selectedKeys={[pathname]}
                 mode='inline'
                 items={itemsMenu}
             />
@@ -60,4 +60,4 @@ const Navbar = () => {
     );
 };
 
-export default Navbar;
+export default memo(Navbar);

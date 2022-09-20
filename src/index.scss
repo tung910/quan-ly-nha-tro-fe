@@ -1,2 +1,5 @@
 @import 'antd/dist/antd.css';
-@import './Antd.module.scss';
+
+a[href] {
+    color: #fff;
+}
