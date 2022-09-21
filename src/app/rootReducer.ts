@@ -4,7 +4,6 @@ import userSlice from '~/feature/user/userSlice';
 
 const rootReducers = combineReducers({
     user: userSlice,
-
     service: serviceSlice,
 });
 export default rootReducers;

@@ -1,25 +1,27 @@
-import styles from './signin.module.scss';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { notification } from 'antd';
+import { CheckCircleOutlined } from '@ant-design/icons';
+import styles from './signUp.module.scss';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { IUser } from '~/types/User.type';
-import { Link } from 'react-router-dom';
-import { signIn } from '../userSlice';
-import { useAppDispatch } from '~/app/hooks';
-import { loginApi } from '~/api/auth.api';
+import { signUp } from '~/api/auth.api';
 
-const LoginPage = () => {
-    const dispatch = useAppDispatch();
+const SignUpPage = () => {
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm();
     const onSubmit: SubmitHandler<any> = async (data: IUser) => {
-        const res = await loginApi(data);
-        console.log(res);
+        await signUp(data);
+        notification.open({
+            message: 'Đăng ký tài khoản thành công',
+            icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />,
+        });
     };
     return (
         <div className={styles['center']}>
-            <h1 className=''>Đăng nhập</h1>
+            <h1 className=''>Đăng ký</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles['txt_field']}>
                     <input
@@ -64,19 +66,13 @@ const LoginPage = () => {
                     )}
                     <label htmlFor=''>Mật khẩu</label>
                 </div>
-                <div className={styles['pass']}>Forgot Password?</div>
                 <button className={styles['btn_login']} type='submit'>
-                    Đăng nhập
+                    Đăng Ký
                 </button>
-                <div className={styles['signup_link']}>
-                    Bạn chưa có tài khoản?{' '}
-                    <Link to='/sign-up' className={styles['signup_link-btn']}>
-                        Đăng kí
-                    </Link>
-                </div>
+                <div className={styles['signup_link']}></div>
             </form>
         </div>
     );
 };
 
-export default LoginPage;
+export default SignUpPage;
