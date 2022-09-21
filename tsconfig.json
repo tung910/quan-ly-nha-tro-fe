@@ -20,12 +20,14 @@
             "~/*": ["src/*"],
             "~/page/*": ["src/page/*"],
             "~/layouts/*": ["src/layouts/*"],
-            "~/components/*": ["src/layout/*"],
+            "~/components/*": ["src/components/*"],
             "~/assets/*": ["src/assets/*"],
             "~/modules/*": ["src/modules/*"],
             "~/features/*": ["src/features/*"],
             "~/api/*": ["src/api/*"],
-            "~/app/*": ["src/app/*"]
+            "~/app/*": ["src/app/*"],
+            "~/consts/*": ["src/consts/*"],
+            "~/utils/*": ["src/utils/*"]
         }
     },
     "include": ["src", "declaration.d.ts", "env.d.ts"],

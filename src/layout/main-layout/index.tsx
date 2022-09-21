@@ -18,16 +18,8 @@ const MainLayout: React.FC = () => {
             <Sider
                 theme='light'
                 trigger={null}
-                collapsible
                 collapsed={collapsed}
-                style={{
-                    overflow: 'auto',
-                    height: '100%',
-                    position: 'fixed',
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
-                }}
+                className={cx('slider-menu')}
             >
                 <Navbar />
             </Sider>
@@ -36,14 +28,7 @@ const MainLayout: React.FC = () => {
                     collapsed={collapsed}
                     setCollapsed={setCollapsed}
                 ></Header>
-                <Content
-                    className={cx('wrapper')}
-                    style={{
-                        margin: '24px 16px',
-                        padding: 24,
-                        minHeight: '100vh',
-                    }}
-                >
+                <Content className={cx('wrapper')}>
                     <Outlet />
                 </Content>
             </Layout>

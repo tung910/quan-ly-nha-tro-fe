@@ -1,41 +1,21 @@
 import { Button, Col, DatePicker, Form, Input, Row, Select } from 'antd';
-import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import moment from 'moment';
 import styles from './FormCreate.module.scss';
 import classNames from 'classnames/bind';
-import { addCustomer } from '~/api/customer';
+import { addCustomer } from '~/api/customer.api';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
 const dateFormat = 'YYYY-MM-DD';
-const initialState = {
-    name: '',
-    cmnd: '',
-    dateLevel: '',
-    PhoneNumber: '',
-    issuedBy: '',
-    address: '',
-    email: '',
-    datePicker: '',
-    birthplace: '',
-    carNumber: '',
-};
-const FormCreate = () => {
-    const [form] = Form.useForm();
-    const [dataInput, setdataInput] = useState(initialState);
 
-    const onFinish = (values: any) => {
-        const dataForm = {
-            ...values,
-            datePicker: values['datePicker'].format('YYYY-MM-DD'),
-            startDay: values['startDay'].format('YYYY-MM-DD'),
-        };
-        const FormData = async () => {
-            await addCustomer(dataForm);
-        };
-        FormData();
-    };
+type Props = {
+    onSubmitForm: (values: string | number, name: string) => void;
+};
+
+const FormCreate = ({ onSubmitForm }: Props) => {
+    const [form] = Form.useForm();
+
     return (
         <Form
             className={cx('form-create')}
@@ -44,16 +24,15 @@ const FormCreate = () => {
             labelCol={{ span: 9 }}
             wrapperCol={{ span: 16 }}
             style={{ marginTop: 20, padding: 20 }}
-            onFinish={onFinish}
         >
             {/* Row 1 */}
             <Row>
                 <Col span={8}>
                     <Form.Item
                         label={<>Họ và tên</>}
-                        name='name'
                         colon={false}
                         labelAlign='left'
+                        name='name'
                         rules={[
                             {
                                 required: true,
@@ -63,13 +42,19 @@ const FormCreate = () => {
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <Input style={{ width: 400 }} autoFocus />
+                        <Input
+                            onChange={(e) =>
+                                onSubmitForm(e.target.value, e.target.name)
+                            }
+                            name='name'
+                            style={{ width: 400 }}
+                            autoFocus
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
                     <Form.Item
                         label={<>CMND/ CCCD</>}
-                        name='cmnd'
                         colon={false}
                         labelAlign='left'
                         rules={[
@@ -80,7 +65,13 @@ const FormCreate = () => {
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <Input style={{ width: 400 }} />
+                        <Input
+                            name='cmnd'
+                            onChange={(e) =>
+                                onSubmitForm(e.target.value, e.target.name)
+                            }
+                            style={{ width: 400 }}
+                        />
                     </Form.Item>
                 </Col>
             </Row>
@@ -90,11 +81,12 @@ const FormCreate = () => {
                     <Form.Item
                         label={<>Giới Tính</>}
                         colon={false}
-                        name='gender'
                         labelAlign='left'
                         initialValue={'Nam'}
                     >
                         <Select
+                            defaultValue={1}
+                            onChange={(e) => onSubmitForm(e, 'gender')}
                             showSearch
                             style={{ width: 400 }}
                             optionFilterProp='children'
@@ -104,20 +96,25 @@ const FormCreate = () => {
                                 ).includes(input)
                             }
                         >
-                            <Option value='1'>Nam</Option>
-                            <Option value='2'>Nữ</Option>
-                            <Option value='3'>Khác</Option>
+                            <Option value={1}>Nam</Option>
+                            <Option value={2}>Nữ</Option>
+                            <Option value={3}>Khác</Option>
                         </Select>
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
                     <Form.Item
                         label={<>Ngày cấp</>}
-                        name='dateLevel'
                         colon={false}
                         labelAlign='left'
                     >
-                        <Input style={{ width: 400 }} />
+                        <Input
+                            name='dateRange'
+                            onChange={(e) =>
+                                onSubmitForm(e.target.value, e.target.name)
+                            }
+                            style={{ width: 400 }}
+                        />
                     </Form.Item>
                 </Col>
             </Row>
@@ -126,17 +123,21 @@ const FormCreate = () => {
                 <Col span={8}>
                     <Form.Item
                         label={<>Số điện thoại</>}
-                        name='PhoneNumber'
                         colon={false}
                         labelAlign='left'
                     >
-                        <Input style={{ width: 400 }} />
+                        <Input
+                            name='phoneNumber'
+                            onChange={(e) =>
+                                onSubmitForm(e.target.value, e.target.name)
+                            }
+                            style={{ width: 400 }}
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
                     <Form.Item
                         label={<>Nơi cấp</>}
-                        name='issuedBy'
                         colon={false}
                         labelAlign='left'
                         rules={[
@@ -148,6 +149,7 @@ const FormCreate = () => {
                         validateTrigger={['onBlur', 'onChange']}
                     >
                         <Select
+                            onChange={(e) => onSubmitForm(e, 'issuedBy')}
                             showSearch
                             style={{ width: 400 }}
                             optionFilterProp='children'
@@ -179,17 +181,21 @@ const FormCreate = () => {
                 <Col span={8}>
                     <Form.Item
                         label={<>Địa chỉ thường trú</>}
-                        name='address'
                         colon={false}
                         labelAlign='left'
                     >
-                        <Input style={{ width: 400 }} />
+                        <Input
+                            name='address'
+                            onChange={(e) =>
+                                onSubmitForm(e.target.value, e.target.name)
+                            }
+                            style={{ width: 400 }}
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
                     <Form.Item
                         label={<>Email</>}
-                        name='email'
                         colon={false}
                         labelAlign='left'
                         rules={[
@@ -200,7 +206,13 @@ const FormCreate = () => {
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <Input style={{ width: 400 }} />
+                        <Input
+                            name='email'
+                            onChange={(e) =>
+                                onSubmitForm(e.target.value, e.target.name)
+                            }
+                            style={{ width: 400 }}
+                        />
                     </Form.Item>
                 </Col>
             </Row>
@@ -211,19 +223,27 @@ const FormCreate = () => {
                         label={<>Ngày sinh</>}
                         colon={false}
                         labelAlign='left'
-                        name='datePicker'
                     >
-                        <DatePicker style={{ width: 400 }} />
+                        <DatePicker
+                            name='dateOfBirth'
+                            onChange={(e) =>
+                                onSubmitForm(
+                                    e?.format('YYYY-MM-DD') || '',
+                                    'dateOfBirth'
+                                )
+                            }
+                            style={{ width: 400 }}
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
                     <Form.Item
                         label={<>Nơi sinh</>}
-                        name='birthplace'
                         colon={false}
                         labelAlign='left'
                     >
                         <Select
+                            onChange={(e) => onSubmitForm(e, 'birthPlace')}
                             showSearch
                             style={{ width: 400 }}
                             optionFilterProp='children'
@@ -255,9 +275,9 @@ const FormCreate = () => {
                 <Col span={8}>
                     <Form.Item
                         label={<>Thuê phòng số </>}
+                        colon={false}
                         name='numberRoom'
                         initialValue={1}
-                        colon={false}
                         labelAlign='left'
                         rules={[
                             {
@@ -267,7 +287,14 @@ const FormCreate = () => {
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <Input disabled style={{ width: 400 }} />
+                        <Input
+                            name='numberRoom'
+                            onChange={(e) =>
+                                onSubmitForm(e.target.value, e.target.name)
+                            }
+                            disabled
+                            style={{ width: 400 }}
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -285,7 +312,14 @@ const FormCreate = () => {
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <Input suffix='VNĐ' style={{ width: 400 }} />
+                        <Input
+                            name='priceRoom'
+                            onChange={(e) =>
+                                onSubmitForm(e.target.value, e.target.name)
+                            }
+                            suffix='VNĐ'
+                            style={{ width: 400 }}
+                        />
                     </Form.Item>
                 </Col>
             </Row>
@@ -294,9 +328,9 @@ const FormCreate = () => {
                 <Col span={8}>
                     <Form.Item
                         label={<>Ngày bắt đầu </>}
-                        name='startDay'
                         colon={false}
                         labelAlign='left'
+                        name='startDay'
                         initialValue={moment('2015-06-06', dateFormat)}
                         rules={[
                             {
@@ -306,15 +340,25 @@ const FormCreate = () => {
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <DatePicker disabled style={{ width: 400 }} />
+                        <DatePicker
+                            name='startDay'
+                            onChange={(e) =>
+                                onSubmitForm(
+                                    e?.format('YYYY-MM-DD') || '',
+                                    'startDay'
+                                )
+                            }
+                            disabled
+                            style={{ width: 400 }}
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
                     <Form.Item
                         label={<>Đặt cọc</>}
-                        name='deposit'
-                        initialValue={0}
                         colon={false}
+                        initialValue={0}
+                        name='deposit'
                         labelAlign='left'
                         rules={[
                             {
@@ -324,7 +368,14 @@ const FormCreate = () => {
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <Input suffix='VNĐ' style={{ width: 400 }} />
+                        <Input
+                            name='deposit'
+                            onChange={(e) =>
+                                onSubmitForm(e.target.value, e.target.name)
+                            }
+                            suffix='VNĐ'
+                            style={{ width: 400 }}
+                        />
                     </Form.Item>
                 </Col>
             </Row>
@@ -333,10 +384,9 @@ const FormCreate = () => {
                 <Col span={8}>
                     <Form.Item
                         label={<>Kỳ thanh toán</>}
-                        name='PaymentPeriod'
                         colon={false}
                         labelAlign='left'
-                        initialValue={'Kỳ 30'}
+                        name='paymentPeriod'
                         rules={[
                             {
                                 required: true,
@@ -346,6 +396,8 @@ const FormCreate = () => {
                         validateTrigger={['onBlur', 'onChange']}
                     >
                         <Select
+                            defaultValue={1}
+                            onChange={(e) => onSubmitForm(e, 'paymentPeriod')}
                             showSearch
                             style={{ width: 400 }}
                             optionFilterProp='children'
@@ -365,18 +417,16 @@ const FormCreate = () => {
                                     )
                             }
                         >
-                            <Option value='1'>Kỳ 30</Option>
-                            <Option value='2'>Kỳ 15</Option>
+                            <Option value={1}>Kỳ 30</Option>
+                            <Option value={2}>Kỳ 15</Option>
                         </Select>
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
                     <Form.Item
                         label={<>Thanh toán mỗi lần</>}
-                        name='payment'
                         colon={false}
                         labelAlign='left'
-                        initialValue={1}
                         rules={[
                             {
                                 required: true,
@@ -387,6 +437,8 @@ const FormCreate = () => {
                         validateTrigger={['onBlur', 'onChange']}
                     >
                         <Select
+                            defaultValue={1}
+                            onChange={(e) => onSubmitForm(e, 'payment')}
                             showSearch
                             suffixIcon='Tháng'
                             style={{ width: 400 }}
@@ -407,9 +459,9 @@ const FormCreate = () => {
                                     )
                             }
                         >
-                            <Option value='1'>1</Option>
-                            <Option value='2'>2</Option>
-                            <Option value='3'>3</Option>
+                            <Option value={1}>1</Option>
+                            <Option value={2}>2</Option>
+                            <Option value={3}>3</Option>
                         </Select>
                     </Form.Item>
                 </Col>
@@ -419,35 +471,35 @@ const FormCreate = () => {
                 <Col span={8}>
                     <Form.Item
                         label={<>Số xe</>}
-                        name='carNumber'
                         colon={false}
                         labelAlign='left'
                     >
-                        <Input style={{ width: 400 }} />
+                        <Input
+                            name='carNumber'
+                            onChange={(e) =>
+                                onSubmitForm(e.target.value, e.target.name)
+                            }
+                            style={{ width: 400 }}
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
                     <Form.Item
                         label={<>Hình ảnh</>}
-                        name='Image'
                         colon={false}
                         labelAlign='left'
                     >
-                        <Input type='file' style={{ width: 400 }} />
+                        <Input
+                            name='Image'
+                            onChange={(e) =>
+                                onSubmitForm(e.target.value, e.target.name)
+                            }
+                            type='file'
+                            style={{ width: 400 }}
+                        />
                     </Form.Item>
                 </Col>
             </Row>
-            <Button icon={<RollbackOutlined />} className={cx('btn-back')}>
-                Quay lại
-            </Button>
-            <Button
-                htmlType='submit'
-                type='primary'
-                className={cx('btn-submit')}
-                icon={<CheckOutlined />}
-            >
-                Lưu Thông Tin
-            </Button>
         </Form>
     );
 };

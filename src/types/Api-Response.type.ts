@@ -1,0 +1,8 @@
+enum STATUS_CODE {
+    OK = 200,
+    BAD_REQUEST = 400,
+    UNAUTHORIZE = 401,
+    FORBIDDEN = 403,
+    NOT_FOUND = 404,
+}
+export { STATUS_CODE };
