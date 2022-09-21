@@ -1,4 +1,4 @@
-import { Button, Tabs } from 'antd';
+import { Button, Tabs, Form } from 'antd';
 import ContractCustomer from '~/modules/contract-customer/ContractCustomer';
 import MemberCustomer from '~/modules/member-customer/MemberCustomer';
 import ServiceCustomer from '~/modules/service-customer/ServiceCustomer';
@@ -42,7 +42,17 @@ const CustomerRedirect = () => {
     };
 
     const [member, setMember] = useState({});
-    const [contract, setContract] = useState({});
+    const [contract, setContract] = useState({
+        coinNumber: '',
+        dateStart: '',
+        timeCoin: '',
+        dateLate: '',
+    });
+    const [form]: any = Form.useForm();
+    const onFinish = (values: any) => {
+        const data = form.getFieldValue();
+        setContract({ ...contract, ...data });
+    };
     const onSave = async () => {
         await addCustomer(tenantInfor, service, member, contract);
     };
@@ -74,7 +84,10 @@ const CustomerRedirect = () => {
                         <MemberCustomer />
                     </TabPane>
                     <TabPane tab='Hợp đồng' key='tab-d'>
-                        <ContractCustomer />
+                        <ContractCustomer
+                            formItem={form}
+                            onFinished={onFinish}
+                        />
                     </TabPane>
                 </Tabs>
             </div>
