@@ -20,7 +20,6 @@ const Motel = () => {
     useEffect(() => {
         const getMotels = async () => {
             const { data } = await getAllMotel();
-            console.log(data);
 
             setMotels(data);
         };
@@ -31,7 +30,7 @@ const Motel = () => {
         const confirm = window.confirm('Bạn muốn xóa không?');
         if (confirm) {
             await removeMotel(id);
-            setMotels(motels.filter((item) => item.id !== id));
+            setMotels(motels.filter((item) => item._id !== id));
         }
     };
     return (
@@ -52,7 +51,7 @@ const Motel = () => {
                                     <Button
                                         type='primary'
                                         icon={<DeleteOutlined />}
-                                        onClick={() => onRemoveMotel(item.id)}
+                                        onClick={() => onRemoveMotel(item._id)}
                                         danger
                                     >
                                         Xóa nhà trọ
@@ -61,7 +60,7 @@ const Motel = () => {
                                         className={cx('btn-edit-motel')}
                                         type='primary'
                                         icon={<EditOutlined />}
-                                        href={`/motel-room/edit-motel/${item.id}`}
+                                        href={`/motel-room/edit-motel/${item._id}`}
                                     >
                                         Sửa nhà trọ
                                     </Button>
@@ -78,7 +77,7 @@ const Motel = () => {
                                     </Button>
                                 </div>
                                 <div>
-                                    <ListRoom motelId={item.id} />
+                                    <ListRoom motelId={item._id} />
                                 </div>
                             </Tabs.TabPane>
                         );
