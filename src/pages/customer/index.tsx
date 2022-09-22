@@ -1,4 +1,4 @@
-import { Button, Tabs } from 'antd';
+import { Button, Tabs, Form } from 'antd';
 import ContractCustomer from '~/modules/contract-customer/ContractCustomer';
 import MemberCustomer from '~/modules/member-customer/MemberCustomer';
 import ServiceCustomer from '~/modules/service-customer/ServiceCustomer';
@@ -8,7 +8,6 @@ import styles from './Create.module.scss';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
-import { useForm } from 'react-hook-form';
 import { addCustomer } from '~/api/customer.api';
 import { TypeCustomer, TypeServiceCustomer } from '~/types/Customer';
 const { TabPane } = Tabs;
@@ -36,15 +35,24 @@ const CustomerRedirect = () => {
     const onSubmitForm = (values: string | number, name: string) => {
         setTenantInfor({ ...tenantInfor, [name]: values });
     };
-    const { handleSubmit, control } = useForm();
 
     const [service, setService] = useState<TypeServiceCustomer[]>([]);
     const onGetService = (data: TypeServiceCustomer[]) => {
         setService(data);
     };
 
-    const [member, setMember] = useState([]);
-    const [contract, setContract] = useState([]);
+    const [member, setMember] = useState({});
+    const [contract, setContract] = useState({
+        coinNumber: '',
+        dateStart: '',
+        timeCoin: '',
+        dateLate: '',
+    });
+    const [form]: any = Form.useForm();
+    const onFinish = (values: any) => {
+        const data = form.getFieldValue();
+        setContract({ ...contract, ...data });
+    };
     const onSave = async () => {
         await addCustomer(tenantInfor, service, member, contract);
     };
@@ -76,7 +84,10 @@ const CustomerRedirect = () => {
                         <MemberCustomer />
                     </TabPane>
                     <TabPane tab='Hợp đồng' key='tab-d'>
-                        <ContractCustomer />
+                        <ContractCustomer
+                            formItem={form}
+                            onFinished={onFinish}
+                        />
                     </TabPane>
                 </Tabs>
             </div>
