@@ -13,7 +13,7 @@ const ListRoom = ({ motelId }: Props) => {
         const Room = async () => {
             const { data } = await getRooms(motelId);
 
-            setRooms(data.rooms);
+            setRooms(data);
         };
         Room();
     }, []);
@@ -26,7 +26,7 @@ const ListRoom = ({ motelId }: Props) => {
                         return (
                             <CardItem
                                 key={index}
-                                roomName={item.name}
+                                roomName={item.roomName}
                             ></CardItem>
                         );
                     })}

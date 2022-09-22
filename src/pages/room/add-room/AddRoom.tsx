@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-console */
 import { Form, Input, Row, Col, Upload, Select } from 'antd';
 import { RollbackOutlined, InboxOutlined } from '@ant-design/icons';
 import { Content } from 'antd/lib/layout/layout';
@@ -9,6 +7,9 @@ import classNames from 'classnames/bind';
 import HeaderPage from '~/components/page-header';
 import { useEffect, useState } from 'react';
 import { getAllMotel } from '~/api/motel.api';
+import { addRoom } from '~/api/room.api';
+import { useNavigate } from 'react-router-dom';
+import { RoomType } from '~/types/RoomType';
 const { Option } = Select;
 const { Dragger } = Upload;
 const cx = classNames.bind(styles);
@@ -16,6 +17,7 @@ const { TextArea } = Input;
 
 const AddRoom = () => {
     const [form] = Form.useForm();
+    const navigate = useNavigate();
     const [motels, setMotels] = useState<MotelType[]>();
     const [fileList, setFileList] = useState<any>([]);
 
@@ -27,8 +29,13 @@ const AddRoom = () => {
         };
         getMotels();
     }, []);
-    const onFinish = async (values: MotelType) => {
-        console.log(values);
+    const onFinish = async (values: RoomType) => {
+        const add = async () => {
+            await addRoom(values);
+            alert('Bạn thêm thành công!');
+            navigate('/motel-room');
+        };
+        add();
     };
 
     const handleBeforeUpload = (file: any) => {
@@ -36,9 +43,7 @@ const AddRoom = () => {
         return false;
     };
 
-    const handleChangeFiles = ({ fileList, file }) => {
-        console.log(fileList);
-
+    const handleChangeFiles = ({ fileList, file }: any) => {
         setFileList([...fileList]);
     };
 
@@ -104,7 +109,7 @@ const AddRoom = () => {
                                                 return (
                                                     <Option
                                                         key={index}
-                                                        value={item.id}
+                                                        value={item._id}
                                                     >
                                                         {item.name}
                                                     </Option>
@@ -168,11 +173,6 @@ const AddRoom = () => {
                                             required: true,
                                             message: 'Không được để trống',
                                         },
-                                        {
-                                            type: 'string',
-                                            min: 3,
-                                            message: 'Phải lớn hơn 3 ký tự!',
-                                        },
                                     ]}
                                 >
                                     <Input placeholder='' addonAfter='m' />
@@ -199,9 +199,6 @@ const AddRoom = () => {
                                             multiple: true,
                                             onChange: handleChangeFiles,
                                             listType: 'picture',
-                                            // data: (file) => {
-                                            //     // console.log('DATA:', file);
-                                            // },
                                         }}
                                     >
                                         <p className='ant-upload-drag-icon'>
