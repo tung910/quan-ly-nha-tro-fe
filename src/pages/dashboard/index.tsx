@@ -1,8 +1,9 @@
 import { Col, Form, Row } from 'antd';
+import classNames from 'classnames/bind';
+
 import Revenue from './Revenue';
 import RoomStatus from './RoomStatus';
 import styles from './Dasboard.module.scss';
-import classNames from 'classnames/bind';
 import AvailableRooms from './AvailableRooms';
 import OweRoomFees from './OweRoomFees';
 import UnfinishedWork from './UnfinishedWork';
