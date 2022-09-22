@@ -4,5 +4,5 @@ export const getRooms = (id: string) => {
     return instance.get(`/motel-room/list?roomId=${id}`);
 };
 export const addRoom = (room: RoomType) => {
-    return instance.post(`/motel-room/create`, room);
+    return instance.post(`/motel-room/create`, { data: room });
 };

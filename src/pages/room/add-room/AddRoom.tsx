@@ -29,6 +29,7 @@ const AddRoom = () => {
         };
         getMotels();
     }, []);
+
     const onFinish = async (values: RoomType) => {
         const add = async () => {
             await addRoom(values);
