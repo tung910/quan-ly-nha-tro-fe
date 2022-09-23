@@ -1,19 +1,18 @@
-import { Button, Col, DatePicker, Form, Input, Row, Select } from 'antd';
-import { useState } from 'react';
+import { Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import moment from 'moment';
 import styles from './FormCreate.module.scss';
 import classNames from 'classnames/bind';
-import { addCustomer } from '~/api/customer.api';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
-const dateFormat = 'YYYY-MM-DD';
+const dateFormat = 'DD-MM-YYYY';
 
 type Props = {
     onSubmitForm: (values: string | number, name: string) => void;
+    roomId: string;
 };
 
-const FormCreate = ({ onSubmitForm }: Props) => {
+const FormCreate = ({ onSubmitForm, roomId }: Props) => {
     const [form] = Form.useForm();
 
     return (
@@ -277,7 +276,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         label={<>Thuê phòng số </>}
                         colon={false}
                         name='motelRoomID'
-                        initialValue={1}
+                        initialValue={roomId}
                         labelAlign='left'
                         rules={[
                             {
@@ -331,7 +330,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         colon={false}
                         labelAlign='left'
                         name='startDate'
-                        initialValue={moment('2015-06-06', dateFormat)}
+                        initialValue={moment(new Date(), dateFormat)}
                         rules={[
                             {
                                 required: true,
@@ -348,7 +347,6 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                                     'startDay'
                                 )
                             }
-                            disabled
                             style={{ width: 400 }}
                         />
                     </Form.Item>

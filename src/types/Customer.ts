@@ -13,7 +13,7 @@ export type TypeCustomer = {
     licensePlates: string;
     motelRoomID: string;
     priceRoom: number;
-    startDate: string;
+    startDate: string | Date;
     deposit: number;
     payEachTime: number;
     paymentPeriod: number;
