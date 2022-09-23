@@ -24,10 +24,10 @@ const ListRoom = ({ motelId }: Props) => {
             setRooms(rooms.filter((item) => item._id !== id));
         }
     };
+
     return (
         <div>
             <Row>
-                {' '}
                 {rooms &&
                     rooms.map((item, index) => {
                         return (
@@ -35,7 +35,11 @@ const ListRoom = ({ motelId }: Props) => {
                                 key={index}
                                 roomName={item.roomName}
                                 idRoom={item._id}
+                                unitPrice={item.unitPrice}
+                                isRent={item.isRent}
                                 onRemoveMotel={() => onRemove(item._id)}
+                                customerName={item.customerName}
+                                maxPerson={item.maxPerson}
                             ></CardItem>
                         );
                     })}
