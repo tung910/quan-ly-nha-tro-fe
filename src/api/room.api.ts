@@ -6,3 +6,6 @@ export const getRooms = (id: string) => {
 export const addRoom = (room: RoomType) => {
     return instance.post(`/motel-room/create`, { data: room });
 };
+export const removeRoom = (id: string) => {
+    return instance.delete(`/motel-room/delete/${id}`);
+};
