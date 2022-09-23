@@ -17,7 +17,7 @@ const EditMotel = () => {
     const navigate = useNavigate();
 
     const onFinish = async (values: MotelType) => {
-        values.id = id;
+        values._id = id;
 
         try {
             await updateMotel(values);
@@ -116,7 +116,7 @@ const EditMotel = () => {
                             </Col>
                             <Col span={12}>
                                 <Form.Item
-                                    name='ward'
+                                    name='commune'
                                     label='Phường/Xã'
                                     rules={[
                                         {

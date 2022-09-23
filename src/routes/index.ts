@@ -8,6 +8,7 @@ import AddRoom from '~/pages/room/add-room/AddRoom';
 import CustomerRedirect from '~/pages/customer';
 import ServicePage from '~/pages/service';
 import AddService from '~/pages/service/AddService';
+import EditRoom from '~/pages/room/eidt-room';
 
 export interface Route {
     path: string;
@@ -20,6 +21,7 @@ const routes: Route[] = [
     { path: '/motel-room/add-motel', component: AddMotel },
     { path: '/motel-room/edit-motel/:id', component: EditMotel },
     { path: '/motel-room/add-room', component: AddRoom },
+    { path: '/motel-room/edit-room/:id', component: EditRoom },
     { path: '/service', component: ServicePage },
     { path: '/service/add-service', component: AddService },
 ];
