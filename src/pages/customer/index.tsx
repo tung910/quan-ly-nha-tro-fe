@@ -55,7 +55,13 @@ const CustomerRedirect = () => {
         setContract({ ...contract, ...data });
     };
     const onSave = async () => {
-        await addCustomer(tenantInfor, service, member, contract);
+        const data = {
+            CustomerInfo: tenantInfor,
+            Service: service,
+            Member: member,
+            Contract: contract,
+        };
+        await addCustomer(data);
     };
     return (
         <div>
