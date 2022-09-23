@@ -33,6 +33,13 @@ const Motel = () => {
         <div>
             <div className={cx('button-motel')}>
                 <Button
+                    href='/motel-room/customer'
+                    type='primary'
+                    icon={<PlusSquareOutlined />}
+                >
+                    Khách thuê
+                </Button>
+                <Button
                     href='/motel-room/add-motel'
                     type='primary'
                     icon={<PlusSquareOutlined />}
