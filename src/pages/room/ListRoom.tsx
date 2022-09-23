@@ -34,6 +34,7 @@ const ListRoom = ({ motelId }: Props) => {
                             <CardItem
                                 key={index}
                                 roomName={item.roomName}
+                                idRoom={item._id}
                                 onRemoveMotel={() => onRemove(item._id)}
                             ></CardItem>
                         );

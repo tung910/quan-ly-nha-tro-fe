@@ -13,6 +13,7 @@ export interface Props {
     roomName?: ReactNode | string;
     unitPrice?: string;
     totalCustomer?: string;
+    idRoom?: string;
     onRemoveMotel: () => void;
 }
 const cx = classNames.bind(styles);
@@ -20,6 +21,7 @@ const CardItem = ({
     unitPrice,
     totalCustomer,
     roomName,
+    idRoom,
     onRemoveMotel,
 }: Props) => {
     return (
@@ -41,7 +43,12 @@ const CardItem = ({
             <Row>
                 <Col span={12}>
                     <Button type='primary' icon={<EditOutlined />}>
-                        Sửa
+                        <Link
+                            to={`/motel-room/edit-room/${idRoom}`}
+                            style={{ color: 'white' }}
+                        >
+                            Sửa
+                        </Link>
                     </Button>
                 </Col>
                 <Col span={12}>

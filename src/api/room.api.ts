@@ -9,3 +9,9 @@ export const addRoom = (room: RoomType) => {
 export const removeRoom = (id: string) => {
     return instance.delete(`/motel-room/delete/${id}`);
 };
+export const getRoom = (id: string) => {
+    return instance.get(`/motel-room/detail/${id}`);
+};
+export const editRoom = (room: RoomType) => {
+    return instance.put(`/motel-room/edit/${room._id}`, { data: room });
+};
