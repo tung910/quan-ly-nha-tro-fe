@@ -1,22 +1,22 @@
 export type TypeCustomer = {
     id?: string;
-    name: string;
-    cmnd: string;
+    customerName: string;
+    citizenIdentification: number;
     dateRange: string;
-    phoneNumber: string;
+    phone: string;
     issuedBy: string;
     address: string;
     gender: number;
     email: string;
     dateOfBirth: string;
     birthPlace: string;
-    carNumber: string;
-    numberRoom: number;
+    licensePlates: string;
+    motelRoomID: string;
     priceRoom: number;
-    startDay: string;
+    startDate: string | Date;
     deposit: number;
+    payEachTime: number;
     paymentPeriod: number;
-    payment: number;
 };
 
 export type TypeServiceCustomer = {

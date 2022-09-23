@@ -1,4 +1,4 @@
-import { Button, Tabs, Form } from 'antd';
+import { Button, Tabs, Form, message } from 'antd';
 import ContractCustomer from '~/modules/contract-customer/ContractCustomer';
 import MemberCustomer from '~/modules/member-customer/MemberCustomer';
 import ServiceCustomer from '~/modules/service-customer/ServiceCustomer';
@@ -8,30 +8,36 @@ import styles from './Create.module.scss';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
-import { addCustomer } from '~/api/customer.api';
+import { addCustomerToRoom } from '~/api/customer.api';
 import { TypeCustomer, TypeServiceCustomer } from '~/types/Customer';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { MESSAGES } from '~/consts/message.const';
 const { TabPane } = Tabs;
 
 const CustomerRedirect = () => {
+    const { search } = useLocation();
+    const roomId = new URLSearchParams(search).get('roomId') || '';
+
     const [tenantInfor, setTenantInfor] = useState<TypeCustomer>({
-        name: '',
-        cmnd: '',
+        customerName: '',
+        citizenIdentification: 0,
         dateRange: '',
-        phoneNumber: '',
+        phone: '',
         issuedBy: '',
         address: '',
         gender: 1,
         email: '',
         dateOfBirth: '',
         birthPlace: '',
-        carNumber: '',
-        numberRoom: 1,
+        licensePlates: '',
+        motelRoomID: roomId,
         priceRoom: 3000000,
-        startDay: '2015-06-06',
+        startDate: new Date(),
         deposit: 0,
+        payEachTime: 1,
         paymentPeriod: 1,
-        payment: 1,
     });
+
     const onSubmitForm = (values: string | number, name: string) => {
         setTenantInfor({ ...tenantInfor, [name]: values });
     };
@@ -40,6 +46,7 @@ const CustomerRedirect = () => {
     const onGetService = (data: TypeServiceCustomer[]) => {
         setService(data);
     };
+    const navigate = useNavigate();
 
     const [member, setMember] = useState({});
     const [contract, setContract] = useState({
@@ -60,7 +67,9 @@ const CustomerRedirect = () => {
             Member: member,
             Contract: contract,
         };
-        await addCustomer(data);
+        await addCustomerToRoom(data);
+        await message.success(MESSAGES.ADD_SUCCESS);
+        navigate('motel-room');
     };
     return (
         <div>
@@ -81,7 +90,10 @@ const CustomerRedirect = () => {
 
                 <Tabs>
                     <TabPane tab='Thông tin khách thuê' key='tab-a'>
-                        <FormCreate onSubmitForm={onSubmitForm} />
+                        <FormCreate
+                            onSubmitForm={onSubmitForm}
+                            roomId={roomId}
+                        />
                     </TabPane>
                     <TabPane tab='Dịch vụ' key='tab-b'>
                         <ServiceCustomer onGetService={onGetService} />
