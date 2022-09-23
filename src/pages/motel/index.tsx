@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
-import { Tabs, Card, Button, Row, Col } from 'antd';
+import { Tabs, Button } from 'antd';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
 import {
     EditOutlined,
     PlusSquareOutlined,
     DeleteOutlined,
 } from '@ant-design/icons';
-import { getAllMotel, removeMotel } from '~/api/Motel';
-import { MotelType } from '~/types/Model';
+import { getAllMotel, removeMotel } from '~/api/motel.api';
+import { MotelType } from '~/types/MotelType';
 import styles from './Motel.module.scss';
+import HeaderPage from '~/components/page-header';
+import ListRoom from '../room/ListRoom';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -18,15 +20,17 @@ const Motel = () => {
     useEffect(() => {
         const getMotels = async () => {
             const { data } = await getAllMotel();
+
             setMotels(data);
         };
         getMotels();
     }, []);
+
     const onRemoveMotel = async (id: string) => {
         const confirm = window.confirm('Bạn muốn xóa không?');
         if (confirm) {
             await removeMotel(id);
-            setMotels(motels.filter((item) => item.id !== id));
+            setMotels(motels.filter((item) => item._id !== id));
         }
     };
     return (
@@ -39,12 +43,8 @@ const Motel = () => {
                 >
                     Khách thuê
                 </Button>
-                <Button
-                    href='/motel-room/add-motel'
-                    type='primary'
-                    icon={<PlusSquareOutlined />}
-                >
-                    Thêm nhà trọ
+                <Button type='primary' icon={<PlusSquareOutlined />}>
+                    <Link to={'/motel-room/add-motel'}>Thêm nhà trọ</Link>
                 </Button>
             </div>
             <Tabs defaultActiveKey='1'>
@@ -56,7 +56,7 @@ const Motel = () => {
                                     <Button
                                         type='primary'
                                         icon={<DeleteOutlined />}
-                                        onClick={() => onRemoveMotel(item.id)}
+                                        onClick={() => onRemoveMotel(item._id)}
                                         danger
                                     >
                                         Xóa nhà trọ
@@ -65,7 +65,7 @@ const Motel = () => {
                                         className={cx('btn-edit-motel')}
                                         type='primary'
                                         icon={<EditOutlined />}
-                                        href={`/motel-room/edit-motel/${item.id}`}
+                                        href={`/motel-room/edit-motel/${item._id}`}
                                     >
                                         Sửa nhà trọ
                                     </Button>
@@ -73,47 +73,17 @@ const Motel = () => {
                                         type='primary'
                                         icon={<PlusSquareOutlined />}
                                     >
-                                        Thêm phòng trọ
+                                        <Link
+                                            style={{ color: 'white' }}
+                                            to={'/motel-room/add-room'}
+                                        >
+                                            Thêm phòng trọ
+                                        </Link>
                                     </Button>
                                 </div>
-                                <Card
-                                    title='Phòng 1'
-                                    hoverable
-                                    extra={<a href='#'>Xem chi tiết</a>}
-                                    style={{ width: 300 }}
-                                >
-                                    <Col span={8}>
-                                        <Button
-                                            type='primary'
-                                            icon={<PlusSquareOutlined />}
-                                        >
-                                            <Link to='/customer/create'>
-                                                Thêm khách
-                                            </Link>
-                                        </Button>
-                                    </Col>
-                                    <p>Số lượng khách</p>
-                                    <p>Giá phòng</p>
-                                    <Row>
-                                        <Col span={8}>
-                                            <Button
-                                                type='primary'
-                                                icon={<EditOutlined />}
-                                            >
-                                                Sửa
-                                            </Button>
-                                        </Col>
-                                        <Col span={8}>
-                                            <Button
-                                                type='primary'
-                                                icon={<DeleteOutlined />}
-                                                danger
-                                            >
-                                                Xóa
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                </Card>
+                                <div>
+                                    <ListRoom motelId={item._id} />
+                                </div>
                             </Tabs.TabPane>
                         );
                     })}

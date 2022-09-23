@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import Motel from '~/pages/motel';
 import AddMotel from '~/pages/motel/add-motel/AddMotel';
 import EditMotel from '~/pages/motel/edit-motel/EditMotel';
+import AddRoom from '~/pages/room/add-room/AddRoom';
 import CustomerRedirect from '~/pages/customer';
 import ServicePage from '~/pages/service';
 import AddService from '~/pages/service/AddService';
@@ -20,6 +21,7 @@ const routes: Route[] = [
     { path: '/motel-room/customer', component: ListCustomer },
     { path: '/motel-room/add-motel', component: AddMotel },
     { path: '/motel-room/edit-motel/:id', component: EditMotel },
+    { path: '/motel-room/add-room', component: AddRoom },
     { path: '/service', component: ServicePage },
     { path: '/service/add-service', component: AddService },
 ];
