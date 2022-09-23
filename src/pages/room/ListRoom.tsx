@@ -1,6 +1,6 @@
 import { Row } from 'antd';
 import { useEffect, useState } from 'react';
-import { getRooms } from '~/api/room.api';
+import { getRooms, removeRoom } from '~/api/room.api';
 import CardItem from '~/components/card';
 import { RoomType } from '~/types/RoomType';
 export interface Props {
@@ -17,6 +17,13 @@ const ListRoom = ({ motelId }: Props) => {
         };
         Room();
     }, []);
+    const onRemove = async (id: string) => {
+        const confirm = window.confirm('Bạn muốn xóa không?');
+        if (confirm) {
+            await removeRoom(id);
+            setRooms(rooms.filter((item) => item._id !== id));
+        }
+    };
     return (
         <div>
             <Row>
@@ -27,6 +34,8 @@ const ListRoom = ({ motelId }: Props) => {
                             <CardItem
                                 key={index}
                                 roomName={item.roomName}
+                                idRoom={item._id}
+                                onRemoveMotel={() => onRemove(item._id)}
                             ></CardItem>
                         );
                     })}

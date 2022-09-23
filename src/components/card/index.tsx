@@ -13,9 +13,17 @@ export interface Props {
     roomName?: ReactNode | string;
     unitPrice?: string;
     totalCustomer?: string;
+    idRoom?: string;
+    onRemoveMotel: () => void;
 }
 const cx = classNames.bind(styles);
-const CardItem = ({ unitPrice, totalCustomer, roomName }: Props) => {
+const CardItem = ({
+    unitPrice,
+    totalCustomer,
+    roomName,
+    idRoom,
+    onRemoveMotel,
+}: Props) => {
     return (
         <Card
             className={cx('card-item')}
@@ -35,11 +43,21 @@ const CardItem = ({ unitPrice, totalCustomer, roomName }: Props) => {
             <Row>
                 <Col span={12}>
                     <Button type='primary' icon={<EditOutlined />}>
-                        Sửa
+                        <Link
+                            to={`/motel-room/edit-room/${idRoom}`}
+                            style={{ color: 'white' }}
+                        >
+                            Sửa
+                        </Link>
                     </Button>
                 </Col>
                 <Col span={12}>
-                    <Button type='primary' icon={<DeleteOutlined />} danger>
+                    <Button
+                        type='primary'
+                        icon={<DeleteOutlined />}
+                        danger
+                        onClick={() => onRemoveMotel()}
+                    >
                         Xóa
                     </Button>
                 </Col>
