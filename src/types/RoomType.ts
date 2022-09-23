@@ -1,4 +1,4 @@
-export type RoomType = {
+export interface RoomType {
     _id: string;
     roomName: string;
     width: number;
@@ -7,4 +7,7 @@ export type RoomType = {
     maxPerson: number;
     motelID: string;
     description: string;
-};
+    isRent: boolean;
+    isDebit: boolean;
+    customerName: string;
+}

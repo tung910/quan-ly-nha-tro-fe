@@ -1,4 +1,4 @@
-import { Form, Input, Row, Col } from 'antd';
+import { Form, Input, Row, Col, message } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
 import { Content } from 'antd/lib/layout/layout';
 import { MotelType } from '~/types/MotelType';
@@ -7,6 +7,7 @@ import classNames from 'classnames/bind';
 import { addMotel } from '~/api/motel.api';
 import { useNavigate } from 'react-router-dom';
 import HeaderPage from '~/components/page-header';
+import { MESSAGES } from '~/consts/message.const';
 const cx = classNames.bind(styles);
 
 const AddMotel = () => {
@@ -15,7 +16,7 @@ const AddMotel = () => {
     const onFinish = async (values: MotelType) => {
         const add = async () => {
             await addMotel(values);
-            alert('Bạn thêm thành công!');
+            message.success(MESSAGES.ADD_SUCCESS);
             navigate('/motel-room');
         };
         add();

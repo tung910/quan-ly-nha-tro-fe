@@ -1,4 +1,4 @@
-import { Form, Input, Row, Col, Upload, Select } from 'antd';
+import { Form, Input, Row, Col, Upload, Select, message } from 'antd';
 import { RollbackOutlined, InboxOutlined } from '@ant-design/icons';
 import { Content } from 'antd/lib/layout/layout';
 import { MotelType } from '~/types/MotelType';
@@ -10,6 +10,7 @@ import { getAllMotel } from '~/api/motel.api';
 import { addRoom } from '~/api/room.api';
 import { useNavigate } from 'react-router-dom';
 import { RoomType } from '~/types/RoomType';
+import { MESSAGES } from '~/consts/message.const';
 const { Option } = Select;
 const { Dragger } = Upload;
 const cx = classNames.bind(styles);
@@ -33,7 +34,7 @@ const AddRoom = () => {
     const onFinish = async (values: RoomType) => {
         const add = async () => {
             await addRoom(values);
-            alert('Bạn thêm thành công!');
+            message.success(MESSAGES.ADD_SUCCESS);
             navigate('/motel-room');
         };
         add();
