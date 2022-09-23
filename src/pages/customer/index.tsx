@@ -14,23 +14,23 @@ const { TabPane } = Tabs;
 
 const CustomerRedirect = () => {
     const [tenantInfor, setTenantInfor] = useState<TypeCustomer>({
-        name: '',
-        cmnd: '',
+        customerName: '',
+        citizenIdentification: 0,
         dateRange: '',
-        phoneNumber: '',
+        phone: '',
         issuedBy: '',
         address: '',
         gender: 1,
         email: '',
         dateOfBirth: '',
         birthPlace: '',
-        carNumber: '',
-        numberRoom: 1,
+        licensePlates: '',
+        motelRoomID: '1',
         priceRoom: 3000000,
-        startDay: '2015-06-06',
+        startDate: '2015-06-06',
         deposit: 0,
+        payEachTime: 1,
         paymentPeriod: 1,
-        payment: 1,
     });
     const onSubmitForm = (values: string | number, name: string) => {
         setTenantInfor({ ...tenantInfor, [name]: values });

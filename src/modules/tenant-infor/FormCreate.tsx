@@ -32,7 +32,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         label={<>Họ và tên</>}
                         colon={false}
                         labelAlign='left'
-                        name='name'
+                        name='customerName'
                         rules={[
                             {
                                 required: true,
@@ -46,7 +46,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                             onChange={(e) =>
                                 onSubmitForm(e.target.value, e.target.name)
                             }
-                            name='name'
+                            name='customerName'
                             style={{ width: 400 }}
                             autoFocus
                         />
@@ -66,7 +66,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         validateTrigger={['onBlur', 'onChange']}
                     >
                         <Input
-                            name='cmnd'
+                            name='citizenIdentification'
                             onChange={(e) =>
                                 onSubmitForm(e.target.value, e.target.name)
                             }
@@ -127,7 +127,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         labelAlign='left'
                     >
                         <Input
-                            name='phoneNumber'
+                            name='phone'
                             onChange={(e) =>
                                 onSubmitForm(e.target.value, e.target.name)
                             }
@@ -276,7 +276,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                     <Form.Item
                         label={<>Thuê phòng số </>}
                         colon={false}
-                        name='numberRoom'
+                        name='motelRoomID'
                         initialValue={1}
                         labelAlign='left'
                         rules={[
@@ -288,7 +288,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         validateTrigger={['onBlur', 'onChange']}
                     >
                         <Input
-                            name='numberRoom'
+                            name='motelRoomID'
                             onChange={(e) =>
                                 onSubmitForm(e.target.value, e.target.name)
                             }
@@ -330,7 +330,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         label={<>Ngày bắt đầu </>}
                         colon={false}
                         labelAlign='left'
-                        name='startDay'
+                        name='startDate'
                         initialValue={moment('2015-06-06', dateFormat)}
                         rules={[
                             {
@@ -341,7 +341,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         validateTrigger={['onBlur', 'onChange']}
                     >
                         <DatePicker
-                            name='startDay'
+                            name='startDate'
                             onChange={(e) =>
                                 onSubmitForm(
                                     e?.format('YYYY-MM-DD') || '',
@@ -438,7 +438,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                     >
                         <Select
                             defaultValue={1}
-                            onChange={(e) => onSubmitForm(e, 'payment')}
+                            onChange={(e) => onSubmitForm(e, 'payEachTime')}
                             showSearch
                             suffixIcon='Tháng'
                             style={{ width: 400 }}
@@ -475,7 +475,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         labelAlign='left'
                     >
                         <Input
-                            name='carNumber'
+                            name='licensePlates'
                             onChange={(e) =>
                                 onSubmitForm(e.target.value, e.target.name)
                             }
