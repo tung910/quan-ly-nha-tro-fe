@@ -3,7 +3,7 @@ import rootReducers from './rootReducer';
 
 export const store = configureStore({
     reducer: rootReducers,
-    middleware: getDefaultMiddleware => getDefaultMiddleware({}),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({}),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

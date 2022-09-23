@@ -45,6 +45,14 @@ npm run check:lint
 yarn check:lint
 ```
 
+-   Format code
+
+```bash
+npm run format
+# or
+yarn run format
+```
+
 ## 😎Front-end Support
 
 -   antd: [https://ant.design/](https://ant.design)
