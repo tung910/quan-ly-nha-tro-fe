@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -7,19 +7,19 @@ import {
     Title,
     Tooltip,
     Legend,
+    ArcElement,
 } from 'chart.js';
-import { Bar, Pie } from 'react-chartjs-2';
-// eslint-disable-next-line no-duplicate-imports
-import { Chart, ArcElement } from 'chart.js';
-Chart.register(ArcElement);
+import { Bar } from 'react-chartjs-2';
 import { Card } from 'antd';
+
 ChartJS.register(
     CategoryScale,
     LinearScale,
     BarElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    ArcElement
 );
 
 const Revenue = () => {
