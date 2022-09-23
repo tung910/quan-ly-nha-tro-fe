@@ -35,12 +35,17 @@ const Motel = () => {
     };
     return (
         <div>
-            <div>
-                <HeaderPage
-                    btn1=' Thêm nhà trọ'
-                    iconButton={<PlusSquareOutlined />}
-                    href='/motel-room/add-motel'
-                />
+            <div className={cx('button-motel')}>
+                <Button
+                    href='/motel-room/customer'
+                    type='primary'
+                    icon={<PlusSquareOutlined />}
+                >
+                    Khách thuê
+                </Button>
+                <Button type='primary' icon={<PlusSquareOutlined />}>
+                    <Link to={'/motel-room/add-motel'}>Thêm nhà trọ</Link>
+                </Button>
             </div>
             <Tabs defaultActiveKey='1'>
                 {motels &&
