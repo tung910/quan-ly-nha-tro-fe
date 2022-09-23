@@ -82,7 +82,6 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         label={<>Giới Tính</>}
                         colon={false}
                         labelAlign='left'
-                        initialValue={'Nam'}
                     >
                         <Select
                             defaultValue={1}
@@ -277,7 +276,6 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         label={<>Thuê phòng số </>}
                         colon={false}
                         name='numberRoom'
-                        initialValue={1}
                         labelAlign='left'
                         rules={[
                             {
@@ -288,6 +286,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         validateTrigger={['onBlur', 'onChange']}
                     >
                         <Input
+                            defaultValue={1}
                             name='numberRoom'
                             onChange={(e) =>
                                 onSubmitForm(e.target.value, e.target.name)

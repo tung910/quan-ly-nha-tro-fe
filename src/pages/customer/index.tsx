@@ -1,4 +1,4 @@
-import { Button, Tabs, Form } from 'antd';
+import { Button, Tabs, Form, PageHeader } from 'antd';
 import ContractCustomer from '~/modules/contract-customer/ContractCustomer';
 import MemberCustomer from '~/modules/member-customer/MemberCustomer';
 import ServiceCustomer from '~/modules/service-customer/ServiceCustomer';
@@ -9,7 +9,8 @@ import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
 import { addCustomer } from '~/api/customer.api';
-import { TypeCustomer, TypeServiceCustomer } from '~/types/Customer';
+import { TypeCustomer } from '~/types/Customer';
+import { IService } from '~/types/Service.type';
 const { TabPane } = Tabs;
 
 const CustomerRedirect = () => {
@@ -36,12 +37,12 @@ const CustomerRedirect = () => {
         setTenantInfor({ ...tenantInfor, [name]: values });
     };
 
-    const [service, setService] = useState<TypeServiceCustomer[]>([]);
-    const onGetService = (data: TypeServiceCustomer[]) => {
+    const [service, setService] = useState<IService[]>([]);
+    const onGetService = (data: IService[]) => {
         setService(data);
     };
 
-    const [member, setMember] = useState({});
+    const [member, setMember] = useState([]);
     const [contract, setContract] = useState({
         coinNumber: '',
         dateStart: '',
@@ -58,21 +59,32 @@ const CustomerRedirect = () => {
     };
     return (
         <div>
-            <div style={{ padding: 20 }}>
-                <p className={cx('title-create')}>Thêm khách thuê phòng</p>
-                <Button icon={<RollbackOutlined />} className={cx('btn-back')}>
-                    Quay lại
-                </Button>
-                <Button
-                    onClick={onSave}
-                    htmlType='submit'
-                    type='primary'
-                    className={cx('btn-submit')}
-                    icon={<CheckOutlined />}
-                >
-                    Lưu Thông Tin
-                </Button>
-
+            <div>
+                <PageHeader
+                    ghost={true}
+                    title='Thêm khách thuê phòng'
+                    extra={[
+                        <Button
+                            key={1}
+                            icon={<RollbackOutlined />}
+                            className={cx('btn-back')}
+                        >
+                            Quay lại
+                        </Button>,
+                        <Button
+                            key={2}
+                            onClick={onSave}
+                            htmlType='submit'
+                            type='primary'
+                            className={cx('btn-submit')}
+                            icon={<CheckOutlined />}
+                        >
+                            Lưu Thông Tin
+                        </Button>,
+                    ]}
+                ></PageHeader>
+            </div>
+            <div>
                 <Tabs>
                     <TabPane tab='Thông tin khách thuê' key='tab-a'>
                         <FormCreate onSubmitForm={onSubmitForm} />

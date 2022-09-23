@@ -5,4 +5,5 @@ export interface IService {
     unitPrice: number | null;
     serviceTypeId: number;
     serviceTypeName: string;
+    quantity: number;
 }

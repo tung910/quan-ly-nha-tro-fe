@@ -15,6 +15,3 @@ export const addCustomer = (
         },
     });
 };
-export const getService = () => {
-    return instance.get('/service');
-};
