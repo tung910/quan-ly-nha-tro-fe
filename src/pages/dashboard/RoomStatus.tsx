@@ -1,5 +1,5 @@
+import { useEffect, useState } from 'react';
 import { Card } from 'antd';
-import React, { useEffect, useState } from 'react';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -8,19 +8,19 @@ import {
     Title,
     Tooltip,
     Legend,
+    ArcElement,
 } from 'chart.js';
-import { Bar, Pie } from 'react-chartjs-2';
-// eslint-disable-next-line no-duplicate-imports
-import { Chart, ArcElement } from 'chart.js';
-Chart.register(ArcElement);
+import { Pie } from 'react-chartjs-2';
 ChartJS.register(
     CategoryScale,
     LinearScale,
     BarElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    ArcElement
 );
+
 const RoomStatus = () => {
     const [chartData, setChartData] = useState<any>({
         datasets: [],

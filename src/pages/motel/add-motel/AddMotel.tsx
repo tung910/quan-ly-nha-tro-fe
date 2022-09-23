@@ -1,12 +1,12 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button, Form, Input, Space, Breadcrumb, Layout, Row, Col } from 'antd';
+import { Form, Input, Row, Col } from 'antd';
+import { RollbackOutlined } from '@ant-design/icons';
 import { Content } from 'antd/lib/layout/layout';
-import { MotelType } from '~/types/Model';
+import { MotelType } from '~/types/MotelType';
 import styles from './AddMotel.module.scss';
 import classNames from 'classnames/bind';
-import { addMotel } from '~/api/Motel';
+import { addMotel } from '~/api/motel.api';
 import { useNavigate } from 'react-router-dom';
+import HeaderPage from '~/components/page-header';
 const cx = classNames.bind(styles);
 
 const AddMotel = () => {
@@ -23,9 +23,7 @@ const AddMotel = () => {
     return (
         <div>
             <Content>
-                <div>
-                    <h2>Thêm mới nhà trọ</h2>
-                </div>
+                <div></div>
                 <div className={cx('form-add')}>
                     <Form
                         autoComplete='off'
@@ -34,6 +32,13 @@ const AddMotel = () => {
                         onFinish={onFinish}
                         wrapperCol={{ span: 20 }}
                     >
+                        <HeaderPage
+                            title={'Thêm mới nhà trọ'}
+                            btn1=' Quay lại'
+                            btn2=' Thêm mới'
+                            iconButton={<RollbackOutlined />}
+                            href='/motel-room'
+                        ></HeaderPage>
                         <Row gutter={[8, 8]}>
                             <Col span={12}>
                                 <Form.Item
@@ -96,7 +101,7 @@ const AddMotel = () => {
                             </Col>
                             <Col span={12}>
                                 <Form.Item
-                                    name='ward'
+                                    name='commune'
                                     label='Phường/Xã'
                                     rules={[
                                         {
@@ -135,13 +140,6 @@ const AddMotel = () => {
                                 </Form.Item>
                             </Col>
                         </Row>
-                        <Form.Item className={cx('button')}>
-                            <Space>
-                                <Button type='primary' htmlType='submit'>
-                                    Thêm mới
-                                </Button>
-                            </Space>
-                        </Form.Item>
                     </Form>
                 </div>
             </Content>
