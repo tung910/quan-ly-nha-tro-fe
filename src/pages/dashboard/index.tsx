@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Col, Form, Row } from 'antd';
 import classNames from 'classnames/bind';
 
@@ -8,17 +9,40 @@ import AvailableRooms from './AvailableRooms';
 import OweRoomFees from './OweRoomFees';
 import UnfinishedWork from './UnfinishedWork';
 import ExpiresContract from './ExpiresContract';
+import { getStatisticalRoomStatus } from '~/api/room.api';
+import { IStatistical } from '~/types/Statistical.type';
 
 const cx = classNames.bind(styles);
-
+export interface StateRoomStatus {
+    areRenting: IStatistical | null;
+    emptyRooms: IStatistical | null;
+}
 const Dashboard = () => {
+    const [state, setState] = useState<StateRoomStatus>({
+        areRenting: null,
+        emptyRooms: null,
+    });
+    useEffect(() => {
+        const fetchStatisticalRoom = async () => {
+            const { data } = await getStatisticalRoomStatus();
+            const [areRenting, emptyRooms] = data;
+            setState({
+                areRenting,
+                emptyRooms,
+            });
+        };
+        fetchStatisticalRoom();
+    }, []);
+
     return (
         <div>
             <Form autoComplete='off' style={{ marginTop: 20, padding: 20 }}>
                 {/* Row 1 */}
                 <Row gutter={[16, 16]}>
                     <Col span={12}>
-                        <RoomStatus />
+                        {state.areRenting && state.emptyRooms && (
+                            <RoomStatus roomStatus={state} />
+                        )}
                     </Col>
                     <Col span={12}>
                         <Revenue />
