@@ -10,6 +10,7 @@ import ServicePage from '~/pages/service';
 import AddService from '~/pages/service/AddService';
 import ListCustomer from '~/pages/motel/list-customer';
 import EditRoom from '~/pages/room/eidt-room';
+import WaterPage from '~/pages/water';
 
 export interface Route {
     path: string;
@@ -26,6 +27,7 @@ const routes: Route[] = [
     { path: '/motel-room/edit-room/:id', component: EditRoom },
     { path: '/service', component: ServicePage },
     { path: '/service/add-service', component: AddService },
+    { path: '/data-water', component: WaterPage },
 ];
 
 export default routes;
