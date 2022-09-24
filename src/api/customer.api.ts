@@ -5,9 +5,6 @@ export const addCustomer = (data: any) => {
         data,
     });
 };
-export const getService = () => {
-    return instance.get('/service');
-};
 
 export const addCustomerToRoom = (data: any) => {
     return instance.post('/room-rental-detail/create', { data });
