@@ -5,3 +5,7 @@ export const addCustomer = (data: any) => {
         data,
     });
 };
+
+export const addCustomerToRoom = (data: any) => {
+    return instance.post('/room-rental-detail/create', { data });
+};

@@ -11,7 +11,8 @@
         "lint": "eslint . --ext ts --ext tsx --ext js",
         "check:types": "tsc --pretty --noEmit",
         "check:format": "prettier --check .",
-        "beautiful": "lint-staged"
+        "beautiful": "lint-staged",
+        "format": "prettier --single-quote --trailing-comma es5 --tab-width 4 --write src/**/*.{js,tsx,ts,scss}"
     },
     "husky": {
         "hooks": {

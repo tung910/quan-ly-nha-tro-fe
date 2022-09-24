@@ -1,19 +1,18 @@
-import { Button, Col, DatePicker, Form, Input, Row, Select } from 'antd';
-import { useState } from 'react';
+import { Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import moment from 'moment';
 import styles from './FormCreate.module.scss';
 import classNames from 'classnames/bind';
-import { addCustomer } from '~/api/customer.api';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
-const dateFormat = 'YYYY-MM-DD';
+const dateFormat = 'DD-MM-YYYY';
 
 type Props = {
     onSubmitForm: (values: string | number, name: string) => void;
+    roomId: string;
 };
 
-const FormCreate = ({ onSubmitForm }: Props) => {
+const FormCreate = ({ onSubmitForm, roomId }: Props) => {
     const [form] = Form.useForm();
 
     return (
@@ -32,7 +31,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         label={<>Họ và tên</>}
                         colon={false}
                         labelAlign='left'
-                        name='name'
+                        name='customerName'
                         rules={[
                             {
                                 required: true,
@@ -46,7 +45,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                             onChange={(e) =>
                                 onSubmitForm(e.target.value, e.target.name)
                             }
-                            name='name'
+                            name='customerName'
                             style={{ width: 400 }}
                             autoFocus
                         />
@@ -66,7 +65,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         validateTrigger={['onBlur', 'onChange']}
                     >
                         <Input
-                            name='cmnd'
+                            name='citizenIdentification'
                             onChange={(e) =>
                                 onSubmitForm(e.target.value, e.target.name)
                             }
@@ -126,7 +125,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         labelAlign='left'
                     >
                         <Input
-                            name='phoneNumber'
+                            name='phone'
                             onChange={(e) =>
                                 onSubmitForm(e.target.value, e.target.name)
                             }
@@ -275,7 +274,8 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                     <Form.Item
                         label={<>Thuê phòng số </>}
                         colon={false}
-                        name='numberRoom'
+                        name='motelRoomID'
+                        initialValue={roomId}
                         labelAlign='left'
                         rules={[
                             {
@@ -286,8 +286,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         validateTrigger={['onBlur', 'onChange']}
                     >
                         <Input
-                            defaultValue={1}
-                            name='numberRoom'
+                            name='motelRoomID'
                             onChange={(e) =>
                                 onSubmitForm(e.target.value, e.target.name)
                             }
@@ -329,8 +328,8 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         label={<>Ngày bắt đầu </>}
                         colon={false}
                         labelAlign='left'
-                        name='startDay'
-                        initialValue={moment('2015-06-06', dateFormat)}
+                        name='startDate'
+                        initialValue={moment(new Date(), dateFormat)}
                         rules={[
                             {
                                 required: true,
@@ -340,14 +339,13 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         validateTrigger={['onBlur', 'onChange']}
                     >
                         <DatePicker
-                            name='startDay'
+                            name='startDate'
                             onChange={(e) =>
                                 onSubmitForm(
                                     e?.format('YYYY-MM-DD') || '',
                                     'startDay'
                                 )
                             }
-                            disabled
                             style={{ width: 400 }}
                         />
                     </Form.Item>
@@ -437,7 +435,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                     >
                         <Select
                             defaultValue={1}
-                            onChange={(e) => onSubmitForm(e, 'payment')}
+                            onChange={(e) => onSubmitForm(e, 'payEachTime')}
                             showSearch
                             suffixIcon='Tháng'
                             style={{ width: 400 }}
@@ -474,7 +472,7 @@ const FormCreate = ({ onSubmitForm }: Props) => {
                         labelAlign='left'
                     >
                         <Input
-                            name='carNumber'
+                            name='licensePlates'
                             onChange={(e) =>
                                 onSubmitForm(e.target.value, e.target.name)
                             }

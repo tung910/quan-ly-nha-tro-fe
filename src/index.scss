@@ -3,3 +3,13 @@
 a[href] {
     color: #fff;
 }
+
+.d-flex {
+    display: flex;
+    &.-justify-space-between {
+        justify-content: space-between;
+    }
+}
+.w-full {
+    width: 100%;
+}

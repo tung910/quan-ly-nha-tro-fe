@@ -1,24 +1,25 @@
-import { Form, Input, Row, Col, Upload, Select, message } from 'antd';
+import { Form, Input, Row, Col, Upload, Select } from 'antd';
 import { RollbackOutlined, InboxOutlined } from '@ant-design/icons';
 import { Content } from 'antd/lib/layout/layout';
-import { MotelType } from '~/types/MotelType';
-import styles from './AddRoom.module.scss';
-import classNames from 'classnames/bind';
-import HeaderPage from '~/components/page-header';
 import { useEffect, useState } from 'react';
+import classNames from 'classnames/bind';
+import { useNavigate, useParams } from 'react-router-dom';
+//
+import { MotelType } from '~/types/MotelType';
+import styles from './EditRoom.module.scss';
+import HeaderPage from '~/components/page-header';
 import { getAllMotel } from '~/api/motel.api';
-import { addRoom } from '~/api/room.api';
-import { useNavigate } from 'react-router-dom';
+import { editRoom, getRoom } from '~/api/room.api';
 import { RoomType } from '~/types/RoomType';
-import { MESSAGES } from '~/consts/message.const';
 const { Option } = Select;
 const { Dragger } = Upload;
 const cx = classNames.bind(styles);
 const { TextArea } = Input;
 
-const AddRoom = () => {
+const EditRoom = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
+    const id = (useParams().id as string) || '';
     const [motels, setMotels] = useState<MotelType[]>();
     const [fileList, setFileList] = useState<any>([]);
 
@@ -29,15 +30,22 @@ const AddRoom = () => {
             setMotels(data);
         };
         getMotels();
+        const readRoom = async () => {
+            const { data } = await getRoom(id);
+
+            form.setFieldsValue(data);
+        };
+        readRoom();
     }, []);
 
     const onFinish = async (values: RoomType) => {
-        const add = async () => {
-            await addRoom(values);
-            message.success(MESSAGES.ADD_SUCCESS);
+        values._id = id;
+        const edit = async () => {
+            await editRoom(values);
+            alert('Bạn thêm thành công!');
             navigate('/motel-room');
         };
-        add();
+        edit();
     };
 
     const handleBeforeUpload = (file: any) => {
@@ -68,9 +76,9 @@ const AddRoom = () => {
                         onFinish={onFinish}
                     >
                         <HeaderPage
-                            title={'Thêm mới phòng trọ'}
+                            title={'Cập nhật phòng trọ'}
                             btn1=' Quay lại'
-                            btn2=' Thêm mới'
+                            btn2='Cập nhật'
                             iconButton={<RollbackOutlined />}
                             href='/motel-room'
                         ></HeaderPage>
@@ -226,4 +234,4 @@ const AddRoom = () => {
     );
 };
 
-export default AddRoom;
+export default EditRoom;
