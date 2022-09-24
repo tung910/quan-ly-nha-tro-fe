@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Card } from 'antd';
 import {
     Chart as ChartJS,
@@ -11,6 +10,7 @@ import {
     ArcElement,
 } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
+import { StateRoomStatus } from '.';
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -20,27 +20,28 @@ ChartJS.register(
     Legend,
     ArcElement
 );
-
-const RoomStatus = () => {
-    const [chartData, setChartData] = useState<any>({
-        datasets: [],
-    });
-    useEffect(() => {
-        setChartData({
-            labels: ['Phòng trống', 'Đang thuê'],
-            datasets: [
-                {
-                    data: [20, 80],
-                    backgroundColor: ['red', 'green'],
-                },
-            ],
-        });
-    }, []);
+interface Props {
+    roomStatus: StateRoomStatus;
+}
+const RoomStatus = ({ roomStatus }: Props) => {
+    const { areRenting, emptyRooms } = roomStatus;
+    const pie = {
+        labels: [areRenting?.statusName, emptyRooms?.statusName],
+        datasets: [
+            {
+                data: [
+                    areRenting?.areRenting.length,
+                    emptyRooms?.emptyRooms.length,
+                ],
+                backgroundColor: ['green', 'red'],
+            },
+        ],
+    };
     return (
         <div>
             <Card title='Trạng thái phòng' bordered={true}>
                 <div style={{ width: 270, marginLeft: 130 }}>
-                    <Pie data={chartData}></Pie>
+                    <Pie data={pie}></Pie>
                 </div>
             </Card>
         </div>
