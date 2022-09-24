@@ -81,7 +81,6 @@ const FormCreate = ({ onSubmitForm, roomId }: Props) => {
                         label={<>Giới Tính</>}
                         colon={false}
                         labelAlign='left'
-                        initialValue={'Nam'}
                     >
                         <Select
                             defaultValue={1}

@@ -18,10 +18,3 @@ export type TypeCustomer = {
     payEachTime: number;
     paymentPeriod: number;
 };
-
-export type TypeServiceCustomer = {
-    key?: string;
-    name: string;
-    price: number;
-    number: number;
-};
