@@ -1,6 +1,6 @@
 enum MESSAGES {
     ADD_SUCCESS = 'Thêm thành công',
-    DEL_SUCCESS = 'XÓA thành công',
-    EDIT_SUCCESS = 'SỬA thành công',
+    DEL_SUCCESS = 'Xóa thành công',
+    EDIT_SUCCESS = 'Sửa thành công',
 }
 export { MESSAGES };

@@ -1,9 +1,10 @@
 export interface IService {
     _id?: string;
-    isActive: boolean | null;
+    isActive?: boolean;
     serviceName: string;
-    unitPrice: number | null;
+    unitPrice?: number;
     serviceTypeId: number;
-    serviceTypeName: string;
-    quantity: number;
+    serviceTypeName?: string;
+    quantity?: number;
+    note?: string;
 }
