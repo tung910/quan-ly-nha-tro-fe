@@ -15,3 +15,6 @@ export const getRoom = (id: string) => {
 export const editRoom = (room: RoomType) => {
     return instance.put(`/motel-room/edit/${room._id}`, { data: room });
 };
+export const getStatisticalRoomStatus = () => {
+    return instance.get('/motel-room/statistical/room-status');
+};

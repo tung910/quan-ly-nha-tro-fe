@@ -8,30 +8,75 @@ import {
     Select,
     Checkbox,
     InputNumber,
+    message,
 } from 'antd';
+import { useEffect } from 'react';
 import { RollbackOutlined, SaveOutlined } from '@ant-design/icons';
+
 import { serviceTypeOptions } from '~/consts/service.const';
 import { IService } from '~/types/Service.type';
-import { createService } from '~/feature/service/serviceSlice';
+import { createService, updateService } from '~/feature/service/serviceSlice';
 import { useAppDispatch } from '~/app/hooks';
+import { useGetParam } from '~/utils/helper';
+import { getServiceAPI } from '~/api/service.api';
+import { MESSAGES } from '~/consts/message.const';
 const { Option } = Select;
 
-const AddService = () => {
+const AddEditService = () => {
+    const [param] = useGetParam('serviceId');
+    const [form] = Form.useForm<IService>();
     const dispatch = useAppDispatch();
+
     const goBack = () => {
         window.history.back();
     };
     const onSubmit = async (value: IService) => {
-        const service = serviceTypeOptions.find(
+        let service;
+        service = serviceTypeOptions.find(
             (item) => item.serviceTypeId === +value.serviceTypeId
         );
+
+        if (param) {
+            service = serviceTypeOptions.find((item) => {
+                if (Number(value.serviceTypeId)) {
+                    return item.serviceTypeId === +value.serviceTypeId;
+                }
+                return item.serviceTypeName === String(value.serviceTypeId);
+            });
+            const payload = {
+                ...value,
+                ...service,
+            };
+            dispatch(updateService({ ...payload, _id: param }));
+            message.success(MESSAGES.EDIT_SUCCESS);
+            goBack();
+            return;
+        }
         const payload = {
             ...value,
             ...service,
         };
-
         await dispatch(createService(payload));
+        message.success(MESSAGES.ADD_SUCCESS);
+        goBack();
+        return;
     };
+    useEffect(() => {
+        if (param) {
+            const fetchData = async () => {
+                const { data } = await getServiceAPI(param);
+                form.setFieldsValue({
+                    serviceName: data.serviceName,
+                    serviceTypeId: data.serviceTypeName,
+                    unitPrice: +data.unitPrice,
+                    isActive: data.isActive,
+                    note: data.note,
+                });
+            };
+            fetchData();
+        }
+    }, [param]);
+
     return (
         <div>
             <Form
@@ -39,11 +84,12 @@ const AddService = () => {
                 wrapperCol={{ span: 16 }}
                 size={'large'}
                 onFinish={onSubmit}
+                form={param ? form : undefined}
             >
                 <div>
                     <PageHeader
                         ghost={true}
-                        title='Danh sách dịch vụ'
+                        title={`${param ? 'Sửa' : 'Thêm'} dịch vụ`}
                         extra={[
                             <Button
                                 type='ghost'
@@ -146,4 +192,4 @@ const AddService = () => {
     );
 };
 
-export default AddService;
+export default AddEditService;
