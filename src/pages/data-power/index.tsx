@@ -13,6 +13,8 @@ import {
 } from 'antd';
 import { SearchOutlined, CheckOutlined, SaveOutlined } from '@ant-design/icons';
 import Table from '~/components/table';
+import { useEffect, useState } from 'react';
+import { getListRooms } from '~/api/room.api';
 
 const cx = classNames.bind(styles);
 const { Option } = Select;
@@ -35,7 +37,7 @@ const ColumnsDataPower: ColumnsType = [
         render: (OldValue: any) => {
             return (
                 <>
-                    <Input />
+                    <Input value={OldValue} />
                 </>
             );
         },
@@ -46,7 +48,7 @@ const ColumnsDataPower: ColumnsType = [
         render: (NewValue: any) => {
             return (
                 <>
-                    <Input />
+                    <Input value={NewValue} />
                 </>
             );
         },
@@ -70,6 +72,23 @@ const ColumnsDataPower: ColumnsType = [
     },
 ];
 const PowerOnly = () => {
+    const [dataPower, setDataPower] = useState([]);
+    useEffect(() => {
+        const listMotelRoom = async () => {
+            const { data } = await getListRooms();
+            const newData = data.map((item: any) => {
+                const result = {
+                    ...item,
+                    OldValue: 0,
+                    NewValue: 0,
+                    UseValue: 0,
+                };
+                return result;
+            });
+            setDataPower(newData);
+        };
+        listMotelRoom();
+    }, []);
     return (
         <div>
             <div>
@@ -137,7 +156,7 @@ const PowerOnly = () => {
             </div>
 
             <div>
-                <Table dataSource={[]} columns={ColumnsDataPower} />
+                <Table dataSource={dataPower} columns={ColumnsDataPower} />
             </div>
         </div>
     );
