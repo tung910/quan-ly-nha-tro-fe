@@ -3,6 +3,9 @@ import instance from './instance';
 export const getRooms = (id: string) => {
     return instance.get(`/motel-room/list?roomId=${id}`);
 };
+export const getListRooms = () => {
+    return instance.get(`/motel-room/list`);
+};
 export const addRoom = (room: RoomType) => {
     return instance.post(`/motel-room/create`, { data: room });
 };
