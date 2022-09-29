@@ -1,4 +1,4 @@
-import { Form, Input, Row, Col, Upload, Select } from 'antd';
+import { Form, Input, Row, Col, Upload, Select, InputNumber } from 'antd';
 import { RollbackOutlined, InboxOutlined } from '@ant-design/icons';
 import { Content } from 'antd/lib/layout/layout';
 import { useEffect, useState } from 'react';
@@ -155,7 +155,21 @@ const EditRoom = () => {
                                         },
                                     ]}
                                 >
-                                    <Input placeholder='' addonAfter='VND' />
+                                    <InputNumber
+                                        formatter={(value) =>
+                                            ` ${value}`.replace(
+                                                /\B(?=(\d{3})+(?!\d))/g,
+                                                ','
+                                            )
+                                        }
+                                        parser={(value) =>
+                                            ` ${value}`.replace(
+                                                /\$\s?|(,*)/g,
+                                                ''
+                                            )
+                                        }
+                                        addonAfter='VNĐ'
+                                    />
                                 </Form.Item>
                             </Col>
                         </Row>
