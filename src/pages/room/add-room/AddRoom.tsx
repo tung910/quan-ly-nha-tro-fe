@@ -1,4 +1,13 @@
-import { Form, Input, Row, Col, Upload, Select, message } from 'antd';
+import {
+    Form,
+    Input,
+    Row,
+    Col,
+    Upload,
+    Select,
+    message,
+    InputNumber,
+} from 'antd';
 import { RollbackOutlined, InboxOutlined } from '@ant-design/icons';
 import { Content } from 'antd/lib/layout/layout';
 import { MotelType } from '~/types/MotelType';
@@ -147,7 +156,21 @@ const AddRoom = () => {
                                         },
                                     ]}
                                 >
-                                    <Input placeholder='' addonAfter='VND' />
+                                    <InputNumber
+                                        formatter={(value) =>
+                                            ` ${value}`.replace(
+                                                /\B(?=(\d{3})+(?!\d))/g,
+                                                ','
+                                            )
+                                        }
+                                        parser={(value) =>
+                                            ` ${value}`.replace(
+                                                /\$\s?|(,*)/g,
+                                                ''
+                                            )
+                                        }
+                                        addonAfter='VNĐ'
+                                    />
                                 </Form.Item>
                             </Col>
                         </Row>
