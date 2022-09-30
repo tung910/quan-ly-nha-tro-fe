@@ -3,12 +3,12 @@ import ContractCustomer from '~/modules/contract-customer/ContractCustomer';
 import MemberCustomer from '~/modules/member-customer/MemberCustomer';
 import ServiceCustomer from '~/modules/service-customer/ServiceCustomer';
 import FormCreate from '~/modules/tenant-infor/FormCreate';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './Create.module.scss';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
-import { addCustomerToRoom } from '~/api/customer.api';
+import { addCustomerToRoom, getDetailCustomerToRoom } from '~/api/customer.api';
 import { TypeCustomer } from '~/types/Customer';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MESSAGES } from '~/consts/message.const';
@@ -18,6 +18,17 @@ const { TabPane } = Tabs;
 const CustomerRedirect = () => {
     const { search } = useLocation();
     const roomId = new URLSearchParams(search).get('roomId') || '';
+    const [form]: any = Form.useForm();
+    const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
+    const [newdataService, setNewdataService] = useState([]);
+    useEffect(() => {
+        const dataRoom = async () => {
+            const { data } = await getDetailCustomerToRoom(roomRentID);
+            setNewdataService(data.service);
+            form.setFieldsValue(data);
+        };
+        dataRoom();
+    }, []);
 
     const [tenantInfor, setTenantInfor] = useState<TypeCustomer>({
         customerName: '',
@@ -56,7 +67,6 @@ const CustomerRedirect = () => {
         timeCoin: '',
         dateLate: '',
     });
-    const [form]: any = Form.useForm();
     const onFinish = (values: any) => {
         const data = form.getFieldValue();
         setContract({ ...contract, ...data });
@@ -93,6 +103,7 @@ const CustomerRedirect = () => {
                             type='primary'
                             className={cx('btn-submit')}
                             icon={<CheckOutlined />}
+                            disabled={roomRentID ? true : false}
                         >
                             Lưu Thông Tin
                         </Button>,
@@ -105,10 +116,15 @@ const CustomerRedirect = () => {
                         <FormCreate
                             onSubmitForm={onSubmitForm}
                             roomId={roomId}
+                            formData={form}
                         />
                     </TabPane>
                     <TabPane tab='Dịch vụ' key='tab-b'>
-                        <ServiceCustomer onGetService={onGetService} />
+                        <ServiceCustomer
+                            roomRentID={roomRentID}
+                            newdataService={newdataService}
+                            onGetService={onGetService}
+                        />
                     </TabPane>
                     <TabPane tab='Thành viên' key='tab-c'>
                         <MemberCustomer />
