@@ -18,6 +18,7 @@ const { TabPane } = Tabs;
 const CustomerRedirect = () => {
     const { search } = useLocation();
     const roomId = new URLSearchParams(search).get('roomId') || '';
+    const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
 
     const [tenantInfor, setTenantInfor] = useState<TypeCustomer>({
         customerName: '',
@@ -105,6 +106,7 @@ const CustomerRedirect = () => {
                         <FormCreate
                             onSubmitForm={onSubmitForm}
                             roomId={roomId}
+                            roomRentID={roomRentID}
                         />
                     </TabPane>
                     <TabPane tab='Dịch vụ' key='tab-b'>

@@ -2,6 +2,8 @@ import { Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import moment from 'moment';
 import styles from './FormCreate.module.scss';
 import classNames from 'classnames/bind';
+import { useEffect } from 'react';
+import { getCustomerToRoom } from '~/api/customer.api';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
@@ -10,11 +12,20 @@ const dateFormat = 'DD-MM-YYYY';
 type Props = {
     onSubmitForm: (values: string | number, name: string) => void;
     roomId: string;
+    roomRentID: string;
 };
 
-const FormCreate = ({ onSubmitForm, roomId }: Props) => {
+const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
     const [form] = Form.useForm();
-
+    useEffect(() => {
+        const getCustomer = async () => {
+            const { data } = await getCustomerToRoom(roomRentID);
+            form.setFieldsValue({
+                customerName: data.customerName,
+            });
+        };
+        getCustomer();
+    });
     return (
         <Form
             className={cx('form-create')}
