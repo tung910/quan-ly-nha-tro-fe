@@ -1,42 +1,27 @@
 import { Button, Tabs, Form, message, PageHeader } from 'antd';
-import moment from 'moment';
 import ContractCustomer from '~/modules/contract-customer/ContractCustomer';
 import MemberCustomer from '~/modules/member-customer/MemberCustomer';
 import ServiceCustomer from '~/modules/service-customer/ServiceCustomer';
-import FormCreate from '~/modules/tenant-infor/FormCreate';
-import { useState, useEffect } from 'react';
-import styles from './Create.module.scss';
+import { useState } from 'react';
+import styles from './Edit.module.scss';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
-import { addCustomerToRoom, getDetailCustomerToRoom } from '~/api/customer.api';
 import { TypeCustomer } from '~/types/Customer';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { MESSAGES } from '~/consts/message.const';
 import { IService } from '~/types/Service.type';
-const { TabPane } = Tabs;
+import FormEdit from '~/modules/tenant-infor/FormEdit';
+import { editCustomerToRoom } from '~/api/customer.api';
+import { MESSAGES } from '~/consts/message.const';
 
-const dateFormat = 'DD-MM-YYYY';
-const CustomerRedirect = () => {
+const { TabPane } = Tabs;
+const EditCustomerToRoom = () => {
     const { search } = useLocation();
-    const roomId = new URLSearchParams(search).get('roomId') || '';
     const [form]: any = Form.useForm();
+
+    const roomId = new URLSearchParams(search).get('roomId') || '';
     const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
     const [newdataService, setNewdataService] = useState([]);
-    useEffect(() => {
-        const dataRoom = async () => {
-            const { data } = await getDetailCustomerToRoom(roomRentID);
-            setNewdataService(data.service);
-            form.setFieldsValue({
-                ...data,
-                dateOfBirth: data.dateOfBirth
-                    ? moment(data.dateOfBirth, dateFormat)
-                    : '',
-                startDate: moment(data.startDate, dateFormat),
-            });
-        };
-        dataRoom();
-    }, []);
 
     const [tenantInfor, setTenantInfor] = useState<TypeCustomer>({
         customerName: '',
@@ -57,51 +42,28 @@ const CustomerRedirect = () => {
         payEachTime: 1,
         paymentPeriod: 1,
     });
-
-    const onSubmitForm = (values: string | number, name: string) => {
-        setTenantInfor({ ...tenantInfor, [name]: values });
-    };
-
-    const [service, setService] = useState<IService[]>([]);
-    const onGetService = (data: IService[]) => {
-        setService(data);
-    };
-    const navigate = useNavigate();
-
-    const [member, setMember] = useState([]);
     const [contract, setContract] = useState({
         coinNumber: '',
         dateStart: '',
         timeCoin: '',
         dateLate: '',
     });
+
+    const [service, setService] = useState<IService[]>([]);
+    const onGetService = (data: IService[]) => {
+        setService(data);
+    };
     const onFinish = (values: any) => {
         const data = form.getFieldValue();
         setContract({ ...contract, ...data });
     };
+    const navigate = useNavigate();
+
     const onSave = async () => {
-        if (roomRentID) {
-            const data = {
-                CustomerInfo: tenantInfor,
-                Service: service,
-                Member: member,
-                Contract: contract,
-            };
-
-            // await editCustomerToRoom(data);
-            // navigate('/motel-room');
-        } else {
-            const data = {
-                CustomerInfo: tenantInfor,
-                Service: service,
-                Member: member,
-                Contract: contract,
-            };
-
-            await addCustomerToRoom(data);
-            await message.success(MESSAGES.ADD_SUCCESS);
-            navigate('/motel-room');
-        }
+        const data = form.getFieldValue();
+        await editCustomerToRoom(data);
+        message.success(MESSAGES.EDIT_SUCCESS);
+        navigate('/motel-room');
     };
 
     return (
@@ -109,13 +71,12 @@ const CustomerRedirect = () => {
             <div>
                 <PageHeader
                     ghost={true}
-                    title='Thêm khách thuê phòng'
+                    title='Cập nhật khách thuê phòng'
                     extra={[
                         <Button
                             key={1}
                             icon={<RollbackOutlined />}
                             className={cx('btn-back')}
-                            onClick={() => window.history.back()}
                         >
                             Quay lại
                         </Button>,
@@ -126,7 +87,6 @@ const CustomerRedirect = () => {
                             type='primary'
                             className={cx('btn-submit')}
                             icon={<CheckOutlined />}
-                            disabled={roomRentID ? true : false}
                         >
                             Lưu Thông Tin
                         </Button>,
@@ -136,12 +96,11 @@ const CustomerRedirect = () => {
             <div>
                 <Tabs>
                     <TabPane tab='Thông tin khách thuê' key='tab-a'>
-                        <FormCreate
-                            onSubmitForm={onSubmitForm}
+                        <FormEdit
+                            onSave={onSave}
                             roomId={roomId}
                             roomRentID={roomRentID}
                             form={form}
-                            formData={form}
                         />
                     </TabPane>
                     <TabPane tab='Dịch vụ' key='tab-b'>
@@ -166,4 +125,4 @@ const CustomerRedirect = () => {
     );
 };
 
-export default CustomerRedirect;
+export default EditCustomerToRoom;

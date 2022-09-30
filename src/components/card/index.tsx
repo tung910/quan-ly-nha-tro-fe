@@ -51,7 +51,9 @@ const CardItem = ({
                                 Xem
                             </Link>
                         </Button>
-                        <Button>Sửa</Button>
+                        <Link to={`/customer/edit?roomRentID=${roomRentID}`}>
+                            <Button>Sửa</Button>
+                        </Link>
                     </div>
                 ) : (
                     <Button type='primary' icon={<PlusSquareOutlined />}>

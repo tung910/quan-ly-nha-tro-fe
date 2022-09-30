@@ -35,12 +35,12 @@ const ListRoom = ({ motelId }: Props) => {
                                 key={index}
                                 roomName={item.roomName}
                                 idRoom={item._id}
+                                roomRentID={item.roomRentID}
                                 unitPrice={item.unitPrice}
                                 isRent={item.isRent}
                                 onRemoveMotel={() => onRemove(item._id)}
                                 customerName={item.customerName}
                                 maxPerson={item.maxPerson}
-                                roomRentID={item.roomRentID}
                             ></CardItem>
                         );
                     })}

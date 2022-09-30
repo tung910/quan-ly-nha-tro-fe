@@ -1,7 +1,7 @@
 import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from 'antd';
 import moment from 'moment';
 import classNames from 'classnames/bind';
-import styles from './FormCreate.module.scss';
+import styles from './FormEdit.module.scss';
 import { generatePriceToVND } from '~/utils/helper';
 import { useEffect } from 'react';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
@@ -11,15 +11,13 @@ const { Option } = Select;
 const dateFormat = 'YYYY-MM-DD';
 
 type Props = {
-    onSubmitForm: (values: string | number, name: string) => void;
+    onSave: (values: any) => void;
     roomId: string;
     roomRentID: string;
     form: any;
-    formData: any;
 };
 
-const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
-    const [form] = Form.useForm();
+const FormEdit = ({ roomId, roomRentID, onSave, form }: Props) => {
     useEffect(() => {
         if (roomRentID) {
             const getCustomer = async () => {
@@ -27,7 +25,9 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
 
                 form.setFieldsValue({
                     ...data,
-                    dateOfBirth: moment(data.dateOfBirth, dateFormat),
+                    dateOfBirth: data.dateOfBirth
+                        ? moment(data.dateOfBirth, dateFormat)
+                        : '',
                     startDate: moment(data.startDate, dateFormat),
                 });
             };
@@ -37,14 +37,15 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
 
     return (
         <Form
-            className={cx('form-create')}
+            className={cx('form-edit')}
             autoComplete='off'
             form={form}
             labelCol={{ span: 9 }}
             wrapperCol={{ span: 16 }}
             style={{ marginTop: 20, padding: 20 }}
+            onFinish={onSave}
         >
-            {/* Row 1 */}
+            ,{/* Row 1 */}
             <Row>
                 <Col span={8}>
                     <Form.Item
@@ -61,14 +62,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <Input
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            name='customerName'
-                            style={{ width: 400 }}
-                            autoFocus
-                        />
+                        <Input style={{ width: 400 }} autoFocus />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -85,13 +79,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         validateTrigger={['onBlur', 'onChange']}
                         name='citizenIdentification'
                     >
-                        <Input
-                            name='citizenIdentification'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <Input style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
             </Row>
@@ -102,10 +90,10 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         label={<>Giới Tính</>}
                         colon={false}
                         labelAlign='left'
+                        name={'gender'}
                     >
                         <Select
                             defaultValue={1}
-                            onChange={(e) => onSubmitForm(e, 'gender')}
                             showSearch
                             style={{ width: 400 }}
                             optionFilterProp='children'
@@ -128,13 +116,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         labelAlign='left'
                         name='dateRange'
                     >
-                        <Input
-                            name='dateRange'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <Input style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
             </Row>
@@ -147,13 +129,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         labelAlign='left'
                         name='phone'
                     >
-                        <Input
-                            name='phone'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <Input style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -161,6 +137,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         label={<>Nơi cấp</>}
                         colon={false}
                         labelAlign='left'
+                        name={'issuedBy'}
                         rules={[
                             {
                                 required: true,
@@ -170,7 +147,6 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         validateTrigger={['onBlur', 'onChange']}
                     >
                         <Select
-                            onChange={(e) => onSubmitForm(e, 'issuedBy')}
                             showSearch
                             style={{ width: 400 }}
                             optionFilterProp='children'
@@ -206,13 +182,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         labelAlign='left'
                         name='address'
                     >
-                        <Input
-                            name='address'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <Input style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -229,13 +199,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         validateTrigger={['onBlur', 'onChange']}
                         name='email'
                     >
-                        <Input
-                            name='email'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <Input style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
             </Row>
@@ -247,16 +211,9 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         colon={false}
                         labelAlign='left'
                         name='dateOfBirth'
+                        initialValue={moment(new Date(), dateFormat)}
                     >
-                        <DatePicker
-                            onChange={(e) =>
-                                onSubmitForm(
-                                    e?.format('YYYY-MM-DD') || '',
-                                    'dateOfBirth'
-                                )
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <DatePicker style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -266,7 +223,6 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         labelAlign='left'
                     >
                         <Select
-                            onChange={(e) => onSubmitForm(e, 'birthPlace')}
                             showSearch
                             style={{ width: 400 }}
                             optionFilterProp='children'
@@ -310,14 +266,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <Input
-                            name='motelRoomID'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            disabled
-                            style={{ width: 400 }}
-                        />
+                        <Input disabled style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -337,9 +286,6 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                     >
                         <InputNumber
                             name='priceRoom'
-                            onChange={(e: any) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
                             formatter={(value) =>
                                 ` ${value}`.replace(
                                     /\B(?=(\d{3})+(?!\d))/g,
@@ -372,16 +318,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <DatePicker
-                            name='startDate'
-                            onChange={(e) =>
-                                onSubmitForm(
-                                    e?.format('YYYY-MM-DD') || '',
-                                    'startDay'
-                                )
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <DatePicker style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -400,10 +337,6 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         validateTrigger={['onBlur', 'onChange']}
                     >
                         <InputNumber
-                            name='deposit'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
                             formatter={(value) =>
                                 ` ${value}`.replace(
                                     /\B(?=(\d{3})+(?!\d))/g,
@@ -437,7 +370,6 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                     >
                         <Select
                             defaultValue={1}
-                            onChange={(e) => onSubmitForm(e, 'paymentPeriod')}
                             showSearch
                             style={{ width: 400 }}
                             optionFilterProp='children'
@@ -466,6 +398,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                     <Form.Item
                         label={<>Thanh toán mỗi lần</>}
                         colon={false}
+                        name='payEachTime'
                         labelAlign='left'
                         rules={[
                             {
@@ -478,7 +411,6 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                     >
                         <Select
                             defaultValue={1}
-                            onChange={(e) => onSubmitForm(e, 'payEachTime')}
                             showSearch
                             suffixIcon='Tháng'
                             style={{ width: 400 }}
@@ -513,14 +445,9 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         label={<>Số xe</>}
                         colon={false}
                         labelAlign='left'
+                        name='licensePlates'
                     >
-                        <Input
-                            name='licensePlates'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <Input style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -528,15 +455,9 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         label={<>Hình ảnh</>}
                         colon={false}
                         labelAlign='left'
+                        name='Image'
                     >
-                        <Input
-                            name='Image'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            type='file'
-                            style={{ width: 400 }}
-                        />
+                        <Input type='file' style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
             </Row>
@@ -544,4 +465,4 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
     );
 };
 
-export default FormCreate;
+export default FormEdit;
