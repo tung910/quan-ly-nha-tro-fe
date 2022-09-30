@@ -72,17 +72,28 @@ const CustomerRedirect = () => {
         setContract({ ...contract, ...data });
     };
     const onSave = async () => {
-        const data = {
-            CustomerInfo: tenantInfor,
-            Service: service,
-            Member: member,
-            Contract: contract,
-        };
-        console.log(form.getFieldValue());
+        if (roomRentID) {
+            const data = {
+                CustomerInfo: tenantInfor,
+                Service: service,
+                Member: member,
+                Contract: contract,
+            };
 
-        await addCustomerToRoom(data);
-        await message.success(MESSAGES.ADD_SUCCESS);
-        navigate('/motel-room');
+            // await editCustomerToRoom(data);
+            // navigate('/motel-room');
+        } else {
+            const data = {
+                CustomerInfo: tenantInfor,
+                Service: service,
+                Member: member,
+                Contract: contract,
+            };
+
+            await addCustomerToRoom(data);
+            await message.success(MESSAGES.ADD_SUCCESS);
+            navigate('/motel-room');
+        }
     };
 
     return (

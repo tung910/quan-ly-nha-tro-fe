@@ -51,7 +51,7 @@ const CardItem = ({
                                 Xem
                             </Link>
                         </Button>
-                        <Link to={`/customer/create?roomRentID=${roomRentID}`}>
+                        <Link to={`/customer/edit?roomRentID=${roomRentID}`}>
                             <Button>Sửa</Button>
                         </Link>
                     </div>
