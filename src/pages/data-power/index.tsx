@@ -134,8 +134,8 @@ const ColumnsDataPower: (ColumnTypes[number] & {
 })[] = [
     {
         title: 'Nhà',
-        dataIndex: ['motelId', 'name'],
-        key: 'motelId',
+        dataIndex: ['motelID', 'name'],
+        key: 'motelID',
     },
     {
         title: 'Phòng',
@@ -216,15 +216,15 @@ function handleSubmitData(record: any) {
 const handSubmitData = async (record: any) => {
     const tempData = {
         _id: record._id,
-        motelId: record.motelId,
+        motelID: record.motelID,
         roomName: record.roomName,
         customerName: record.customerName,
         oldValue: record.oldValue,
         newValue: record.newValue,
         useValue: record.useValue,
     };
-    // await editDataPower({ data: tempData });
-    // message.success(MESSAGES.EDIT_SUCCESS);
+    await editDataPower({ data: tempData });
+    message.success(MESSAGES.EDIT_SUCCESS);
 };
 
 function handleSaveAll(dataPower: any) {
@@ -253,6 +253,7 @@ const PowerOnly = () => {
 
             setDataPower(data);
         };
+
         listMotelRoom();
         const getListData = async () => {
             const { data } = await getAllMotel();
