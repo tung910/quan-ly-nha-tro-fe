@@ -4,6 +4,7 @@ import styles from './FormCreate.module.scss';
 import classNames from 'classnames/bind';
 import { useEffect } from 'react';
 import { getCustomerToRoom } from '~/api/customer.api';
+import { generatePriceToVND } from '~/utils/helper';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
@@ -13,19 +14,23 @@ type Props = {
     onSubmitForm: (values: string | number, name: string) => void;
     roomId: string;
     roomRentID: string;
+    form: any;
 };
 
-const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
-    const [form] = Form.useForm();
+const FormCreate = ({ onSubmitForm, roomId, roomRentID, form }: Props) => {
     useEffect(() => {
-        const getCustomer = async () => {
-            const { data } = await getCustomerToRoom(roomRentID);
-            form.setFieldsValue({
-                customerName: data.customerName,
-            });
-        };
-        getCustomer();
-    });
+        if (roomRentID) {
+            const getCustomer = async () => {
+                const { data } = await getCustomerToRoom(roomRentID);
+                form.setFieldsValue({
+                    ...data,
+                    dateOfBirth: moment(data.dateOfBirth, dateFormat),
+                    startDate: moment(data.startDate, dateFormat),
+                });
+            };
+            getCustomer();
+        }
+    }, []);
     return (
         <Form
             className={cx('form-create')}

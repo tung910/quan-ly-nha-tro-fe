@@ -69,10 +69,13 @@ const CustomerRedirect = () => {
             Member: member,
             Contract: contract,
         };
+        console.log(form.getFieldValue());
+
         await addCustomerToRoom(data);
         await message.success(MESSAGES.ADD_SUCCESS);
-        navigate('motel-room');
+        navigate('/motel-room');
     };
+
     return (
         <div>
             <div>
@@ -107,6 +110,7 @@ const CustomerRedirect = () => {
                             onSubmitForm={onSubmitForm}
                             roomId={roomId}
                             roomRentID={roomRentID}
+                            form={form}
                         />
                     </TabPane>
                     <TabPane tab='Dịch vụ' key='tab-b'>
