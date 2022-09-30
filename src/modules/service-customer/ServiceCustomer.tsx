@@ -143,9 +143,15 @@ const defaultColumns: (ColumnTypes[number] & {
 ];
 type Props = {
     onGetService: (data: IService[]) => void;
+    roomRentID: string;
+    newdataService: any;
 };
 
-const ServiceCustomer = ({ onGetService }: Props) => {
+const ServiceCustomer = ({
+    onGetService,
+    roomRentID,
+    newdataService,
+}: Props) => {
     const [state, setstate] = useState<IService[]>([]);
     const [getServiceCustomer, setServiceCustomer] = useState([]);
     useEffect(() => {
@@ -157,7 +163,7 @@ const ServiceCustomer = ({ onGetService }: Props) => {
                     return result;
                 }
             });
-            setstate(dataSelected);
+            setstate(roomRentID ? newdataService : dataSelected);
         };
         getServices();
     }, []);

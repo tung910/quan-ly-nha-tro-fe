@@ -16,7 +16,6 @@ const ContractCustomer = ({ onFinished, formItem }: Props) => {
                 wrapperCol={{ span: 16 }}
                 style={{ marginTop: 20, padding: 20 }}
                 form={formItem}
-                // onFinish={onFinished}
             >
                 <p className={cx('title-contract')}>
                     Các thông tin nhập ở đây sẽ được sử dụng cho việc xuất/ in

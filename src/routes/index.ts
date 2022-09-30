@@ -19,6 +19,7 @@ export interface Route {
 const routes: Route[] = [
     { path: '', component: Dashboard },
     { path: '/customer/create', component: CustomerRedirect },
+    { path: '/customer/view', component: CustomerRedirect },
     { path: '/motel-room', component: Motel },
     { path: '/motel-room/customer', component: ListCustomer },
     { path: '/motel-room/add-motel', component: AddMotel },
