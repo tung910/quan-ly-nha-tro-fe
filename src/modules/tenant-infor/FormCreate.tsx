@@ -237,17 +237,15 @@ const FormCreate = ({ onSubmitForm, roomId, formData }: Props) => {
                         labelAlign='left'
                         name='dateOfBirth'
                     >
-                        <ConfigProvider>
-                            <DatePicker
-                                onChange={(e) =>
-                                    onSubmitForm(
-                                        e?.format('YYYY-MM-DD') || '',
-                                        'dateOfBirth'
-                                    )
-                                }
-                                style={{ width: 400 }}
-                            />
-                        </ConfigProvider>
+                        <DatePicker
+                            onChange={(e) =>
+                                onSubmitForm(
+                                    e?.format('YYYY-MM-DD') || '',
+                                    'dateOfBirth'
+                                )
+                            }
+                            style={{ width: 400 }}
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -363,17 +361,15 @@ const FormCreate = ({ onSubmitForm, roomId, formData }: Props) => {
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <ConfigProvider>
-                            <DatePicker
-                                onChange={(e) =>
-                                    onSubmitForm(
-                                        e?.format('YYYY-MM-DD') || '',
-                                        'startDate'
-                                    )
-                                }
-                                style={{ width: 400 }}
-                            />
-                        </ConfigProvider>
+                        <DatePicker
+                            onChange={(e) =>
+                                onSubmitForm(
+                                    e?.format('YYYY-MM-DD') || '',
+                                    'startDate'
+                                )
+                            }
+                            style={{ width: 400 }}
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>

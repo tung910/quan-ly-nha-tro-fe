@@ -1,4 +1,5 @@
 import { Button, Tabs, Form, message, PageHeader } from 'antd';
+import moment from 'moment';
 import ContractCustomer from '~/modules/contract-customer/ContractCustomer';
 import MemberCustomer from '~/modules/member-customer/MemberCustomer';
 import ServiceCustomer from '~/modules/service-customer/ServiceCustomer';
@@ -15,6 +16,7 @@ import { MESSAGES } from '~/consts/message.const';
 import { IService } from '~/types/Service.type';
 const { TabPane } = Tabs;
 
+const dateFormat = 'DD-MM-YYYY';
 const CustomerRedirect = () => {
     const { search } = useLocation();
     const roomId = new URLSearchParams(search).get('roomId') || '';
@@ -25,7 +27,13 @@ const CustomerRedirect = () => {
         const dataRoom = async () => {
             const { data } = await getDetailCustomerToRoom(roomRentID);
             setNewdataService(data.service);
-            form.setFieldsValue(data);
+            form.setFieldsValue({
+                ...data,
+                dateOfBirth: data.dateOfBirth
+                    ? moment(data.dateOfBirth, dateFormat)
+                    : '',
+                startDate: moment(data.startDate, dateFormat),
+            });
         };
         dataRoom();
     }, []);
@@ -93,6 +101,7 @@ const CustomerRedirect = () => {
                             key={1}
                             icon={<RollbackOutlined />}
                             className={cx('btn-back')}
+                            onClick={() => window.history.back()}
                         >
                             Quay lại
                         </Button>,
