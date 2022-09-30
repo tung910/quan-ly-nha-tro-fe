@@ -3,13 +3,14 @@ import {
     EditOutlined,
     PlusSquareOutlined,
     DeleteOutlined,
+    EyeOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import styles from './Card.module.scss';
 import classNames from 'classnames/bind';
 import { generatePriceToVND } from '~/utils/helper';
-
+import { listCustomerToRoom } from '~/api/customer.api';
 export interface Props {
     roomName?: ReactNode | string;
     unitPrice: number;
@@ -27,9 +28,9 @@ const CardItem = ({
     roomName,
     idRoom,
     isRent,
-    roomRentID,
     customerName,
     onRemoveMotel,
+    roomRentID,
 }: Props) => {
     return (
         <Card
@@ -41,11 +42,17 @@ const CardItem = ({
             <Col>
                 {isRent ? (
                     <div className={cx('d-flex -justify-space-between')}>
-                        <h3>Trả</h3>
-                        <h3>Đổi</h3>
-                        <h3>Xem</h3>
+                        <Button>Trả</Button>
+                        <Button>Đổi</Button>
+                        <Button type='primary' icon={<EyeOutlined />}>
+                            <Link
+                                to={`/customer/view?roomRentID=${roomRentID}`}
+                            >
+                                Xem
+                            </Link>
+                        </Button>
                         <Link to={`/customer/create?roomRentID=${roomRentID}`}>
-                            <h3>Sửa</h3>
+                            <Button>Sửa</Button>
                         </Link>
                     </div>
                 ) : (

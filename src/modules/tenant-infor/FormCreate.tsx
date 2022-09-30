@@ -1,42 +1,39 @@
-import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from 'antd';
+import {
+    Col,
+    DatePicker,
+    ConfigProvider,
+    Form,
+    Input,
+    InputNumber,
+    Row,
+    Select,
+} from 'antd';
 import moment from 'moment';
-import styles from './FormCreate.module.scss';
 import classNames from 'classnames/bind';
-import { useEffect } from 'react';
-import { getCustomerToRoom } from '~/api/customer.api';
+import styles from './FormCreate.module.scss';
 import { generatePriceToVND } from '~/utils/helper';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
-const dateFormat = 'DD-MM-YYYY';
+const dateFormat = 'YYYY-MM-DD';
 
 type Props = {
     onSubmitForm: (values: string | number, name: string) => void;
     roomId: string;
     roomRentID: string;
     form: any;
+    formData: any;
 };
 
-const FormCreate = ({ onSubmitForm, roomId, roomRentID, form }: Props) => {
-    useEffect(() => {
-        if (roomRentID) {
-            const getCustomer = async () => {
-                const { data } = await getCustomerToRoom(roomRentID);
-                form.setFieldsValue({
-                    ...data,
-                    dateOfBirth: moment(data.dateOfBirth, dateFormat),
-                    startDate: moment(data.startDate, dateFormat),
-                });
-            };
-            getCustomer();
-        }
-    }, []);
+const FormCreate = ({ onSubmitForm, roomId, formData }: Props) => {
+    const [form] = Form.useForm();
+
     return (
         <Form
             className={cx('form-create')}
             autoComplete='off'
-            form={form}
             labelCol={{ span: 9 }}
+            form={formData}
             wrapperCol={{ span: 16 }}
             style={{ marginTop: 20, padding: 20 }}
         >
@@ -64,7 +61,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID, form }: Props) => {
                             name='customerName'
                             style={{ width: 400 }}
                             autoFocus
-                        />
+                        ></Input>
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -79,6 +76,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID, form }: Props) => {
                             },
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
+                        name='citizenIdentification'
                     >
                         <Input
                             name='citizenIdentification'
@@ -121,6 +119,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID, form }: Props) => {
                         label={<>Ngày cấp</>}
                         colon={false}
                         labelAlign='left'
+                        name='dateRange'
                     >
                         <Input
                             name='dateRange'
@@ -139,6 +138,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID, form }: Props) => {
                         label={<>Số điện thoại</>}
                         colon={false}
                         labelAlign='left'
+                        name='phone'
                     >
                         <Input
                             name='phone'
@@ -197,6 +197,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID, form }: Props) => {
                         label={<>Địa chỉ thường trú</>}
                         colon={false}
                         labelAlign='left'
+                        name='address'
                     >
                         <Input
                             name='address'
@@ -212,6 +213,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID, form }: Props) => {
                         label={<>Email</>}
                         colon={false}
                         labelAlign='left'
+                        name='email'
                         rules={[
                             {
                                 required: true,
@@ -237,17 +239,19 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID, form }: Props) => {
                         label={<>Ngày sinh</>}
                         colon={false}
                         labelAlign='left'
+                        name='dateOfBirth'
                     >
-                        <DatePicker
-                            name='dateOfBirth'
-                            onChange={(e) =>
-                                onSubmitForm(
-                                    e?.format('YYYY-MM-DD') || '',
-                                    'dateOfBirth'
-                                )
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <ConfigProvider>
+                            <DatePicker
+                                onChange={(e) =>
+                                    onSubmitForm(
+                                        e?.format('YYYY-MM-DD') || '',
+                                        'dateOfBirth'
+                                    )
+                                }
+                                style={{ width: 400 }}
+                            />
+                        </ConfigProvider>
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -363,16 +367,17 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID, form }: Props) => {
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <DatePicker
-                            name='startDate'
-                            onChange={(e) =>
-                                onSubmitForm(
-                                    e?.format('YYYY-MM-DD') || '',
-                                    'startDay'
-                                )
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <ConfigProvider>
+                            <DatePicker
+                                onChange={(e) =>
+                                    onSubmitForm(
+                                        e?.format('YYYY-MM-DD') || '',
+                                        'startDate'
+                                    )
+                                }
+                                style={{ width: 400 }}
+                            />
+                        </ConfigProvider>
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
