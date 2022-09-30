@@ -35,6 +35,7 @@ const ListRoom = ({ motelId }: Props) => {
                                 key={index}
                                 roomName={item.roomName}
                                 idRoom={item._id}
+                                roomRentID={item.roomRentID}
                                 unitPrice={item.unitPrice}
                                 isRent={item.isRent}
                                 onRemoveMotel={() => onRemove(item._id)}

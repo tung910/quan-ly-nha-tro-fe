@@ -12,6 +12,7 @@ import ListCustomer from '~/pages/motel/list-customer';
 import EditRoom from '~/pages/room/eidt-room';
 import WaterPage from '~/pages/water';
 import PowerOnly from '~/pages/data-power';
+import EditCustomerToRoom from '~/pages/customer/edit';
 
 export interface Route {
     path: string;
@@ -22,6 +23,7 @@ const routes: Route[] = [
     { path: '/customer/create', component: CustomerRedirect },
     { path: '/motel-room', component: Motel },
     { path: '/motel-room/customer', component: ListCustomer },
+    { path: '/motel-room/edit', component: EditCustomerToRoom },
     { path: '/motel-room/add-motel', component: AddMotel },
     { path: '/motel-room/edit-motel/:id', component: EditMotel },
     { path: '/motel-room/add-room', component: AddRoom },
