@@ -1,15 +1,17 @@
-import moment from 'moment';
-import classNames from 'classnames/bind';
 import {
     Col,
-    ConfigProvider,
     DatePicker,
+    ConfigProvider,
     Form,
     Input,
+    InputNumber,
     Row,
     Select,
 } from 'antd';
+import moment from 'moment';
+import classNames from 'classnames/bind';
 import styles from './FormCreate.module.scss';
+import { generatePriceToVND } from '~/utils/helper';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
@@ -313,7 +315,7 @@ const FormCreate = ({ onSubmitForm, roomId, formData }: Props) => {
                     <Form.Item
                         label={<>Tiền phòng</>}
                         name='priceRoom'
-                        initialValue={3000000}
+                        initialValue={generatePriceToVND(3000000, undefined)}
                         colon={false}
                         labelAlign='left'
                         rules={[
@@ -324,12 +326,21 @@ const FormCreate = ({ onSubmitForm, roomId, formData }: Props) => {
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <Input
+                        <InputNumber
                             name='priceRoom'
-                            onChange={(e) =>
+                            onChange={(e: any) =>
                                 onSubmitForm(e.target.value, e.target.name)
                             }
-                            suffix='VNĐ'
+                            formatter={(value) =>
+                                ` ${value}`.replace(
+                                    /\B(?=(\d{3})+(?!\d))/g,
+                                    ','
+                                )
+                            }
+                            parser={(value: any) =>
+                                value.replace(/\$\s?|(,*)/g, '')
+                            }
+                            addonAfter={'VND'}
                             style={{ width: 400 }}
                         />
                     </Form.Item>
@@ -380,12 +391,21 @@ const FormCreate = ({ onSubmitForm, roomId, formData }: Props) => {
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <Input
+                        <InputNumber
                             name='deposit'
                             onChange={(e) =>
                                 onSubmitForm(e.target.value, e.target.name)
                             }
-                            suffix='VNĐ'
+                            formatter={(value) =>
+                                ` ${value}`.replace(
+                                    /\B(?=(\d{3})+(?!\d))/g,
+                                    ','
+                                )
+                            }
+                            parser={(value: any) =>
+                                value.replace(/\$\s?|(,*)/g, '')
+                            }
+                            addonAfter='VNĐ'
                             style={{ width: 400 }}
                         />
                     </Form.Item>

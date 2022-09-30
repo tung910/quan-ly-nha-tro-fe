@@ -167,7 +167,18 @@ const AddEditService = () => {
                             ]}
                             validateTrigger={['onBlur', 'onChange']}
                         >
-                            <InputNumber addonAfter='VND' />
+                            <InputNumber
+                                formatter={(value) =>
+                                    ` ${value}`.replace(
+                                        /\B(?=(\d{3})+(?!\d))/g,
+                                        ','
+                                    )
+                                }
+                                parser={(value) =>
+                                    ` ${value}`.replace(/\$\s?|(,*)/g, '')
+                                }
+                                addonAfter='VNĐ'
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={12}>

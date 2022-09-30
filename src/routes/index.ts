@@ -10,6 +10,7 @@ import ServicePage from '~/pages/service';
 import AddEditService from '~/pages/service/AddEditService';
 import ListCustomer from '~/pages/motel/list-customer';
 import EditRoom from '~/pages/room/eidt-room';
+import WaterPage from '~/pages/water';
 import PowerOnly from '~/pages/data-power';
 
 export interface Route {
@@ -27,6 +28,7 @@ const routes: Route[] = [
     { path: '/motel-room/add-room', component: AddRoom },
     { path: '/motel-room/edit-room/:id', component: EditRoom },
     { path: '/service', component: ServicePage },
+    { path: '/data-water', component: WaterPage },
     { path: '/service/add-service', component: AddEditService },
     { path: '/service/edit-service', component: AddEditService },
     { path: '/data-power', component: PowerOnly },
