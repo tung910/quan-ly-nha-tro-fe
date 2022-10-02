@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
 import { STATUS_CODE } from '~/types/Api-Response.type';
+
 const baseURL = import.meta.env.VITE_BASE_URL;
 const instance = axios.create({
     baseURL,
@@ -23,7 +24,8 @@ instance.interceptors.response.use(
         }
     },
     (error) => {
-        return Promise.reject(error);
+        const { data } = error.response;
+        return Promise.reject(data);
     }
 );
 export default instance;
