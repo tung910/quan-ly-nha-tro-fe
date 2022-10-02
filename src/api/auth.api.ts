@@ -8,5 +8,8 @@ const loginApi = (user: IUser) => {
 const signUp = (user: IUser) => {
     return instance.post('/signup', user);
 };
+const verifyOtp = (user: { email: string; otp: string }) => {
+    return instance.post('/verify-otp', user);
+};
 
-export { loginApi, signUp };
+export { loginApi, signUp, verifyOtp };
