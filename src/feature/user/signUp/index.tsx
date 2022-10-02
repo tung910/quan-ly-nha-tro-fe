@@ -1,46 +1,56 @@
-import styles from './signin.module.scss';
-import { useNavigate } from 'react-router-dom';
-import { login } from '~/api/auth.api';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { notification } from 'antd';
+import { CheckCircleOutlined } from '@ant-design/icons';
+import styles from './signUp.module.scss';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { IUser } from '~/types/Auth';
+import { IUser } from '~/types/User.type';
+import { signUp } from '~/api/auth.api';
 
-type InputUser = {
-    email: string;
-    password: string;
-};
-const LoginPage = () => {
-    const navigate = useNavigate();
+const SignUpPage = () => {
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm();
     const onSubmit: SubmitHandler<any> = async (data: IUser) => {
-        // try {
-        await login(data);
-        // } catch (error) {
-        //     console.log(error);
-        // }
-        // alert('')
+        await signUp(data);
+        notification.open({
+            message: 'Đăng ký tài khoản thành công',
+            icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />,
+        });
     };
     return (
         <div className={styles['center']}>
-            <h1 className=''>Đăng nhập</h1>
+            <h1 className=''>Đăng ký</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles['txt_field']}>
                     <input
-                        type='text'
+                        type='email'
                         {...register('email', {
                             required: true,
                         })}
                     />
                     {errors?.email?.type === 'required' && (
                         <span className={styles['my-error']}>
-                            Email is required
+                            Vui lòng không bỏ trống trường này
                         </span>
                     )}
                     {/* <span></span> */}
                     <label htmlFor=''>Email đăng nhập</label>
+                </div>
+                <div className={styles['txt_field']}>
+                    <input
+                        type='number'
+                        {...register('phone', {
+                            required: true,
+                        })}
+                    />
+                    {errors?.email?.type === 'required' && (
+                        <span className={styles['my-error']}>
+                            Vui lòng không bỏ trống trường này
+                        </span>
+                    )}
+                    <label htmlFor=''>Số điện thoại</label>
                 </div>
                 <div className={styles['txt_field']}>
                     <input
@@ -51,21 +61,18 @@ const LoginPage = () => {
                     />
                     {errors?.password?.type === 'required' && (
                         <span className={styles['my-error']}>
-                            Password is required
+                            Vui lòng không bỏ trống trường này
                         </span>
                     )}
                     <label htmlFor=''>Mật khẩu</label>
                 </div>
-                <div className={styles['pass']}>Forgot Password?</div>
                 <button className={styles['btn_login']} type='submit'>
-                    Đăng nhập
+                    Đăng Ký
                 </button>
-                <div className={styles['signup_link']}>
-                    Bạn chưa có tài khoản? <a href='#'>Đăng kí</a>
-                </div>
+                <div className={styles['signup_link']}></div>
             </form>
         </div>
     );
 };
 
-export default LoginPage;
+export default SignUpPage;
