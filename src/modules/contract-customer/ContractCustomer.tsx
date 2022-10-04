@@ -1,12 +1,14 @@
 import { Form, Button, Row, Col, Input, DatePicker } from 'antd';
 import styles from './Contract.module.scss';
+import { DownloadOutlined } from '@ant-design/icons';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 type Props = {
     onFinished: (values: any) => void;
     formItem: any;
+    roomRentID: string;
 };
-const ContractCustomer = ({ onFinished, formItem }: Props) => {
+const ContractCustomer = ({ onFinished, formItem, roomRentID }: Props) => {
     return (
         <div>
             <Form
@@ -113,6 +115,13 @@ const ContractCustomer = ({ onFinished, formItem }: Props) => {
                         </Form.Item>
                     </Col>
                 </Row>
+                {roomRentID ? (
+                    <Button type='primary' icon={<DownloadOutlined />}>
+                        Tải hợp đồng
+                    </Button>
+                ) : (
+                    ''
+                )}
             </Form>
         </div>
     );

@@ -71,7 +71,7 @@ const EditCustomerToRoom = () => {
             <div>
                 <PageHeader
                     ghost={true}
-                    title='Cập nhật khách thuê phòng'
+                    title='Cập nhật thông tin khách thuê phòng'
                     extra={[
                         <Button
                             key={1}
@@ -115,6 +115,7 @@ const EditCustomerToRoom = () => {
                     </TabPane>
                     <TabPane tab='Hợp đồng' key='tab-d'>
                         <ContractCustomer
+                            roomRentID={roomRentID}
                             formItem={form}
                             onFinished={onFinish}
                         />
