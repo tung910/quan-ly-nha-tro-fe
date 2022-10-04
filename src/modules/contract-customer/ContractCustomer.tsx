@@ -1,12 +1,25 @@
 import { Form, Button, Row, Col, Input, DatePicker } from 'antd';
+import { renderToString } from 'react-dom/server';
 import styles from './Contract.module.scss';
 import { DownloadOutlined } from '@ant-design/icons';
 import classNames from 'classnames/bind';
+import PrintContract from '~/feature/contract/index';
+import jsPDF from 'jspdf';
 const cx = classNames.bind(styles);
 type Props = {
     onFinished: (values: any) => void;
     formItem: any;
     roomRentID: string;
+};
+
+const Printf = () => {
+    const string = renderToString(<PrintContract />);
+    const pdf = new jsPDF('p', 'pt', 'a4');
+    pdf.html(string, {
+        callback(doc) {
+            doc.save('HDTN.pdf');
+        },
+    });
 };
 const ContractCustomer = ({ onFinished, formItem, roomRentID }: Props) => {
     return (
@@ -116,7 +129,11 @@ const ContractCustomer = ({ onFinished, formItem, roomRentID }: Props) => {
                     </Col>
                 </Row>
                 {roomRentID ? (
-                    <Button type='primary' icon={<DownloadOutlined />}>
+                    <Button
+                        onClick={Printf}
+                        type='primary'
+                        icon={<DownloadOutlined />}
+                    >
                         Tải hợp đồng
                     </Button>
                 ) : (
