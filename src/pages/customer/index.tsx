@@ -23,10 +23,13 @@ const CustomerRedirect = () => {
     const [form]: any = Form.useForm();
     const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
     const [newdataService, setNewdataService] = useState([]);
+    const [newdataMember, setNewdataMember] = useState([]);
     useEffect(() => {
         const dataRoom = async () => {
             const { data } = await getDetailCustomerToRoom(roomRentID);
             setNewdataService(data.service);
+            setNewdataMember(data.member);
+
             form.setFieldsValue({
                 ...data,
                 dateOfBirth: data.dateOfBirth
@@ -69,6 +72,10 @@ const CustomerRedirect = () => {
     const navigate = useNavigate();
 
     const [member, setMember] = useState([]);
+
+    const onGetMember = (dataSource: any) => {
+        setMember(dataSource);
+    };
     const [contract, setContract] = useState({
         coinNumber: '',
         dateStart: '',
@@ -152,7 +159,11 @@ const CustomerRedirect = () => {
                         />
                     </TabPane>
                     <TabPane tab='Thành viên' key='tab-c'>
-                        <MemberCustomer />
+                        <MemberCustomer
+                            roomRentID={roomRentID}
+                            newdataMember={newdataMember}
+                            onGetMember={onGetMember}
+                        />
                     </TabPane>
                     <TabPane tab='Hợp đồng' key='tab-d'>
                         <ContractCustomer
