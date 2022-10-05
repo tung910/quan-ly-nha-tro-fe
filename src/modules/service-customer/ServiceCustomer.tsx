@@ -153,7 +153,6 @@ const ServiceCustomer = ({
     newdataService,
 }: Props) => {
     const [state, setstate] = useState<IService[]>([]);
-    const [getServiceCustomer, setServiceCustomer] = useState([]);
     useEffect(() => {
         const getServices = async () => {
             const { data } = await getAllService();
@@ -163,22 +162,25 @@ const ServiceCustomer = ({
                     return result;
                 }
             });
+
             setstate(roomRentID ? newdataService : dataSelected);
+            setSelectedRowKeys(dataSelected.map((item: any) => item._id));
         };
         getServices();
     }, []);
     const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
     const onSelectChange = (newSelectedRowKeys: any, record: any) => {
-        setServiceCustomer(record);
+        setSelectedRowKeys(record);
         setSelectedRowKeys(newSelectedRowKeys);
     };
+
     const rowSelection = {
         selectedRowKeys,
         onChange: onSelectChange,
     };
 
     if (state.length > 0) {
-        onGetService(getServiceCustomer);
+        onGetService(selectedRowKeys);
     } else {
         onGetService(state);
     }

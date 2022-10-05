@@ -25,20 +25,22 @@ const CustomerRedirect = () => {
     const [newdataService, setNewdataService] = useState([]);
     const [newdataMember, setNewdataMember] = useState([]);
     useEffect(() => {
-        const dataRoom = async () => {
-            const { data } = await getDetailCustomerToRoom(roomRentID);
-            setNewdataService(data.service);
-            setNewdataMember(data.member);
+        if (roomRentID) {
+            const dataRoom = async () => {
+                const { data } = await getDetailCustomerToRoom(roomRentID);
+                setNewdataService(data.service);
+                setNewdataMember(data.member);
 
-            form.setFieldsValue({
-                ...data,
-                dateOfBirth: data.dateOfBirth
-                    ? moment(data.dateOfBirth, dateFormat)
-                    : '',
-                startDate: moment(data.startDate, dateFormat),
-            });
-        };
-        dataRoom();
+                form.setFieldsValue({
+                    ...data,
+                    dateOfBirth: data.dateOfBirth
+                        ? moment(data.dateOfBirth, dateFormat)
+                        : '',
+                    startDate: moment(data.startDate, dateFormat),
+                });
+            };
+            dataRoom();
+        }
     }, []);
 
     const [tenantInfor, setTenantInfor] = useState<TypeCustomer>({
@@ -116,7 +118,11 @@ const CustomerRedirect = () => {
             <div>
                 <PageHeader
                     ghost={true}
-                    title='Thêm khách thuê phòng'
+                    title={
+                        roomRentID
+                            ? 'Xem thông tin khách thuê phòng'
+                            : 'Thêm khách thuê phòng'
+                    }
                     extra={[
                         <Button
                             key={1}
