@@ -163,7 +163,7 @@ const MemberCustomer = ({ onGetMember, roomRentID, newdataMember }: Props) => {
             dataIndex: 'date',
             editable: true,
             render: (date: any) => (
-                <DatePicker value={moment(date, dateFormat)} />
+                <DatePicker value={date ? moment(date, dateFormat) : date} />
             ),
         },
         {
