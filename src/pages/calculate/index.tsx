@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import classNames from 'classnames/bind';
 import styles from './Calculate.module.scss';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Button,
     Col,
@@ -13,12 +13,10 @@ import {
     Table,
     InputNumber,
     Modal,
-    message,
-    Input,
 } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import { SearchOutlined, CalculatorOutlined } from '@ant-design/icons';
-import { getStatisticalRoomStatus, getListRooms } from '~/api/room.api';
+import { getStatisticalRoomStatus, getRooms } from '~/api/room.api';
 import { IDataWater } from '~/types/DataWater.type';
 import { MotelType } from '~/types/MotelType';
 import { getAllMotel } from '~/api/motel.api';
@@ -45,90 +43,11 @@ const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
     );
 };
 
-interface EditableCellProps {
-    title: React.ReactNode;
-    editable: boolean;
-    children: React.ReactNode;
-    dataIndex: keyof IDataWater;
-    record: IDataWater;
-    handleSave: (record: IDataWater) => void;
-}
-
-const EditableCell: React.FC<EditableCellProps> = ({
-    title,
-    editable,
-    children,
-    dataIndex,
-    record,
-    handleSave,
-    ...restProps
-}) => {
-    const [editing, setEditing] = useState(false);
-    const inputRef = useRef<HTMLInputElement>(null);
-    const form = useContext(EditableContext)!;
-
-    useEffect(() => {
-        if (editing) {
-            inputRef.current?.focus();
-        }
-    }, [editing]);
-
-    const toggleEdit = () => {
-        setEditing(!editing);
-        form.setFieldsValue({ [dataIndex]: record[dataIndex] });
-    };
-
-    const save = async () => {
-        try {
-            const values = await form.validateFields();
-            toggleEdit();
-            handleSave({
-                ...record,
-                ...values,
-                useValue: values.newValue
-                    ? values.newValue - record.oldValue
-                    : record.newValue - values.oldValue,
-            });
-        } catch (errInfo) {
-            console.log('Save failed:', errInfo);
-        }
-    };
-
-    let childNode = children;
-
-    if (editable) {
-        childNode = editing ? (
-            <Form.Item
-                style={{ margin: 0 }}
-                name={dataIndex}
-                rules={[
-                    {
-                        required: true,
-                        message: `${dataIndex} is required.`,
-                    },
-                ]}
-            >
-                <InputNumber ref={inputRef} onPressEnter={save} onBlur={save} />
-            </Form.Item>
-        ) : (
-            <div
-                className='editable-cell-value-wrap'
-                style={{ paddingRight: 24 }}
-                onClick={toggleEdit}
-            >
-                {children}
-            </div>
-        );
-    }
-
-    return <td {...restProps}>{childNode}</td>;
-};
-
 type EditableTableProps = Parameters<typeof Table>[0];
 
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 
-const ColumnsDataWater: (ColumnTypes[number] & {
+const ColumnsData: (ColumnTypes[number] & {
     editable?: boolean;
     dataIndex: any;
 })[] = [
@@ -205,9 +124,21 @@ const Calculate = () => {
     const [listNameRoom, setListNameRoom] = useState<RoomType[]>([]);
     const [listStatusRoom, setListStatusRoom] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [motelId, setMotelId] = useState();
     const showModal = () => {
         setIsModalOpen(true);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+        form.resetFields();
+    };
+
+    const onClickMotel = (value: string) => {
+        const getListRoom = async () => {
+            const { data } = await getRooms(value);
+            setListNameRoom(data);
+        };
+        getListRoom();
     };
 
     const handleSubmit = (values: any) => {
@@ -216,30 +147,18 @@ const Calculate = () => {
             invoiceDate: moment(values.invoiceDate).format('DD/MM/YYYY'),
             month: moment(values.month).format('MM/YYYY'),
         };
-        console.log(data);
 
         setIsModalOpen(false);
         form.resetFields();
     };
 
-    const handleCancel = () => {
-        setIsModalOpen(false);
-        form.resetFields();
-    };
-    const onClickMotel = () => {
-        console.log('ahiii');
-    };
     useEffect(() => {
         const getListMotel = async () => {
             const { data } = await getAllMotel();
             setListNameMotel(data);
         };
         getListMotel();
-        // const getListRoom = async () => {
-        //     const { data } = await getListRooms();
-        //     setListNameRoom(data);
-        // };
-        // // getListRoom();
+
         const getListDataStatus = async () => {
             const { data } = await getStatisticalRoomStatus();
             setListStatusRoom(data);
@@ -250,11 +169,10 @@ const Calculate = () => {
     const components = {
         body: {
             row: EditableRow,
-            cell: EditableCell,
         },
     };
 
-    const columns = ColumnsDataWater.map((col) => {
+    const columns = ColumnsData.map((col) => {
         if (!col.editable) {
             return col;
         }
@@ -348,10 +266,8 @@ const Calculate = () => {
                                     labelAlign='left'
                                     name='month'
                                     initialValue={moment()}
-                                    // format={dateFormat}
                                 >
                                     <DatePicker
-                                        // defaultValue={moment()}
                                         format={dateFormat}
                                         style={{ width: '375px' }}
                                     />
@@ -365,6 +281,7 @@ const Calculate = () => {
                                     <Select
                                         placeholder='Mời bạn chọn nhà'
                                         showSearch
+                                        onChange={onClickMotel}
                                     >
                                         {listNameMotel &&
                                             listNameMotel.map((item, index) => {
@@ -372,7 +289,6 @@ const Calculate = () => {
                                                     <Option
                                                         key={index}
                                                         value={item._id}
-                                                        onClick={onClickMotel}
                                                     >
                                                         {item.name}
                                                     </Option>
@@ -412,11 +328,7 @@ const Calculate = () => {
             <div className={cx('header-bottom')}>
                 <Row gutter={[8, 8]}>
                     <Col span={6}>
-                        <Form.Item
-                            // initialValue={moment(new Date(), dateFormat)}
-                            label={<>Tháng/năm</>}
-                            colon={false}
-                        >
+                        <Form.Item label={<>Tháng/năm</>} colon={false}>
                             <DatePicker
                                 defaultValue={moment()}
                                 format={dateFormat}
