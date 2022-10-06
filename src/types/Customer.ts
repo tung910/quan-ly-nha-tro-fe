@@ -17,4 +17,5 @@ export type TypeCustomer = {
     deposit: number;
     payEachTime: number;
     paymentPeriod: number;
+    roomName: string;
 };

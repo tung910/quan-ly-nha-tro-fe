@@ -17,7 +17,6 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { useLocation } from 'react-router-dom';
 import { ACTION } from '~/consts/member.const';
 import { DataTable } from '~/types/Member.type';
 const { Option } = Select;

@@ -164,13 +164,14 @@ const ServiceCustomer = ({
             });
 
             setstate(roomRentID ? newdataService : dataSelected);
-            setSelectedRowKeys(dataSelected.map((item: any) => item._id));
+            setSelectedRowKeys(data.map((item: any) => item._id));
         };
         getServices();
     }, []);
     const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
+    const [getServices, setGetServices] = useState([]);
     const onSelectChange = (newSelectedRowKeys: any, record: any) => {
-        setSelectedRowKeys(record);
+        setGetServices(record);
         setSelectedRowKeys(newSelectedRowKeys);
     };
 
@@ -179,11 +180,7 @@ const ServiceCustomer = ({
         onChange: onSelectChange,
     };
 
-    if (state.length > 0) {
-        onGetService(selectedRowKeys);
-    } else {
-        onGetService(state);
-    }
+    onGetService(getServices.length > 0 ? getServices : state);
 
     const handleSave = (row: IService) => {
         const newData = [...state];
