@@ -1,7 +1,7 @@
 import { Form, Input, Row, Col, message, Select } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
 import { Content } from 'antd/lib/layout/layout';
-import { MotelType } from '~/types/MotelType';
+import { MotelType, MotelTypeMotel } from '~/types/MotelType';
 import styles from './AddMotel.module.scss';
 import classNames from 'classnames/bind';
 const { Option } = Select;
@@ -11,9 +11,11 @@ import HeaderPage from '~/components/page-header';
 import { MESSAGES } from '~/consts/message.const';
 import { useEffect, useState } from 'react';
 import {
+    getDistrict,
     getDistrictByProvince,
     getProvince,
     getProvinces,
+    getWard,
     getWardByDistrict,
 } from '~/api/addressCheckout';
 import { useForm } from 'react-hook-form';
@@ -25,6 +27,9 @@ const AddMotel = () => {
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
+    const [provinceId, setProvinceId] = useState([]);
+    const [districtId, setdistrictId] = useState([]);
+    const [wardId, setwardId] = useState([]);
 
     useEffect(() => {
         const getDataProvince = async () => {
@@ -36,7 +41,7 @@ const AddMotel = () => {
 
     // provice render
     const handleChangeProvince = async (code: any) => {
-        // console.log('a', code);
+        console.log('a', code);
         if (code === '') {
             setDistricts([]);
             setWards([]);
@@ -58,33 +63,26 @@ const AddMotel = () => {
             setWards(wards);
         }
     };
+    const onFinish = async (values: MotelTypeMotel) => {
+        const dataProvince = await getProvince(values.province);
+        const dataDistrict = await getDistrict(values.district);
+        const dataWard = await getWard(values.ward);
 
-    // // address
-    // const addressDataTotal = async (
-    //     codeP: string | number,
-    //     codeD: string | number,
-    //     codeW: string | number
-    // ) => {
-    //     const province = await getProvince(+codeP);
-    //     const district = await getDistrict(+codeD);
-    //     const ward = await getWard(+codeW);
-    //     return `${province.data.name}, ${district.data.name}, ${ward.data.name}`;
-    // };
-    const onFinish = async (values: MotelType) => {
-        // const nameProvince = await getProvince(provinces)
-        // const address =
-        //     (await addressDataTotal(data.province, data.district, data.ward)) +
-        //     ', ' +
-        //     data.address;
-        const add = async () => {
-            console.log('123', values);
-            await addMotel(values);
-
+        const dataAddress =
+            dataProvince.data.name +
+            ', ' +
+            dataDistrict.data.name +
+            ', ' +
+            dataWard.data.name +
+            ', ' +
+            values.address;
+        try {
+            await addMotel({ ...values, address: dataAddress });
             message.success(MESSAGES.ADD_SUCCESS);
             navigate('/motel-room');
-        };
-
-        add();
+        } catch (error) {
+            message.error(MESSAGES.ERROR);
+        }
     };
 
     return (
@@ -127,21 +125,7 @@ const AddMotel = () => {
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
-                                <Form.Item
-                                    // name='commune'
-                                    label='Phường/Xã'
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Không được để trống',
-                                        },
-                                        {
-                                            type: 'string',
-                                            min: 3,
-                                            message: 'Phải lớn hơn 3 ký tự!',
-                                        },
-                                    ]}
-                                >
+                                <Form.Item name='ward' label='Phường/Xã'>
                                     <Select
                                         // defaultValue='Phường/Xã'
                                         placeholder='Phường/Xã'
@@ -167,19 +151,8 @@ const AddMotel = () => {
                         <Row>
                             <Col span={12}>
                                 <Form.Item
-                                    // name='province'
+                                    name='province'
                                     label='Tỉnh/Thành phố'
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Không được để trống',
-                                        },
-                                        {
-                                            type: 'string',
-                                            min: 3,
-                                            message: 'Phải lớn hơn 3 ký tự!',
-                                        },
-                                    ]}
                                 >
                                     <Select
                                         // name='province'
@@ -227,20 +200,7 @@ const AddMotel = () => {
                         </Row>
                         <Row>
                             <Col span={12}>
-                                <Form.Item
-                                    label='Quận/Huyện'
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Không được để trống',
-                                        },
-                                        {
-                                            type: 'string',
-                                            min: 3,
-                                            message: 'Phải lớn hơn 3 ký tự!',
-                                        },
-                                    ]}
-                                >
+                                <Form.Item name='district' label='Quận/Huyện'>
                                     <Select
                                         // defaultValue='Quận/Huyện'
                                         style={{ width: 420 }}
