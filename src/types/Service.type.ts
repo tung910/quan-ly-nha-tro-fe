@@ -7,4 +7,5 @@ export interface IService {
     serviceTypeName?: string;
     quantity?: number;
     note?: string;
+    isUse?: boolean;
 }
