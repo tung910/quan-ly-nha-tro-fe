@@ -19,6 +19,7 @@ const { TabPane } = Tabs;
 const dateFormat = 'DD-MM-YYYY';
 const CustomerRedirect = () => {
     const { search } = useLocation();
+    const roomName = new URLSearchParams(search).get('roomName') || '';
     const roomId = new URLSearchParams(search).get('roomId') || '';
     const [form]: any = Form.useForm();
     const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
@@ -28,6 +29,7 @@ const CustomerRedirect = () => {
         if (roomRentID) {
             const dataRoom = async () => {
                 const { data } = await getDetailCustomerToRoom(roomRentID);
+
                 setNewdataService(data.service);
                 setNewdataMember(data.member);
 
@@ -61,6 +63,7 @@ const CustomerRedirect = () => {
         deposit: 0,
         payEachTime: 1,
         paymentPeriod: 1,
+        roomName,
     });
 
     const onSubmitForm = (values: string | number, name: string) => {
@@ -106,6 +109,7 @@ const CustomerRedirect = () => {
                 Member: member,
                 Contract: contract,
             };
+            // console.log(data);
 
             await addCustomerToRoom(data);
             await message.success(MESSAGES.ADD_SUCCESS);
@@ -151,10 +155,9 @@ const CustomerRedirect = () => {
                     <TabPane tab='Thông tin khách thuê' key='tab-a'>
                         <FormCreate
                             onSubmitForm={onSubmitForm}
-                            roomId={roomId}
+                            roomName={roomName}
                             roomRentID={roomRentID}
                             form={form}
-                            formData={form}
                         />
                     </TabPane>
                     <TabPane tab='Dịch vụ' key='tab-b'>

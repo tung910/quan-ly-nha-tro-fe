@@ -12,13 +12,12 @@ const dateFormat = 'YYYY-MM-DD';
 
 type Props = {
     onSubmitForm: (values: string | number, name: string) => void;
-    roomId: string;
+    roomName: string;
     roomRentID: string;
     form: any;
-    formData: any;
 };
 
-const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
+const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
     const [form] = Form.useForm();
     useEffect(() => {
         if (roomRentID) {
@@ -300,7 +299,7 @@ const FormCreate = ({ onSubmitForm, roomId, roomRentID }: Props) => {
                         label={<>Thuê phòng số </>}
                         colon={false}
                         name='motelRoomID'
-                        initialValue={roomId}
+                        initialValue={roomName}
                         labelAlign='left'
                         rules={[
                             {

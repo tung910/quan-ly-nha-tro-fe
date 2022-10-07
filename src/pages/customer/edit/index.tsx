@@ -54,6 +54,7 @@ const EditCustomerToRoom = () => {
         deposit: 0,
         payEachTime: 1,
         paymentPeriod: 1,
+        roomName: '',
     });
     const [contract, setContract] = useState({
         coinNumber: '',
