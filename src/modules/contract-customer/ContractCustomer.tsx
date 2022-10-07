@@ -1,10 +1,10 @@
 import { Form, Button, Row, Col, Input, DatePicker } from 'antd';
-import { renderToString } from 'react-dom/server';
 import styles from './Contract.module.scss';
 import { DownloadOutlined } from '@ant-design/icons';
 import classNames from 'classnames/bind';
-import PrintContract from '~/feature/contract/index';
-import jsPDF from 'jspdf';
+import { exportHtmlToWord } from '~/utils/helper';
+import { exportWordContract } from '~/api/export.api';
+
 const cx = classNames.bind(styles);
 type Props = {
     onFinished: (values: any) => void;
@@ -12,16 +12,11 @@ type Props = {
     roomRentID: string;
 };
 
-const Printf = () => {
-    const string = renderToString(<PrintContract />);
-    const pdf = new jsPDF('p', 'pt', 'a4');
-    pdf.html(string, {
-        callback(doc) {
-            doc.save('HDTN.pdf');
-        },
-    });
-};
 const ContractCustomer = ({ onFinished, formItem, roomRentID }: Props) => {
+    const handleDownloadContract = async () => {
+        const { data } = await exportWordContract(roomRentID);
+        await exportHtmlToWord(data);
+    };
     return (
         <div>
             <Form
@@ -130,7 +125,7 @@ const ContractCustomer = ({ onFinished, formItem, roomRentID }: Props) => {
                 </Row>
                 {roomRentID ? (
                     <Button
-                        onClick={Printf}
+                        onClick={handleDownloadContract}
                         type='primary'
                         icon={<DownloadOutlined />}
                     >
