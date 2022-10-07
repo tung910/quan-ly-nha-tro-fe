@@ -1,12 +1,22 @@
 import { Form, Button, Row, Col, Input, DatePicker } from 'antd';
 import styles from './Contract.module.scss';
+import { DownloadOutlined } from '@ant-design/icons';
 import classNames from 'classnames/bind';
+import { exportHtmlToWord } from '~/utils/helper';
+import { exportWordContract } from '~/api/export.api';
+
 const cx = classNames.bind(styles);
 type Props = {
     onFinished: (values: any) => void;
     formItem: any;
+    roomRentID: string;
 };
-const ContractCustomer = ({ onFinished, formItem }: Props) => {
+
+const ContractCustomer = ({ onFinished, formItem, roomRentID }: Props) => {
+    const handleDownloadContract = async () => {
+        const { data } = await exportWordContract(roomRentID);
+        await exportHtmlToWord(data);
+    };
     return (
         <div>
             <Form
@@ -113,6 +123,17 @@ const ContractCustomer = ({ onFinished, formItem }: Props) => {
                         </Form.Item>
                     </Col>
                 </Row>
+                {roomRentID ? (
+                    <Button
+                        onClick={handleDownloadContract}
+                        type='primary'
+                        icon={<DownloadOutlined />}
+                    >
+                        Tải hợp đồng
+                    </Button>
+                ) : (
+                    ''
+                )}
             </Form>
         </div>
     );

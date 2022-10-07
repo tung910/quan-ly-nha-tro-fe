@@ -9,7 +9,6 @@ import {
 import { getAllMotel, removeMotel } from '~/api/motel.api';
 import { MotelType } from '~/types/MotelType';
 import styles from './Motel.module.scss';
-import HeaderPage from '~/components/page-header';
 import ListRoom from '../room/ListRoom';
 import { Link } from 'react-router-dom';
 

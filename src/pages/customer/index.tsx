@@ -176,6 +176,7 @@ const CustomerRedirect = () => {
                     </TabPane>
                     <TabPane tab='Hợp đồng' key='tab-d'>
                         <ContractCustomer
+                            roomRentID={roomRentID}
                             formItem={form}
                             onFinished={onFinish}
                         />
