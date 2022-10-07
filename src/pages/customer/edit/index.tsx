@@ -2,7 +2,7 @@ import { Button, Tabs, Form, message, PageHeader } from 'antd';
 import ContractCustomer from '~/modules/contract-customer/ContractCustomer';
 import MemberCustomer from '~/modules/member-customer/MemberCustomer';
 import ServiceCustomer from '~/modules/service-customer/ServiceCustomer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Edit.module.scss';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
@@ -11,7 +11,10 @@ import { TypeCustomer } from '~/types/Customer';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { IService } from '~/types/Service.type';
 import FormEdit from '~/modules/tenant-infor/FormEdit';
-import { editCustomerToRoom } from '~/api/customer.api';
+import {
+    editCustomerToRoom,
+    getDetailCustomerToRoom,
+} from '~/api/customer.api';
 import { MESSAGES } from '~/consts/message.const';
 
 const { TabPane } = Tabs;
@@ -22,6 +25,16 @@ const EditCustomerToRoom = () => {
     const roomId = new URLSearchParams(search).get('roomId') || '';
     const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
     const [newdataService, setNewdataService] = useState([]);
+    const [newdataMember, setNewdataMember] = useState([]);
+
+    useEffect(() => {
+        const dataRoom = async () => {
+            const { data } = await getDetailCustomerToRoom(roomRentID);
+            setNewdataService(data.service);
+            setNewdataMember(data.member);
+        };
+        dataRoom();
+    }, []);
 
     const [tenantInfor, setTenantInfor] = useState<TypeCustomer>({
         customerName: '',
@@ -41,6 +54,7 @@ const EditCustomerToRoom = () => {
         deposit: 0,
         payEachTime: 1,
         paymentPeriod: 1,
+        roomName: '',
     });
     const [contract, setContract] = useState({
         coinNumber: '',
@@ -48,6 +62,11 @@ const EditCustomerToRoom = () => {
         timeCoin: '',
         dateLate: '',
     });
+    const [member, setMember] = useState([]);
+
+    const onGetMember = (dataSource: any) => {
+        setMember(dataSource);
+    };
 
     const [service, setService] = useState<IService[]>([]);
     const onGetService = (data: IService[]) => {
@@ -111,7 +130,11 @@ const EditCustomerToRoom = () => {
                         />
                     </TabPane>
                     <TabPane tab='Thành viên' key='tab-c'>
-                        <MemberCustomer />
+                        <MemberCustomer
+                            roomRentID={roomRentID}
+                            newdataMember={newdataMember}
+                            onGetMember={onGetMember}
+                        />
                     </TabPane>
                     <TabPane tab='Hợp đồng' key='tab-d'>
                         <ContractCustomer

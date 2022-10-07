@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable no-console */
 import {
     Button,
     DatePicker,
@@ -7,12 +9,20 @@ import {
     Select,
     Table,
 } from 'antd';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import moment from 'moment';
+import React, {
+    useContext,
+    useEffect,
+    useReducer,
+    useRef,
+    useState,
+} from 'react';
+import { ACTION } from '~/consts/member.const';
+import { DataTable } from '~/types/Member.type';
 const { Option } = Select;
 
 const EditableContext = React.createContext<any>(null);
 const dateFormat = 'YYYY-MM-DD';
-
 const EditableRow = ({ index, ...props }: any) => {
     const [form] = Form.useForm();
 
@@ -53,9 +63,10 @@ const EditableCell = ({
         try {
             const values = await form.validateFields();
             toggleEdit();
+            const result = { ...record, ...values };
             handleSave({ ...record, ...values });
         } catch (errInfo) {
-            console.log('Save failed:', errInfo);
+            // console.log('Save failed:', errInfo);
         }
     };
 
@@ -77,37 +88,22 @@ const EditableCell = ({
                 ]}
             >
                 {dataIndex === 'gender' ? (
-                    <Select ref={inputRef} onBlur={save}>
+                    <Select ref={inputRef} defaultValue='1' onBlur={save}>
                         <Option value='1'>Nam</Option>
                         <Option value='2'>Nữ</Option>
                     </Select>
                 ) : dataIndex === 'date' ? (
-                    <Form.Item>
-                        <DatePicker
-                            name='date'
-                            ref={inputRef}
-                            onBlur={save}
-                            format={dateFormat}
-                        />
-                    </Form.Item>
+                    <DatePicker
+                        ref={inputRef}
+                        onBlur={save}
+                        format={dateFormat}
+                    />
                 ) : (
-                    <Form.Item>
-                        <Input
-                            onBlur={save}
-                            onPressEnter={save}
-                            ref={inputRef}
-                        />
-                    </Form.Item>
+                    <Input onBlur={save} onPressEnter={save} ref={inputRef} />
                 )}
             </Form.Item>
         ) : (
-            <div
-                className='editable-cell-value-wrap'
-                style={{
-                    paddingRight: 24,
-                }}
-                onClick={toggleEdit}
-            >
+            <div className='editable-cell-value-wrap' onClick={toggleEdit}>
                 {children}
             </div>
         );
@@ -115,14 +111,43 @@ const EditableCell = ({
 
     return <td {...restProps}>{childNode}</td>;
 };
+type Props = {
+    onGetMember: (dataSource: any) => void;
+    roomRentID: string;
+    newdataMember: any;
+};
+const reducer = (data: any, action: { type: string; payload: any }) => {
+    switch (action.type) {
+        case ACTION.ADD: {
+            const datas: DataTable[] = [];
+            [...data, action.payload].map((e, index) => {
+                datas.push({ ...e, index });
+            });
+            return datas;
+        }
+        case ACTION.DELETE:
+            return data.filter(
+                (e: DataTable) => e.index !== action.payload.index
+            );
+        case ACTION.CHANGE: {
+            const newData = [...data];
+            const index = newData.findIndex(
+                (item) => action.payload.index === item.index
+            );
+            const item = newData[index];
+            newData.splice(index, 1, { ...item, ...action.payload });
+            return newData;
+        }
+        case ACTION.SET:
+            return action.payload;
+    }
+};
 
-const MemberCustomer = () => {
-    const [dataSource, setDataSource] = useState<any>([]);
-    const [count, setCount] = useState(2);
+const MemberCustomer = ({ onGetMember, roomRentID, newdataMember }: Props) => {
+    const [dataSource, dispatch] = useReducer(reducer, []);
 
-    const handleDelete = (key: string | number) => {
-        const newData = dataSource.filter((item: any) => item.key !== key);
-        setDataSource(newData);
+    const handleDelete = (record: any) => {
+        dispatch({ type: ACTION.DELETE, payload: record });
     };
 
     const defaultColumns = [
@@ -130,45 +155,61 @@ const MemberCustomer = () => {
             title: 'Họ và tên',
             dataIndex: 'name',
             editable: true,
+            render: (name: any) => <Input value={name} />,
         },
         {
             title: 'Ngày sinh',
             dataIndex: 'date',
             editable: true,
+            render: (date: any) => (
+                <DatePicker value={date ? moment(date, dateFormat) : date} />
+            ),
         },
         {
             title: 'Giới tính',
             dataIndex: 'gender',
             editable: true,
+            render: (gender: any) => (
+                <>
+                    <Select defaultValue='Giới tính' value={gender}>
+                        <Option value='1'>Nam</Option>
+                        <Option value='2'>Nữ</Option>
+                    </Select>
+                </>
+            ),
         },
         {
             title: 'CMND/ CCCD',
             dataIndex: 'cmnd',
             editable: true,
+            render: (cmnd: any) => <Input value={cmnd} />,
         },
         {
             title: 'Địa chỉ',
             dataIndex: 'address',
             editable: true,
+            render: (address: any) => <Input value={address} />,
         },
         {
             title: 'Điện thoại',
             dataIndex: 'phoneNumber',
             editable: true,
+            render: (phoneNumber: any) => <Input value={phoneNumber} />,
         },
         {
             title: 'Số xe',
             dataIndex: 'carNumber',
             editable: true,
+            render: (carNumber: any) => <Input value={carNumber} />,
         },
         {
             title: 'operation',
             dataIndex: 'operation',
             render: (_: any, record: any) =>
-                dataSource.length >= 1 ? (
+                dataSource!.length >= 1 ? (
                     <Popconfirm
                         title='Sure to delete?'
-                        onConfirm={() => handleDelete(record.key)}
+                        onConfirm={() => handleDelete(record)}
                     >
                         <a>Delete</a>
                     </Popconfirm>
@@ -178,30 +219,19 @@ const MemberCustomer = () => {
 
     const handleAdd = () => {
         const newData = {
-            key: count,
-            name: <Input />,
-            date: <DatePicker />,
-            gender: (
-                <Select value={'Nam'}>
-                    <Option value='1'>Nam</Option>
-                    <Option value='2'>Nữ</Option>
-                    <Option value='3'>Khác</Option>
-                </Select>
-            ),
-            cmnd: <Input />,
-            address: <Input />,
-            phoneNumber: <Input />,
-            carNumber: <Input />,
+            name: '',
+            date: '',
+            gender: '',
+            cmnd: '',
+            address: '',
+            phoneNumber: '',
+            carNumber: '',
         };
-        setDataSource([...dataSource, newData]);
-        setCount(count + 1);
+        dispatch({ type: ACTION.ADD, payload: newData });
     };
-    const handleSave = (row: any) => {
-        const newData = [...dataSource];
-        const index = newData.findIndex((item) => row.key === item.key);
-        const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row });
-        setDataSource(newData);
+
+    const handleSave = (row: DataTable) => {
+        dispatch({ type: ACTION.CHANGE, payload: row });
     };
 
     const components = {
@@ -210,6 +240,7 @@ const MemberCustomer = () => {
             cell: EditableCell,
         },
     };
+
     const columns = defaultColumns.map((col) => {
         if (!col.editable) {
             return col;
@@ -226,6 +257,13 @@ const MemberCustomer = () => {
             }),
         };
     });
+
+    useEffect(() => {
+        if (roomRentID) {
+            dispatch({ type: ACTION.SET, payload: newdataMember });
+        }
+    }, [roomRentID]);
+    onGetMember(dataSource);
     return (
         <div>
             <Button

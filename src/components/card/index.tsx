@@ -58,7 +58,7 @@ const CardItem = ({
                 ) : (
                     <Button type='primary' icon={<PlusSquareOutlined />}>
                         <Link
-                            to={`/customer/create?roomId=${idRoom}`}
+                            to={`/customer/create?roomId=${idRoom}&&roomName=${roomName}`}
                             style={{ color: 'white' }}
                         >
                             Thêm khách
