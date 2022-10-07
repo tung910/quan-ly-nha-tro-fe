@@ -19,23 +19,30 @@ const { TabPane } = Tabs;
 const dateFormat = 'DD-MM-YYYY';
 const CustomerRedirect = () => {
     const { search } = useLocation();
+    const roomName = new URLSearchParams(search).get('roomName') || '';
     const roomId = new URLSearchParams(search).get('roomId') || '';
     const [form]: any = Form.useForm();
     const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
     const [newdataService, setNewdataService] = useState([]);
+    const [newdataMember, setNewdataMember] = useState([]);
     useEffect(() => {
-        const dataRoom = async () => {
-            const { data } = await getDetailCustomerToRoom(roomRentID);
-            setNewdataService(data.service);
-            form.setFieldsValue({
-                ...data,
-                dateOfBirth: data.dateOfBirth
-                    ? moment(data.dateOfBirth, dateFormat)
-                    : '',
-                startDate: moment(data.startDate, dateFormat),
-            });
-        };
-        dataRoom();
+        if (roomRentID) {
+            const dataRoom = async () => {
+                const { data } = await getDetailCustomerToRoom(roomRentID);
+
+                setNewdataService(data.service);
+                setNewdataMember(data.member);
+
+                form.setFieldsValue({
+                    ...data,
+                    dateOfBirth: data.dateOfBirth
+                        ? moment(data.dateOfBirth, dateFormat)
+                        : '',
+                    startDate: moment(data.startDate, dateFormat),
+                });
+            };
+            dataRoom();
+        }
     }, []);
 
     const [tenantInfor, setTenantInfor] = useState<TypeCustomer>({
@@ -56,6 +63,7 @@ const CustomerRedirect = () => {
         deposit: 0,
         payEachTime: 1,
         paymentPeriod: 1,
+        roomName,
     });
 
     const onSubmitForm = (values: string | number, name: string) => {
@@ -69,6 +77,10 @@ const CustomerRedirect = () => {
     const navigate = useNavigate();
 
     const [member, setMember] = useState([]);
+
+    const onGetMember = (dataSource: any) => {
+        setMember(dataSource);
+    };
     const [contract, setContract] = useState({
         coinNumber: '',
         dateStart: '',
@@ -97,6 +109,7 @@ const CustomerRedirect = () => {
                 Member: member,
                 Contract: contract,
             };
+            // console.log(data);
 
             await addCustomerToRoom(data);
             await message.success(MESSAGES.ADD_SUCCESS);
@@ -110,9 +123,9 @@ const CustomerRedirect = () => {
                 <PageHeader
                     ghost={true}
                     title={
-                        roomId
-                            ? 'Thêm khách thuê phòng'
-                            : 'Xem thông tin khách thuê phòng'
+                        roomRentID
+                            ? 'Xem thông tin khách thuê phòng'
+                            : 'Thêm khách thuê phòng'
                     }
                     extra={[
                         <Button
@@ -142,10 +155,9 @@ const CustomerRedirect = () => {
                     <TabPane tab='Thông tin khách thuê' key='tab-a'>
                         <FormCreate
                             onSubmitForm={onSubmitForm}
-                            roomId={roomId}
+                            roomName={roomName}
                             roomRentID={roomRentID}
                             form={form}
-                            formData={form}
                         />
                     </TabPane>
                     <TabPane tab='Dịch vụ' key='tab-b'>
@@ -156,7 +168,11 @@ const CustomerRedirect = () => {
                         />
                     </TabPane>
                     <TabPane tab='Thành viên' key='tab-c'>
-                        <MemberCustomer />
+                        <MemberCustomer
+                            roomRentID={roomRentID}
+                            newdataMember={newdataMember}
+                            onGetMember={onGetMember}
+                        />
                     </TabPane>
                     <TabPane tab='Hợp đồng' key='tab-d'>
                         <ContractCustomer
