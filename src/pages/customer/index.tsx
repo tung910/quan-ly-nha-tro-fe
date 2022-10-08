@@ -1,4 +1,5 @@
-import { Button, Tabs, Form, message, PageHeader } from 'antd';
+/* eslint-disable indent */
+import { Button, Tabs, Form, PageHeader, message } from 'antd';
 import moment from 'moment';
 import ContractCustomer from '~/modules/contract-customer/ContractCustomer';
 import MemberCustomer from '~/modules/member-customer/MemberCustomer';
@@ -9,22 +10,25 @@ import styles from './Create.module.scss';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
-import { addCustomerToRoom, getDetailCustomerToRoom } from '~/api/customer.api';
-import { TypeCustomer } from '~/types/Customer';
+import {
+    addCustomerToRoom,
+    editCustomerToRoom,
+    getDetailCustomerToRoom,
+} from '~/api/customer.api';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MESSAGES } from '~/consts/message.const';
 import { IService } from '~/types/Service.type';
+import { DATE_FORMAT } from '~/consts/const';
 const { TabPane } = Tabs;
 
-const dateFormat = 'DD-MM-YYYY';
 const CustomerRedirect = () => {
     const { search } = useLocation();
     const roomName = new URLSearchParams(search).get('roomName') || '';
-    const roomId = new URLSearchParams(search).get('roomId') || '';
     const [form]: any = Form.useForm();
     const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
     const [newdataService, setNewdataService] = useState([]);
     const [newdataMember, setNewdataMember] = useState([]);
+
     useEffect(() => {
         if (roomRentID) {
             const dataRoom = async () => {
@@ -36,44 +40,25 @@ const CustomerRedirect = () => {
                 form.setFieldsValue({
                     ...data,
                     dateOfBirth: data.dateOfBirth
-                        ? moment(data.dateOfBirth, dateFormat)
+                        ? moment(data.dateOfBirth, DATE_FORMAT)
                         : '',
-                    startDate: moment(data.startDate, dateFormat),
+                    startDate: moment(data.startDate, DATE_FORMAT),
+                    dateStart: moment(data.dateStart).format(DATE_FORMAT),
+                    dateLate: data.dateOfBirth
+                        ? moment(data.dateLate).format(DATE_FORMAT)
+                        : '',
+                    roomName,
                 });
             };
             dataRoom();
         }
     }, []);
 
-    const [tenantInfor, setTenantInfor] = useState<TypeCustomer>({
-        customerName: '',
-        citizenIdentification: 0,
-        dateRange: '',
-        phone: '',
-        issuedBy: '',
-        address: '',
-        gender: 1,
-        email: '',
-        dateOfBirth: '',
-        birthPlace: '',
-        licensePlates: '',
-        motelRoomID: roomId,
-        priceRoom: 3000000,
-        startDate: new Date(),
-        deposit: 0,
-        payEachTime: 1,
-        paymentPeriod: 1,
-        roomName,
-    });
-
-    const onSubmitForm = (values: string | number, name: string) => {
-        setTenantInfor({ ...tenantInfor, [name]: values });
-    };
-
     const [service, setService] = useState<IService[]>([]);
     const onGetService = (data: IService[]) => {
         setService(data);
     };
+
     const navigate = useNavigate();
 
     const [member, setMember] = useState([]);
@@ -81,35 +66,38 @@ const CustomerRedirect = () => {
     const onGetMember = (dataSource: any) => {
         setMember(dataSource);
     };
-    const [contract, setContract] = useState({
-        coinNumber: '',
-        dateStart: '',
-        timeCoin: '',
-        dateLate: '',
-    });
-    const onFinish = (values: any) => {
-        const data = form.getFieldValue();
-        setContract({ ...contract, ...data });
-    };
-    const onSave = async () => {
+    const onSave = async (values: any) => {
         if (roomRentID) {
             const data = {
-                CustomerInfo: tenantInfor,
+                CustomerInfo: {
+                    ...values,
+                    dateOfBirth: moment(values.dateOfBirth).format(DATE_FORMAT),
+                    startDate: moment(values.startDate).format(DATE_FORMAT),
+                    dateStart: moment(values.dateStart).format(DATE_FORMAT),
+                    dateLate: moment(values.dateLate).format(DATE_FORMAT),
+                    roomName,
+                },
                 Service: service,
                 Member: member,
-                Contract: contract,
+                _id: roomRentID,
             };
-
-            // await editCustomerToRoom(data);
-            // navigate('/motel-room');
+            await editCustomerToRoom(data);
+            await message.success(MESSAGES.EDIT_SUCCESS);
+            navigate('/motel-room');
         } else {
             const data = {
-                CustomerInfo: tenantInfor,
+                CustomerInfo: {
+                    ...values,
+                    dateOfBirth: moment(values.dateOfBirth).format(DATE_FORMAT),
+                    startDate: moment(values.startDate).format(DATE_FORMAT),
+                    dateStart: moment(values.dateStart).format(DATE_FORMAT),
+                    dateLate: moment(values.dateLate).format(DATE_FORMAT),
+                    roomName,
+                },
                 Service: service,
                 Member: member,
-                Contract: contract,
+                Contract: [],
             };
-            // console.log(data);
 
             await addCustomerToRoom(data);
             await message.success(MESSAGES.ADD_SUCCESS);
@@ -123,9 +111,11 @@ const CustomerRedirect = () => {
                 <PageHeader
                     ghost={true}
                     title={
-                        roomRentID
+                        window.location.pathname === '/customer/create'
+                            ? 'Thêm thông tin khách thuê phòng'
+                            : window.location.pathname === '/customer/view'
                             ? 'Xem thông tin khách thuê phòng'
-                            : 'Thêm khách thuê phòng'
+                            : 'Sửa thông tin khách thuê phòng'
                     }
                     extra={[
                         <Button
@@ -138,12 +128,18 @@ const CustomerRedirect = () => {
                         </Button>,
                         <Button
                             key={2}
-                            onClick={onSave}
+                            onClick={form.submit}
                             htmlType='submit'
                             type='primary'
                             className={cx('btn-submit')}
                             icon={<CheckOutlined />}
-                            disabled={roomRentID ? true : false}
+                            disabled={
+                                window.location.pathname ===
+                                    '/customer/create' ||
+                                window.location.pathname === '/customer/edit'
+                                    ? false
+                                    : true
+                            }
                         >
                             Lưu Thông Tin
                         </Button>,
@@ -154,8 +150,7 @@ const CustomerRedirect = () => {
                 <Tabs>
                     <TabPane tab='Thông tin khách thuê' key='tab-a'>
                         <FormCreate
-                            onSubmitForm={onSubmitForm}
-                            roomName={roomName}
+                            onSave={onSave}
                             roomRentID={roomRentID}
                             form={form}
                         />
@@ -175,10 +170,7 @@ const CustomerRedirect = () => {
                         />
                     </TabPane>
                     <TabPane tab='Hợp đồng' key='tab-d'>
-                        <ContractCustomer
-                            formItem={form}
-                            onFinished={onFinish}
-                        />
+                        <ContractCustomer form={form} onSave={onSave} />
                     </TabPane>
                 </Tabs>
             </div>
