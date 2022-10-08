@@ -3,6 +3,5 @@ enum MESSAGES {
     DEL_SUCCESS = 'Xóa thành công',
     EDIT_SUCCESS = 'Sửa thành công',
     ERROR = 'Không thành công ',
-
 }
 export { MESSAGES };

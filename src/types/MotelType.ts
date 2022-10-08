@@ -1,8 +1,9 @@
-export type MotelTypeMotel = {
+export type MotelType = {
     _id: string;
     name: string;
     province: string;
     district: string;
-    ward: string;
+    commune: string;
     address: string;
+    code: number;
 };

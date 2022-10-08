@@ -1,7 +1,7 @@
 import { Form, Input, Row, Col, message, Select } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
 import { Content } from 'antd/lib/layout/layout';
-import { MotelType, MotelTypeMotel } from '~/types/MotelType';
+import { MotelType } from '~/types/MotelType';
 import styles from './AddMotel.module.scss';
 import classNames from 'classnames/bind';
 const { Option } = Select;
@@ -18,18 +18,14 @@ import {
     getWard,
     getWardByDistrict,
 } from '~/api/addressCheckout';
-import { useForm } from 'react-hook-form';
 const cx = classNames.bind(styles);
 
 const AddMotel = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
-    const [provinces, setProvinces] = useState([]);
-    const [districts, setDistricts] = useState([]);
-    const [wards, setWards] = useState([]);
-    const [provinceId, setProvinceId] = useState([]);
-    const [districtId, setdistrictId] = useState([]);
-    const [wardId, setwardId] = useState([]);
+    const [provinces, setProvinces] = useState<MotelType[]>([]);
+    const [districts, setDistricts] = useState<MotelType[]>([]);
+    const [wards, setWards] = useState<MotelType[]>([]);
 
     useEffect(() => {
         const getDataProvince = async () => {
@@ -41,7 +37,6 @@ const AddMotel = () => {
 
     // provice render
     const handleChangeProvince = async (code: any) => {
-        console.log('a', code);
         if (code === '') {
             setDistricts([]);
             setWards([]);
@@ -50,7 +45,6 @@ const AddMotel = () => {
                 data: { districts },
             } = await getDistrictByProvince(code);
             setDistricts(districts);
-            // console.log('111', districts);
         }
     };
     const handleChangeDistrict = async (code: number | string) => {
@@ -63,10 +57,10 @@ const AddMotel = () => {
             setWards(wards);
         }
     };
-    const onFinish = async (values: MotelTypeMotel) => {
+    const onFinish = async (values: MotelType) => {
         const dataProvince = await getProvince(values.province);
         const dataDistrict = await getDistrict(values.district);
-        const dataWard = await getWard(values.ward);
+        const dataWard = await getWard(values.commune);
 
         const dataAddress =
             dataProvince.data.name +
@@ -125,9 +119,8 @@ const AddMotel = () => {
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
-                                <Form.Item name='ward' label='Phường/Xã'>
+                                <Form.Item name='commune' label='Phường/Xã'>
                                     <Select
-                                        // defaultValue='Phường/Xã'
                                         placeholder='Phường/Xã'
                                         style={{ width: 420 }}
                                         onChange={(e) =>
@@ -155,12 +148,8 @@ const AddMotel = () => {
                                     label='Tỉnh/Thành phố'
                                 >
                                     <Select
-                                        // name='province'
                                         placeholder='Tỉnh/Thành phố'
                                         style={{ width: 420 }}
-                                        // mode='multiple'
-                                        // maxTagCount={2}
-                                        // allowClear
                                         onChange={(e) =>
                                             handleChangeProvince(e)
                                         }
@@ -202,12 +191,8 @@ const AddMotel = () => {
                             <Col span={12}>
                                 <Form.Item name='district' label='Quận/Huyện'>
                                     <Select
-                                        // defaultValue='Quận/Huyện'
                                         style={{ width: 420 }}
                                         placeholder='Quận/Huyện'
-                                        // mode='multiple'
-                                        // maxTagCount={2}
-                                        // allowClear
                                         onChange={(e) =>
                                             handleChangeDistrict(e)
                                         }
@@ -227,23 +212,6 @@ const AddMotel = () => {
                             </Col>
                         </Row>
                     </Form>
-                    {/* <Select
-                        defaultValue='lucy'
-                        style={{ width: 180 }}
-                        placeholder='Choose Province'
-                        // mode='multiple'
-                        // maxTagCount={2}
-                        // allowClear
-                        onChange={(e) => handleChangeProvince(e)}
-                    >
-                        {provin.map((item, index) => {
-                            return (
-                                <Option key={index} value={provin}>
-                                    {item}
-                                </Option>
-                            );
-                        })}
-                    </Select> */}
                 </div>
             </Content>
         </div>
