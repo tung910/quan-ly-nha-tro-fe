@@ -1,0 +1,468 @@
+import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from 'antd';
+import moment from 'moment';
+import classNames from 'classnames/bind';
+import styles from './FormEdit.module.scss';
+import { generatePriceToVND } from '~/utils/helper';
+import { useEffect } from 'react';
+import { getDetailCustomerToRoom } from '~/api/customer.api';
+const cx = classNames.bind(styles);
+
+const { Option } = Select;
+const dateFormat = 'YYYY-MM-DD';
+
+type Props = {
+    onSave: (values: any) => void;
+    roomId: string;
+    roomRentID: string;
+    form: any;
+};
+
+const FormEdit = ({ roomId, roomRentID, onSave, form }: Props) => {
+    useEffect(() => {
+        if (roomRentID) {
+            const getCustomer = async () => {
+                const { data } = await getDetailCustomerToRoom(roomRentID);
+
+                form.setFieldsValue({
+                    ...data,
+                    dateOfBirth: data.dateOfBirth
+                        ? moment(data.dateOfBirth, dateFormat)
+                        : '',
+                    startDate: moment(data.startDate, dateFormat),
+                });
+            };
+            getCustomer();
+        }
+    }, []);
+
+    return (
+        <Form
+            className={cx('form-edit')}
+            autoComplete='off'
+            form={form}
+            labelCol={{ span: 9 }}
+            wrapperCol={{ span: 16 }}
+            style={{ marginTop: 20, padding: 20 }}
+            onFinish={onSave}
+        >
+            {/* Row 1 */}
+            <Row>
+                <Col span={8}>
+                    <Form.Item
+                        label={<>Họ và tên</>}
+                        colon={false}
+                        labelAlign='left'
+                        name='customerName'
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    'Vui lòng nhập tên người dùng của bạn!',
+                            },
+                        ]}
+                        validateTrigger={['onBlur', 'onChange']}
+                    >
+                        <Input style={{ width: 400 }} autoFocus />
+                    </Form.Item>
+                </Col>
+                <Col span={8} offset={4}>
+                    <Form.Item
+                        label={<>CMND/ CCCD</>}
+                        colon={false}
+                        labelAlign='left'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập CMND/ CCCD của bạn!',
+                            },
+                        ]}
+                        validateTrigger={['onBlur', 'onChange']}
+                        name='citizenIdentification'
+                    >
+                        <Input style={{ width: 400 }} />
+                    </Form.Item>
+                </Col>
+            </Row>
+            {/* Row 2 */}
+            <Row>
+                <Col span={8}>
+                    <Form.Item
+                        label={<>Giới Tính</>}
+                        colon={false}
+                        labelAlign='left'
+                        name={'gender'}
+                    >
+                        <Select
+                            defaultValue={1}
+                            showSearch
+                            style={{ width: 400 }}
+                            optionFilterProp='children'
+                            filterOption={(input, option) =>
+                                (
+                                    option!.children as unknown as string
+                                ).includes(input)
+                            }
+                        >
+                            <Option value={1}>Nam</Option>
+                            <Option value={2}>Nữ</Option>
+                            <Option value={3}>Khác</Option>
+                        </Select>
+                    </Form.Item>
+                </Col>
+                <Col span={8} offset={4}>
+                    <Form.Item
+                        label={<>Ngày cấp</>}
+                        colon={false}
+                        labelAlign='left'
+                        name='dateRange'
+                    >
+                        <Input style={{ width: 400 }} />
+                    </Form.Item>
+                </Col>
+            </Row>
+            {/* Row 3 */}
+            <Row>
+                <Col span={8}>
+                    <Form.Item
+                        label={<>Số điện thoại</>}
+                        colon={false}
+                        labelAlign='left'
+                        name='phone'
+                    >
+                        <Input style={{ width: 400 }} />
+                    </Form.Item>
+                </Col>
+                <Col span={8} offset={4}>
+                    <Form.Item
+                        label={<>Nơi cấp</>}
+                        colon={false}
+                        labelAlign='left'
+                        name={'issuedBy'}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập nơi cấp của bạn!',
+                            },
+                        ]}
+                        validateTrigger={['onBlur', 'onChange']}
+                    >
+                        <Select
+                            showSearch
+                            style={{ width: 400 }}
+                            optionFilterProp='children'
+                            filterOption={(input, option) =>
+                                (
+                                    option!.children as unknown as string
+                                ).includes(input)
+                            }
+                            filterSort={(optionA, optionB) =>
+                                (optionA!.children as unknown as string)
+                                    .toLowerCase()
+                                    .localeCompare(
+                                        (
+                                            optionB!
+                                                .children as unknown as string
+                                        ).toLowerCase()
+                                    )
+                            }
+                        >
+                            <Option value='1'>Not Identified</Option>
+                            <Option value='2'>Closed</Option>
+                            <Option value='3'>Communicated</Option>
+                        </Select>
+                    </Form.Item>
+                </Col>
+            </Row>
+            {/* Row 4 */}
+            <Row>
+                <Col span={8}>
+                    <Form.Item
+                        label={<>Địa chỉ thường trú</>}
+                        colon={false}
+                        labelAlign='left'
+                        name='address'
+                    >
+                        <Input style={{ width: 400 }} />
+                    </Form.Item>
+                </Col>
+                <Col span={8} offset={4}>
+                    <Form.Item
+                        label={<>Email</>}
+                        colon={false}
+                        labelAlign='left'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập email của bạn!',
+                            },
+                        ]}
+                        validateTrigger={['onBlur', 'onChange']}
+                        name='email'
+                    >
+                        <Input style={{ width: 400 }} />
+                    </Form.Item>
+                </Col>
+            </Row>
+            {/* Row 5 */}
+            <Row>
+                <Col span={8}>
+                    <Form.Item
+                        label={<>Ngày sinh</>}
+                        colon={false}
+                        labelAlign='left'
+                        name='dateOfBirth'
+                        initialValue={moment(new Date(), dateFormat)}
+                    >
+                        <DatePicker style={{ width: 400 }} />
+                    </Form.Item>
+                </Col>
+                <Col span={8} offset={4}>
+                    <Form.Item
+                        label={<>Nơi sinh</>}
+                        colon={false}
+                        labelAlign='left'
+                    >
+                        <Select
+                            showSearch
+                            style={{ width: 400 }}
+                            optionFilterProp='children'
+                            filterOption={(input, option) =>
+                                (
+                                    option!.children as unknown as string
+                                ).includes(input)
+                            }
+                            filterSort={(optionA, optionB) =>
+                                (optionA!.children as unknown as string)
+                                    .toLowerCase()
+                                    .localeCompare(
+                                        (
+                                            optionB!
+                                                .children as unknown as string
+                                        ).toLowerCase()
+                                    )
+                            }
+                        >
+                            <Option value='1'>Not Identified</Option>
+                            <Option value='2'>Closed</Option>
+                            <Option value='3'>Communicated</Option>
+                        </Select>
+                    </Form.Item>
+                </Col>
+            </Row>
+            {/* Row 6 */}
+            <Row>
+                <Col span={8}>
+                    <Form.Item
+                        label={<>Thuê phòng số </>}
+                        colon={false}
+                        name='motelRoomID'
+                        initialValue={roomId}
+                        labelAlign='left'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập số phòng thuê của bạn!',
+                            },
+                        ]}
+                        validateTrigger={['onBlur', 'onChange']}
+                    >
+                        <Input disabled style={{ width: 400 }} />
+                    </Form.Item>
+                </Col>
+                <Col span={8} offset={4}>
+                    <Form.Item
+                        label={<>Tiền phòng</>}
+                        name='priceRoom'
+                        initialValue={generatePriceToVND(3000000, undefined)}
+                        colon={false}
+                        labelAlign='left'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập tiền phòng của bạn!',
+                            },
+                        ]}
+                        validateTrigger={['onBlur', 'onChange']}
+                    >
+                        <InputNumber
+                            name='priceRoom'
+                            formatter={(value) =>
+                                ` ${value}`.replace(
+                                    /\B(?=(\d{3})+(?!\d))/g,
+                                    ','
+                                )
+                            }
+                            parser={(value: any) =>
+                                value.replace(/\$\s?|(,*)/g, '')
+                            }
+                            addonAfter={'VND'}
+                            style={{ width: 400 }}
+                        />
+                    </Form.Item>
+                </Col>
+            </Row>
+            {/* Row 7 */}
+            <Row>
+                <Col span={8}>
+                    <Form.Item
+                        label={<>Ngày bắt đầu </>}
+                        colon={false}
+                        labelAlign='left'
+                        name='startDate'
+                        initialValue={moment(new Date(), dateFormat)}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập ngày bắt đầu của bạn!',
+                            },
+                        ]}
+                        validateTrigger={['onBlur', 'onChange']}
+                    >
+                        <DatePicker style={{ width: 400 }} />
+                    </Form.Item>
+                </Col>
+                <Col span={8} offset={4}>
+                    <Form.Item
+                        label={<>Đặt cọc</>}
+                        colon={false}
+                        initialValue={0}
+                        name='deposit'
+                        labelAlign='left'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập tiền đặt cọc của bạn!',
+                            },
+                        ]}
+                        validateTrigger={['onBlur', 'onChange']}
+                    >
+                        <InputNumber
+                            formatter={(value) =>
+                                ` ${value}`.replace(
+                                    /\B(?=(\d{3})+(?!\d))/g,
+                                    ','
+                                )
+                            }
+                            parser={(value: any) =>
+                                value.replace(/\$\s?|(,*)/g, '')
+                            }
+                            addonAfter='VNĐ'
+                            style={{ width: 400 }}
+                        />
+                    </Form.Item>
+                </Col>
+            </Row>
+            {/* Row 8 */}
+            <Row>
+                <Col span={8}>
+                    <Form.Item
+                        label={<>Kỳ thanh toán</>}
+                        colon={false}
+                        labelAlign='left'
+                        name='paymentPeriod'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập kỳ thanh toán của bạn!',
+                            },
+                        ]}
+                        validateTrigger={['onBlur', 'onChange']}
+                    >
+                        <Select
+                            defaultValue={1}
+                            showSearch
+                            style={{ width: 400 }}
+                            optionFilterProp='children'
+                            filterOption={(input, option) =>
+                                (
+                                    option!.children as unknown as string
+                                ).includes(input)
+                            }
+                            filterSort={(optionA, optionB) =>
+                                (optionA!.children as unknown as string)
+                                    .toLowerCase()
+                                    .localeCompare(
+                                        (
+                                            optionB!
+                                                .children as unknown as string
+                                        ).toLowerCase()
+                                    )
+                            }
+                        >
+                            <Option value={1}>Kỳ 30</Option>
+                            <Option value={2}>Kỳ 15</Option>
+                        </Select>
+                    </Form.Item>
+                </Col>
+                <Col span={8} offset={4}>
+                    <Form.Item
+                        label={<>Thanh toán mỗi lần</>}
+                        colon={false}
+                        name='payEachTime'
+                        labelAlign='left'
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    'Vui lòng nhập tháng thanh toán của bạn!',
+                            },
+                        ]}
+                        validateTrigger={['onBlur', 'onChange']}
+                    >
+                        <Select
+                            defaultValue={1}
+                            showSearch
+                            suffixIcon='Tháng'
+                            style={{ width: 400 }}
+                            optionFilterProp='children'
+                            filterOption={(input, option) =>
+                                (
+                                    option!.children as unknown as string
+                                ).includes(input)
+                            }
+                            filterSort={(optionA, optionB) =>
+                                (optionA!.children as unknown as string)
+                                    .toLowerCase()
+                                    .localeCompare(
+                                        (
+                                            optionB!
+                                                .children as unknown as string
+                                        ).toLowerCase()
+                                    )
+                            }
+                        >
+                            <Option value={1}>1</Option>
+                            <Option value={2}>2</Option>
+                            <Option value={3}>3</Option>
+                        </Select>
+                    </Form.Item>
+                </Col>
+            </Row>
+            {/* Row 9 */}
+            <Row>
+                <Col span={8}>
+                    <Form.Item
+                        label={<>Số xe</>}
+                        colon={false}
+                        labelAlign='left'
+                        name='licensePlates'
+                    >
+                        <Input style={{ width: 400 }} />
+                    </Form.Item>
+                </Col>
+                <Col span={8} offset={4}>
+                    <Form.Item
+                        label={<>Hình ảnh</>}
+                        colon={false}
+                        labelAlign='left'
+                        name='Image'
+                    >
+                        <Input type='file' style={{ width: 400 }} />
+                    </Form.Item>
+                </Col>
+            </Row>
+        </Form>
+    );
+};
+
+export default FormEdit;

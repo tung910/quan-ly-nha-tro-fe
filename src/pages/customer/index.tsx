@@ -170,7 +170,11 @@ const CustomerRedirect = () => {
                         />
                     </TabPane>
                     <TabPane tab='Hợp đồng' key='tab-d'>
-                        <ContractCustomer form={form} onSave={onSave} />
+                        <ContractCustomer
+                            roomRentID={roomRentID}
+                            form={form}
+                            onSave={onSave}
+                        />
                     </TabPane>
                 </Tabs>
             </div>

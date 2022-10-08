@@ -1,17 +1,24 @@
 import { Form, Button, Row, Col, Input, DatePicker } from 'antd';
 import moment from 'moment';
 import styles from './Contract.module.scss';
+import { DownloadOutlined } from '@ant-design/icons';
 import classNames from 'classnames/bind';
+import { exportHtmlToWord } from '~/utils/helper';
+import { exportWordContract } from '~/api/export.api';
 import { DATE_FORMAT } from '~/consts/const';
-import { useEffect } from 'react';
-import { getDetailCustomerToRoom } from '~/api/customer.api';
+
 const cx = classNames.bind(styles);
 type Props = {
     onSave: (values: any) => void;
     form: any;
+    roomRentID: string;
 };
 
-const ContractCustomer = ({ onSave, form }: Props) => {
+const ContractCustomer = ({ onSave, form, roomRentID }: Props) => {
+    const handleDownloadContract = async () => {
+        const { data } = await exportWordContract(roomRentID);
+        await exportHtmlToWord(data);
+    };
     return (
         <div>
             <Form
@@ -20,7 +27,7 @@ const ContractCustomer = ({ onSave, form }: Props) => {
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
                 style={{ marginTop: 20, padding: 20 }}
-                form={form}
+                // form={form}
                 onFinish={onSave}
             >
                 <p className={cx('title-contract')}>
@@ -80,6 +87,17 @@ const ContractCustomer = ({ onSave, form }: Props) => {
                         </Form.Item>
                     </Col>
                 </Row>
+                {roomRentID ? (
+                    <Button
+                        onClick={handleDownloadContract}
+                        type='primary'
+                        icon={<DownloadOutlined />}
+                    >
+                        Tải hợp đồng
+                    </Button>
+                ) : (
+                    ''
+                )}
             </Form>
         </div>
     );
