@@ -45,7 +45,7 @@ const FormEdit = ({ roomId, roomRentID, onSave, form }: Props) => {
             style={{ marginTop: 20, padding: 20 }}
             onFinish={onSave}
         >
-            ,{/* Row 1 */}
+            {/* Row 1 */}
             <Row>
                 <Col span={8}>
                     <Form.Item

@@ -1,6 +1,4 @@
-/* eslint-disable no-console */
 import { Form, Input, InputRef, Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { IService } from '~/types/Service.type';
 import styles from './Service.module.scss';
@@ -8,6 +6,7 @@ import classNames from 'classnames/bind';
 import { getAllService } from '~/api/service.api';
 import { generatePriceToVND } from '~/utils/helper';
 import { FormInstance } from 'antd/es/form/Form';
+
 const cx = classNames.bind(styles);
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
@@ -60,14 +59,9 @@ const EditableCell: React.FC<EditableCellProps> = ({
     };
 
     const save = async () => {
-        try {
-            const values = await form.validateFields();
-            toggleEdit();
-            console.log(record);
-            handleSave({ ...record, ...values });
-        } catch (errInfo) {
-            console.log('Save failed:', errInfo);
-        }
+        const values = await form.validateFields();
+        toggleEdit();
+        handleSave({ ...record, ...values });
     };
 
     let childNode = children;
@@ -158,19 +152,29 @@ const ServiceCustomer = ({
             const { data } = await getAllService();
             const dataSelected = data.map((item: IService) => {
                 if (item.isActive) {
-                    const result = { ...item, quantity: 1 };
+                    const result = { ...item, quantity: 1, isUse: true };
                     return result;
                 }
             });
 
             setstate(roomRentID ? newdataService : dataSelected);
-            setSelectedRowKeys(data.map((item: any) => item._id));
+            if (roomRentID) {
+                setSelectedRowKeys(
+                    newdataService.map((item: Required<IService>) =>
+                        item.isUse ? item._id : { ...item, _id: undefined }
+                    )
+                );
+            } else {
+                setSelectedRowKeys(
+                    dataSelected.map((item: IService) => item._id)
+                );
+            }
         };
         getServices();
     }, []);
-    const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
-    const [getServices, setGetServices] = useState([]);
-    const onSelectChange = (newSelectedRowKeys: any, record: any) => {
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const [getServices, setGetServices] = useState<IService[]>([]);
+    const onSelectChange = (newSelectedRowKeys: React.Key[], record: any) => {
         setGetServices(record);
         setSelectedRowKeys(newSelectedRowKeys);
     };
@@ -180,7 +184,15 @@ const ServiceCustomer = ({
         onChange: onSelectChange,
     };
 
-    onGetService(getServices.length > 0 ? getServices : state);
+    useEffect(() => {
+        const result = state.map((item: IService) =>
+            getServices.find((i: IService) => i._id === item._id)
+                ? item
+                : { ...item, isUse: false }
+        );
+
+        onGetService(getServices.length > 0 ? result : state);
+    }, [getServices]);
 
     const handleSave = (row: IService) => {
         const newData = [...state];
