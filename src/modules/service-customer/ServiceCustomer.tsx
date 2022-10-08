@@ -184,15 +184,21 @@ const ServiceCustomer = ({
         onChange: onSelectChange,
     };
 
+    const [newData, setNewData] = useState<IService[]>([]);
     useEffect(() => {
         const result = state.map((item: IService) =>
             getServices.find((i: IService) => i._id === item._id)
                 ? item
                 : { ...item, isUse: false }
         );
-
-        onGetService(getServices.length > 0 ? result : state);
+        setNewData(result);
     }, [getServices]);
+
+    if (getServices.length > 0) {
+        onGetService(newData);
+    } else {
+        onGetService(state);
+    }
 
     const handleSave = (row: IService) => {
         const newData = [...state];
