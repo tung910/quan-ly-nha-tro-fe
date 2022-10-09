@@ -180,9 +180,19 @@ const Calculate = () => {
     // };
     const onCalculator = async () => {
         const { data } = await listCalculator();
-        if (data.totalAmount === 0) {
+        data.map(async (item: any) => {
+            if (item.totalAmount === 0) {
+                await Calculator();
+                const { data } = await listCalculator();
+                setCalculator(data);
+            }
+        });
+        if (!data) {
             await Calculator();
+            const { data } = await listCalculator();
+            setCalculator(data);
         }
+
         setIsModalOpen(false);
     };
 
