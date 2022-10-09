@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import classNames from 'classnames/bind';
 import styles from './Calculate.module.scss';
 import React, { useEffect, useState } from 'react';
@@ -11,21 +10,28 @@ import {
     DatePicker,
     Select,
     Table,
-    InputNumber,
     Modal,
 } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
-import { SearchOutlined, CalculatorOutlined } from '@ant-design/icons';
-import { getStatisticalRoomStatus, getRooms } from '~/api/room.api';
+import {
+    SearchOutlined,
+    CalculatorOutlined,
+    EyeOutlined,
+} from '@ant-design/icons';
+import { getStatisticalRoomStatus, getRooms, getRoom } from '~/api/room.api';
 import { IDataWater } from '~/types/DataWater.type';
 import { MotelType } from '~/types/MotelType';
+// import { IService } from '~/types/Service.type';
 import { getAllMotel } from '~/api/motel.api';
 import moment from 'moment';
-import { RoomType } from '~/types/RoomType';
+// import { RoomType } from '~/types/RoomType';
+// import { getDetailCustomerToRoom } from '~/api/customer.api';
+// import { IDataPower } from '~/types/DataPower.type';
+// import { DATE_FORMAT } from '~/consts/const';
+import { Calculator, listCalculator } from '~/api/calculator.api';
 
 const cx = classNames.bind(styles);
 const { Option } = Select;
-const dateFormat = 'MM/YYYY';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 interface EditableRowProps {
@@ -54,66 +60,48 @@ const ColumnsData: (ColumnTypes[number] & {
     {
         title: '',
         dataIndex: 'recond',
-        // render: (text, record) => {
-        //     return (
-        //         <>
-        //             <Button
-        //                 htmlType='submit'
-        //                 type='primary'
-        //                 icon={<SaveOutlined />}
-        //                 onClick={() => handleSubmitData(record)}
-        //             >
-        //                 Lưu
-        //             </Button>
-        //         </>
-        //     );
-        // },
+        key: 'recond',
+        render: (text, record) => {
+            return (
+                <>
+                    <Button
+                        htmlType='submit'
+                        type='primary'
+                        icon={<EyeOutlined />}
+                    ></Button>
+                </>
+            );
+        },
     },
     {
         title: 'Nhà',
-        dataIndex: ['motelID', 'name'],
-        key: 'motelID',
+        dataIndex: 'motelName',
+        key: 'motelName',
     },
     {
         title: 'Phòng',
-        dataIndex: 'roomName',
+        dataIndex: ['roomRentalDetailID', 'roomName'],
         key: 'roomName',
     },
     {
         title: 'Khách thuê',
-        dataIndex: 'customerName',
+        dataIndex: ['roomRentalDetailID', 'customerName'],
         key: 'customerName',
     },
     {
         title: 'Số tiền',
-        dataIndex: 'oldValue',
-        key: 'oldValue',
-        editable: true,
-        render: (oldValue) => {
-            return (
-                <>
-                    <InputNumber value={oldValue} />
-                </>
-            );
-        },
+        dataIndex: 'totalAmount',
+        key: 'totalAmount',
     },
     {
         title: 'Đã trả',
-        dataIndex: 'newValue',
-        key: 'newValue',
-        editable: true,
-        render: (newValue) => {
-            return (
-                <>
-                    <InputNumber value={newValue} />
-                </>
-            );
-        },
+        dataIndex: 'payAmount',
+        key: 'payAmount',
     },
     {
         title: 'Còn lại',
-        dataIndex: 'useValue',
-        key: 'useValue',
+        dataIndex: 'remainAmount',
+        key: 'remainAmount',
     },
 ];
 
@@ -121,35 +109,81 @@ const Calculate = () => {
     const [form] = Form.useForm();
 
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
-    const [listNameRoom, setListNameRoom] = useState<RoomType[]>([]);
     const [listStatusRoom, setListStatusRoom] = useState([]);
+    const [calculator, setCalculator] = useState([]);
+    // const [listNameRoom, setListNameRoom] = useState<RoomType[]>([]);
+    // const [power, setPower] = useState<IDataPower>();
+    // const [water, setWater] = useState<IDataWater>();
+    // const [idRoom, setIdRoom] = useState<string>();
+
     const [isModalOpen, setIsModalOpen] = useState(false);
+    // const showModal = () => {
+    //     setIsModalOpen(true);
+    // };
     const showModal = () => {
         setIsModalOpen(true);
     };
 
     const handleCancel = () => {
         setIsModalOpen(false);
-        form.resetFields();
+        // form.resetFields();
     };
 
-    const onClickMotel = (value: string) => {
-        const getListRoom = async () => {
-            const { data } = await getRooms(value);
-            setListNameRoom(data);
-        };
-        getListRoom();
-    };
+    // const onClickMotel = (value: string) => {
+    //     const getListRoom = async () => {
+    //         const { data } = await getRooms(value);
+    //         setListNameRoom(data);
+    //     };
+    //     getListRoom();
+    // };
+    // const onClickRoom = (value: string) => {
+    //     setIdRoom(value);
+    // };
 
-    const handleSubmit = (values: any) => {
-        const data = {
-            ...values,
-            invoiceDate: moment(values.invoiceDate).format('DD/MM/YYYY'),
-            month: moment(values.month).format('MM/YYYY'),
-        };
+    // const handleSubmit = (values: any) => {
+    //     if (idRoom) {
+    //         const getRoomRental = async (id: string) => {
+    //             const { data } = await getDetailCustomerToRoom(id);
+    //             data.service.map((item: IService) => {
+    //                 if (item.serviceName === 'Điện') {
+    //                     console.log('Điện', item.unitPrice);
+    //                 }
+    //                 if (item.serviceName === 'Nước') {
+    //                     console.log('Nước', item.unitPrice);
+    //                 }
+    //                 if (item.serviceName === 'Giữ xe') {
+    //                     console.log('Xe', item.unitPrice);
+    //                 }
+    //             });
+    //         };
+    //         const Room = async () => {
+    //             const { data } = await getRoom(idRoom);
+    //             setPower({
+    //                 newValue: 10,
+    //                 oldValue: 0,
+    //                 useValue: 10,
+    //             });
+    //             getRoomRental(data.roomRentID);
+    //         };
+    //         Room();
+    //     }
 
+    //     setIsModalOpen(false);
+    //     form.resetFields();
+    //     const data = {
+    //         ...values,
+    //         invoiceDate: moment(values.invoiceDate).format(DATE_FORMAT),
+    //         month: moment(values.month).format('MM'),
+    //         year: moment(values.month).format('YYYY'),
+    //     };
+    //     console.log(data);
+    // };
+    const onCalculator = async () => {
+        const { data } = await listCalculator();
+        if (data.totalAmount === 0) {
+            await Calculator();
+        }
         setIsModalOpen(false);
-        form.resetFields();
     };
 
     useEffect(() => {
@@ -158,7 +192,11 @@ const Calculate = () => {
             setListNameMotel(data);
         };
         getListMotel();
-
+        const getCalculator = async () => {
+            const { data } = await listCalculator();
+            setCalculator(data);
+        };
+        getCalculator();
         const getListDataStatus = async () => {
             const { data } = await getStatisticalRoomStatus();
             setListStatusRoom(data);
@@ -208,25 +246,25 @@ const Calculate = () => {
                 >
                     <div>
                         <Modal
-                            title='Tính tiền'
+                            title='Thông báo'
                             open={isModalOpen}
-                            onOk={form.submit}
+                            onOk={onCalculator}
                             onCancel={handleCancel}
-                            footer={[
-                                <Button key='back' onClick={handleCancel}>
-                                    Đóng
-                                </Button>,
-                                <Button
-                                    key='submit'
-                                    type='primary'
-                                    onClick={form.submit}
-                                    htmlType='submit'
-                                >
-                                    Tính Tiền
-                                </Button>,
-                            ]}
+                            // footer={[
+                            //     <Button key='back' onClick={handleCancel}>
+                            //         Đóng
+                            //     </Button>,
+                            //     <Button
+                            //         key='submit'
+                            //         type='primary'
+                            //         onClick={form.submit}
+                            //         htmlType='submit'
+                            //     >
+                            //         Tính Tiền
+                            //     </Button>,
+                            // ]}
                         >
-                            <Form
+                            {/* <Form
                                 autoComplete='off'
                                 form={form}
                                 labelCol={{ span: 5 }}
@@ -236,7 +274,7 @@ const Calculate = () => {
                                     label={<>Kỳ</>}
                                     colon={false}
                                     labelAlign='left'
-                                    name='customerName'
+                                    name='paymentPeriod'
                                 >
                                     <Select
                                         style={{ width: 375 }}
@@ -256,7 +294,6 @@ const Calculate = () => {
                                 >
                                     <DatePicker
                                         // defaultValue={moment()}
-                                        format={'DD/MM/YYYY'}
                                         style={{ width: '375px' }}
                                     />
                                 </Form.Item>
@@ -267,10 +304,7 @@ const Calculate = () => {
                                     name='month'
                                     initialValue={moment()}
                                 >
-                                    <DatePicker
-                                        format={dateFormat}
-                                        style={{ width: '375px' }}
-                                    />
+                                    <DatePicker style={{ width: '375px' }} />
                                 </Form.Item>
                                 <Form.Item
                                     label={<>Nhà</>}
@@ -305,6 +339,7 @@ const Calculate = () => {
                                     <Select
                                         placeholder='Mời bạn chọn phòng'
                                         showSearch
+                                        onChange={onClickRoom}
                                     >
                                         {listNameRoom &&
                                             listNameRoom.map((item, index) => {
@@ -319,7 +354,8 @@ const Calculate = () => {
                                             })}
                                     </Select>
                                 </Form.Item>
-                            </Form>
+                            </Form> */}
+                            <p>Bạn có muốn tính tiền tháng này không?</p>
                         </Modal>
                     </div>
                 </PageHeader>
@@ -331,7 +367,7 @@ const Calculate = () => {
                         <Form.Item label={<>Tháng/năm</>} colon={false}>
                             <DatePicker
                                 defaultValue={moment()}
-                                format={dateFormat}
+                                format={'MM/YYYY'}
                                 name='date'
                             />
                         </Form.Item>
@@ -392,9 +428,9 @@ const Calculate = () => {
 
             <div>
                 <Table
-                    key={1}
                     components={components}
                     columns={columns as ColumnTypes}
+                    dataSource={calculator}
                 />
             </div>
         </div>
