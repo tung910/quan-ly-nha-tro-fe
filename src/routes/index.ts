@@ -12,6 +12,7 @@ import ListCustomer from '~/pages/motel/list-customer';
 import EditRoom from '~/pages/room/edit-room';
 import WaterPage from '~/pages/water';
 import PowerOnly from '~/pages/data-power';
+import Calculate from '~/pages/calculate';
 
 export interface Route {
     path: string;
@@ -33,6 +34,7 @@ const routes: Route[] = [
     { path: '/service/add-service', component: AddEditService },
     { path: '/service/edit-service', component: AddEditService },
     { path: '/data-power', component: PowerOnly },
+    { path: '/calculator-money', component: Calculate },
 ];
 
 export default routes;

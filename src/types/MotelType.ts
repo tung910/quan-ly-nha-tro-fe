@@ -5,4 +5,5 @@ export type MotelType = {
     district: string;
     commune: string;
     address: string;
+    code: number;
 };
