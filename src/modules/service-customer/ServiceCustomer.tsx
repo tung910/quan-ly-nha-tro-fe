@@ -116,7 +116,7 @@ const defaultColumns: (ColumnTypes[number] & {
         render: (price) => {
             return (
                 <>
-                    <Input name='unitPrice' value={generatePriceToVND(price)} />
+                    <Input value={generatePriceToVND(price)} />
                 </>
             );
         },
@@ -129,7 +129,7 @@ const defaultColumns: (ColumnTypes[number] & {
         render: (numbers) => {
             return (
                 <>
-                    <Input name='quantity' value={numbers} />
+                    <Input value={numbers} />
                 </>
             );
         },

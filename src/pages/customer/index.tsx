@@ -19,11 +19,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { MESSAGES } from '~/consts/message.const';
 import { IService } from '~/types/Service.type';
 import { DATE_FORMAT } from '~/consts/const';
+import { TypeCustomer } from '~/types/Customer';
 const { TabPane } = Tabs;
 
 const CustomerRedirect = () => {
     const { search } = useLocation();
     const roomName = new URLSearchParams(search).get('roomName') || '';
+    const roomId = new URLSearchParams(search).get('roomId') || '';
+
     const [form]: any = Form.useForm();
     const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
     const [newdataService, setNewdataService] = useState([]);
@@ -33,22 +36,8 @@ const CustomerRedirect = () => {
         if (roomRentID) {
             const dataRoom = async () => {
                 const { data } = await getDetailCustomerToRoom(roomRentID);
-
                 setNewdataService(data.service);
                 setNewdataMember(data.member);
-
-                form.setFieldsValue({
-                    ...data,
-                    dateOfBirth: data.dateOfBirth
-                        ? moment(data.dateOfBirth, DATE_FORMAT)
-                        : '',
-                    startDate: moment(data.startDate, DATE_FORMAT),
-                    dateStart: moment(data.dateStart).format(DATE_FORMAT),
-                    dateLate: data.dateOfBirth
-                        ? moment(data.dateLate).format(DATE_FORMAT)
-                        : '',
-                    roomName,
-                });
             };
             dataRoom();
         }
@@ -66,21 +55,20 @@ const CustomerRedirect = () => {
     const onGetMember = (dataSource: any) => {
         setMember(dataSource);
     };
-    const onSave = async (values: any) => {
+    const onSave = async (values: TypeCustomer) => {
         if (roomRentID) {
             const data = {
+                _id: roomRentID,
                 CustomerInfo: {
                     ...values,
                     dateOfBirth: moment(values.dateOfBirth).format(DATE_FORMAT),
                     startDate: moment(values.startDate).format(DATE_FORMAT),
-                    dateStart: moment(values.dateStart).format(DATE_FORMAT),
-                    dateLate: moment(values.dateLate).format(DATE_FORMAT),
                     roomName,
                 },
                 Service: service,
                 Member: member,
-                _id: roomRentID,
             };
+
             await editCustomerToRoom(data);
             await message.success(MESSAGES.EDIT_SUCCESS);
             navigate('/motel-room');
@@ -91,12 +79,11 @@ const CustomerRedirect = () => {
                     dateOfBirth: moment(values.dateOfBirth).format(DATE_FORMAT),
                     startDate: moment(values.startDate).format(DATE_FORMAT),
                     dateStart: moment(values.dateStart).format(DATE_FORMAT),
-                    dateLate: moment(values.dateLate).format(DATE_FORMAT),
+                    motelRoomID: roomId,
                     roomName,
                 },
                 Service: service,
                 Member: member,
-                Contract: [],
             };
 
             await addCustomerToRoom(data);
@@ -153,6 +140,7 @@ const CustomerRedirect = () => {
                             onSave={onSave}
                             roomRentID={roomRentID}
                             form={form}
+                            roomName={roomName}
                         />
                     </TabPane>
                     <TabPane tab='Dịch vụ' key='tab-b'>

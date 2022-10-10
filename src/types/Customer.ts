@@ -1,5 +1,5 @@
 export type TypeCustomer = {
-    id?: string;
+    _id?: string;
     customerName: string;
     citizenIdentification: number;
     dateRange: string;
@@ -13,9 +13,11 @@ export type TypeCustomer = {
     licensePlates: string;
     motelRoomID: string;
     priceRoom: number;
-    startDate: string | Date;
+    startDate: string;
     deposit: number;
     payEachTime: number;
     paymentPeriod: number;
     roomName: string;
+    dateStart: string;
+    dateLate: string;
 };

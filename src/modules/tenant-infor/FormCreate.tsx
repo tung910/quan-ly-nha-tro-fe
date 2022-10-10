@@ -2,10 +2,8 @@ import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from 'antd';
 import moment from 'moment';
 import classNames from 'classnames/bind';
 import styles from './FormCreate.module.scss';
-import { generatePriceToVND } from '~/utils/helper';
 import { useEffect } from 'react';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
-import { useLocation } from 'react-router-dom';
 import { DATE_FORMAT } from '~/consts/const';
 const cx = classNames.bind(styles);
 
@@ -14,16 +12,15 @@ type Props = {
     onSave: (values: any) => void;
     roomRentID: string;
     form: any;
+    roomName: string;
 };
 
-const FormCreate = ({ onSave, roomRentID, form }: Props) => {
-    const { search } = useLocation();
-    const roomId = new URLSearchParams(search).get('roomId') || '';
-
+const FormCreate = ({ onSave, roomRentID, roomName, form }: Props) => {
     useEffect(() => {
         if (roomRentID) {
-            const getCustomer = async () => {
+            const dataRoom = async () => {
                 const { data } = await getDetailCustomerToRoom(roomRentID);
+
                 form.setFieldsValue({
                     ...data,
                     dateOfBirth: data.dateOfBirth
@@ -31,10 +28,10 @@ const FormCreate = ({ onSave, roomRentID, form }: Props) => {
                         : '',
                     startDate: data.startDate
                         ? moment(data.startDate, DATE_FORMAT)
-                        : moment(),
+                        : moment(new Date(), DATE_FORMAT),
                 });
             };
-            getCustomer();
+            dataRoom();
         }
     }, []);
 
@@ -156,9 +153,9 @@ const FormCreate = ({ onSave, roomRentID, form }: Props) => {
                                     )
                             }
                         >
-                            <Option value='1'>Not Identified</Option>
-                            <Option value='2'>Closed</Option>
-                            <Option value='3'>Communicated</Option>
+                            <Option value={1}>Not Identified</Option>
+                            <Option value={2}>Closed</Option>
+                            <Option value={3}>Communicated</Option>
                         </Select>
                     </Form.Item>
                 </Col>
@@ -229,9 +226,9 @@ const FormCreate = ({ onSave, roomRentID, form }: Props) => {
                                     )
                             }
                         >
-                            <Option value='1'>Not Identified</Option>
-                            <Option value='2'>Closed</Option>
-                            <Option value='3'>Communicated</Option>
+                            <Option value={1}>Not Identified</Option>
+                            <Option value={2}>Closed</Option>
+                            <Option value={3}>Communicated</Option>
                         </Select>
                     </Form.Item>
                 </Col>
@@ -242,8 +239,8 @@ const FormCreate = ({ onSave, roomRentID, form }: Props) => {
                     <Form.Item
                         label={<>Thuê phòng số </>}
                         colon={false}
-                        name='motelRoomID'
-                        initialValue={roomId}
+                        name='roomName'
+                        initialValue={roomName}
                         labelAlign='left'
                     >
                         <Input disabled style={{ width: 400 }} />
@@ -253,7 +250,7 @@ const FormCreate = ({ onSave, roomRentID, form }: Props) => {
                     <Form.Item
                         label={<>Tiền phòng</>}
                         name='priceRoom'
-                        initialValue={generatePriceToVND(3000000, undefined)}
+                        initialValue={3000000}
                         colon={false}
                         labelAlign='left'
                     >
@@ -281,7 +278,7 @@ const FormCreate = ({ onSave, roomRentID, form }: Props) => {
                         colon={false}
                         labelAlign='left'
                         name='startDate'
-                        initialValue={moment(new Date(), DATE_FORMAT)}
+                        initialValue={moment()}
                     >
                         <DatePicker
                             format={DATE_FORMAT}
@@ -324,7 +321,6 @@ const FormCreate = ({ onSave, roomRentID, form }: Props) => {
                     >
                         <Select
                             placeholder='Mời chọn kỳ thanh toán'
-                            defaultValue={1}
                             showSearch
                             style={{ width: 400 }}
                             optionFilterProp='children'
@@ -358,7 +354,6 @@ const FormCreate = ({ onSave, roomRentID, form }: Props) => {
                     >
                         <Select
                             placeholder='Mời chọn thanh toán mỗi lần'
-                            defaultValue={1}
                             showSearch
                             suffixIcon='Tháng'
                             style={{ width: 400 }}

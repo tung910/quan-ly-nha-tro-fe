@@ -154,12 +154,14 @@ const MemberCustomer = ({ onGetMember, roomRentID, newdataMember }: Props) => {
         {
             title: 'Họ và tên',
             dataIndex: 'name',
+            key: 'name',
             editable: true,
             render: (name: any) => <Input value={name} />,
         },
         {
             title: 'Ngày sinh',
             dataIndex: 'date',
+            key: 'date',
             editable: true,
             render: (date: any) => (
                 <DatePicker value={date ? moment(date, dateFormat) : date} />
@@ -168,6 +170,7 @@ const MemberCustomer = ({ onGetMember, roomRentID, newdataMember }: Props) => {
         {
             title: 'Giới tính',
             dataIndex: 'gender',
+            key: 'gender',
             editable: true,
             render: (gender: any) => (
                 <>
@@ -181,30 +184,35 @@ const MemberCustomer = ({ onGetMember, roomRentID, newdataMember }: Props) => {
         {
             title: 'CMND/ CCCD',
             dataIndex: 'cmnd',
+            key: 'cmnd',
             editable: true,
             render: (cmnd: any) => <Input value={cmnd} />,
         },
         {
             title: 'Địa chỉ',
             dataIndex: 'address',
+            key: 'address',
             editable: true,
             render: (address: any) => <Input value={address} />,
         },
         {
             title: 'Điện thoại',
             dataIndex: 'phoneNumber',
+            key: 'phoneNumber',
             editable: true,
             render: (phoneNumber: any) => <Input value={phoneNumber} />,
         },
         {
             title: 'Số xe',
             dataIndex: 'carNumber',
+            key: 'carNumber',
             editable: true,
             render: (carNumber: any) => <Input value={carNumber} />,
         },
         {
             title: 'operation',
             dataIndex: 'operation',
+            key: 'operation',
             render: (_: any, record: any) =>
                 dataSource!.length >= 1 ? (
                     <Popconfirm
