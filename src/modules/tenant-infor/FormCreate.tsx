@@ -1,36 +1,51 @@
+/* eslint-disable indent */
 import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from 'antd';
 import moment from 'moment';
 import classNames from 'classnames/bind';
 import styles from './FormCreate.module.scss';
-import { generatePriceToVND } from '~/utils/helper';
 import { useEffect } from 'react';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
+import { DATE_FORMAT } from '~/consts/const';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
-const dateFormat = 'YYYY-MM-DD';
-
 type Props = {
-    onSubmitForm: (values: string | number, name: string) => void;
-    roomName: string;
+    onSave: (values: any) => void;
     roomRentID: string;
     form: any;
+    roomName: string;
 };
 
-const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
-    const [form] = Form.useForm();
+const FormCreate = ({ onSave, roomRentID, roomName, form }: Props) => {
     useEffect(() => {
         if (roomRentID) {
-            const getCustomer = async () => {
+            const dataRoom = async () => {
                 const { data } = await getDetailCustomerToRoom(roomRentID);
 
                 form.setFieldsValue({
                     ...data,
-                    dateOfBirth: moment(data.dateOfBirth, dateFormat),
-                    startDate: moment(data.startDate, dateFormat),
+                    dateOfBirth: data.dateOfBirth
+                        ? moment(data.dateOfBirth, DATE_FORMAT)
+                        : '',
+                    startDate: data.startDate
+                        ? moment(data.startDate, DATE_FORMAT)
+                        : moment(new Date(), DATE_FORMAT),
+                    issuedBy:
+                        data.issuedBy === 1
+                            ? 'Not Identified'
+                            : data.issuedBy === 2
+                            ? 'Closed'
+                            : 'Communicated',
+                    paymentPeriod: data.paymentPeriod === 1 ? 'Kỳ 30' : 'Kỳ 15',
+                    birthPlace:
+                        data.birthPlace === 1
+                            ? 'Not Identified'
+                            : data.birthPlace === 2
+                            ? 'Closed'
+                            : 'Communicated',
                 });
             };
-            getCustomer();
+            dataRoom();
         }
     }, []);
 
@@ -42,6 +57,7 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
             labelCol={{ span: 9 }}
             wrapperCol={{ span: 16 }}
             style={{ marginTop: 20, padding: 20 }}
+            onFinish={onSave}
         >
             {/* Row 1 */}
             <Row>
@@ -60,14 +76,7 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <Input
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            name='customerName'
-                            style={{ width: 400 }}
-                            autoFocus
-                        />
+                        <Input style={{ width: 400 }} autoFocus />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -75,22 +84,9 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         label={<>CMND/ CCCD</>}
                         colon={false}
                         labelAlign='left'
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập CMND/ CCCD của bạn!',
-                            },
-                        ]}
-                        validateTrigger={['onBlur', 'onChange']}
                         name='citizenIdentification'
                     >
-                        <Input
-                            name='citizenIdentification'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <Input style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
             </Row>
@@ -101,10 +97,10 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         label={<>Giới Tính</>}
                         colon={false}
                         labelAlign='left'
+                        name='gender'
                     >
                         <Select
-                            defaultValue={1}
-                            onChange={(e) => onSubmitForm(e, 'gender')}
+                            placeholder='Mời chọn giới tính'
                             showSearch
                             style={{ width: 400 }}
                             optionFilterProp='children'
@@ -127,13 +123,7 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         labelAlign='left'
                         name='dateRange'
                     >
-                        <Input
-                            name='dateRange'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <Input style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
             </Row>
@@ -146,13 +136,7 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         labelAlign='left'
                         name='phone'
                     >
-                        <Input
-                            name='phone'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <Input style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -160,16 +144,10 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         label={<>Nơi cấp</>}
                         colon={false}
                         labelAlign='left'
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập nơi cấp của bạn!',
-                            },
-                        ]}
-                        validateTrigger={['onBlur', 'onChange']}
+                        name='issuedBy'
                     >
                         <Select
-                            onChange={(e) => onSubmitForm(e, 'issuedBy')}
+                            placeholder='Mời chọn nơi cấp'
                             showSearch
                             style={{ width: 400 }}
                             optionFilterProp='children'
@@ -189,9 +167,9 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                                     )
                             }
                         >
-                            <Option value='1'>Not Identified</Option>
-                            <Option value='2'>Closed</Option>
-                            <Option value='3'>Communicated</Option>
+                            <Option value={1}>Not Identified</Option>
+                            <Option value={2}>Closed</Option>
+                            <Option value={3}>Communicated</Option>
                         </Select>
                     </Form.Item>
                 </Col>
@@ -205,13 +183,7 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         labelAlign='left'
                         name='address'
                     >
-                        <Input
-                            name='address'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <Input style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -219,22 +191,9 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         label={<>Email</>}
                         colon={false}
                         labelAlign='left'
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập email của bạn!',
-                            },
-                        ]}
-                        validateTrigger={['onBlur', 'onChange']}
                         name='email'
                     >
-                        <Input
-                            name='email'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <Input style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
             </Row>
@@ -248,12 +207,7 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         name='dateOfBirth'
                     >
                         <DatePicker
-                            onChange={(e) =>
-                                onSubmitForm(
-                                    e?.format('YYYY-MM-DD') || '',
-                                    'dateOfBirth'
-                                )
-                            }
+                            format={DATE_FORMAT}
                             style={{ width: 400 }}
                         />
                     </Form.Item>
@@ -263,9 +217,10 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         label={<>Nơi sinh</>}
                         colon={false}
                         labelAlign='left'
+                        name='birthPlace'
                     >
                         <Select
-                            onChange={(e) => onSubmitForm(e, 'birthPlace')}
+                            placeholder='Mời chọn nơi sinh'
                             showSearch
                             style={{ width: 400 }}
                             optionFilterProp='children'
@@ -285,9 +240,9 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                                     )
                             }
                         >
-                            <Option value='1'>Not Identified</Option>
-                            <Option value='2'>Closed</Option>
-                            <Option value='3'>Communicated</Option>
+                            <Option value={1}>Not Identified</Option>
+                            <Option value={2}>Closed</Option>
+                            <Option value={3}>Communicated</Option>
                         </Select>
                     </Form.Item>
                 </Col>
@@ -298,47 +253,22 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                     <Form.Item
                         label={<>Thuê phòng số </>}
                         colon={false}
-                        name='motelRoomID'
+                        name='roomName'
                         initialValue={roomName}
                         labelAlign='left'
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập số phòng thuê của bạn!',
-                            },
-                        ]}
-                        validateTrigger={['onBlur', 'onChange']}
                     >
-                        <Input
-                            name='motelRoomID'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            disabled
-                            style={{ width: 400 }}
-                        />
+                        <Input disabled style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
                     <Form.Item
                         label={<>Tiền phòng</>}
                         name='priceRoom'
-                        initialValue={generatePriceToVND(3000000, undefined)}
+                        initialValue={3000000}
                         colon={false}
                         labelAlign='left'
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập tiền phòng của bạn!',
-                            },
-                        ]}
-                        validateTrigger={['onBlur', 'onChange']}
                     >
                         <InputNumber
-                            name='priceRoom'
-                            onChange={(e: any) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
                             formatter={(value) =>
                                 ` ${value}`.replace(
                                     /\B(?=(\d{3})+(?!\d))/g,
@@ -362,23 +292,10 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         colon={false}
                         labelAlign='left'
                         name='startDate'
-                        initialValue={moment(new Date(), dateFormat)}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập ngày bắt đầu của bạn!',
-                            },
-                        ]}
-                        validateTrigger={['onBlur', 'onChange']}
+                        initialValue={moment()}
                     >
                         <DatePicker
-                            name='startDate'
-                            onChange={(e) =>
-                                onSubmitForm(
-                                    e?.format('YYYY-MM-DD') || '',
-                                    'startDay'
-                                )
-                            }
+                            format={DATE_FORMAT}
                             style={{ width: 400 }}
                         />
                     </Form.Item>
@@ -390,19 +307,8 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         initialValue={0}
                         name='deposit'
                         labelAlign='left'
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập tiền đặt cọc của bạn!',
-                            },
-                        ]}
-                        validateTrigger={['onBlur', 'onChange']}
                     >
                         <InputNumber
-                            name='deposit'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
                             formatter={(value) =>
                                 ` ${value}`.replace(
                                     /\B(?=(\d{3})+(?!\d))/g,
@@ -426,17 +332,9 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         colon={false}
                         labelAlign='left'
                         name='paymentPeriod'
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập kỳ thanh toán của bạn!',
-                            },
-                        ]}
-                        validateTrigger={['onBlur', 'onChange']}
                     >
                         <Select
-                            defaultValue={1}
-                            onChange={(e) => onSubmitForm(e, 'paymentPeriod')}
+                            placeholder='Mời chọn kỳ thanh toán'
                             showSearch
                             style={{ width: 400 }}
                             optionFilterProp='children'
@@ -466,18 +364,10 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         label={<>Thanh toán mỗi lần</>}
                         colon={false}
                         labelAlign='left'
-                        rules={[
-                            {
-                                required: true,
-                                message:
-                                    'Vui lòng nhập tháng thanh toán của bạn!',
-                            },
-                        ]}
-                        validateTrigger={['onBlur', 'onChange']}
+                        name='payEachTime'
                     >
                         <Select
-                            defaultValue={1}
-                            onChange={(e) => onSubmitForm(e, 'payEachTime')}
+                            placeholder='Mời chọn thanh toán mỗi lần'
                             showSearch
                             suffixIcon='Tháng'
                             style={{ width: 400 }}
@@ -513,13 +403,7 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         colon={false}
                         labelAlign='left'
                     >
-                        <Input
-                            name='licensePlates'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            style={{ width: 400 }}
-                        />
+                        <Input style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -528,14 +412,7 @@ const FormCreate = ({ onSubmitForm, roomName, roomRentID }: Props) => {
                         colon={false}
                         labelAlign='left'
                     >
-                        <Input
-                            name='Image'
-                            onChange={(e) =>
-                                onSubmitForm(e.target.value, e.target.name)
-                            }
-                            type='file'
-                            style={{ width: 400 }}
-                        />
+                        <Input type='file' style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
             </Row>

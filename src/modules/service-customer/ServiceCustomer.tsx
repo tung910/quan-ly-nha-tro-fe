@@ -116,7 +116,7 @@ const defaultColumns: (ColumnTypes[number] & {
         render: (price) => {
             return (
                 <>
-                    <Input name='unitPrice' value={generatePriceToVND(price)} />
+                    <Input value={generatePriceToVND(price)} />
                 </>
             );
         },
@@ -129,7 +129,7 @@ const defaultColumns: (ColumnTypes[number] & {
         render: (numbers) => {
             return (
                 <>
-                    <Input name='quantity' value={numbers} />
+                    <Input value={numbers} />
                 </>
             );
         },
@@ -188,9 +188,10 @@ const ServiceCustomer = ({
     useEffect(() => {
         const result = state.map((item: IService) =>
             getServices.find((i: IService) => i._id === item._id)
-                ? item
+                ? { ...item, isUse: true }
                 : { ...item, isUse: false }
         );
+
         setNewData(result);
     }, [getServices]);
 

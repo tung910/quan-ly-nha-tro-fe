@@ -1,18 +1,20 @@
 import { Form, Button, Row, Col, Input, DatePicker } from 'antd';
+import moment from 'moment';
 import styles from './Contract.module.scss';
 import { DownloadOutlined } from '@ant-design/icons';
 import classNames from 'classnames/bind';
 import { exportHtmlToWord } from '~/utils/helper';
 import { exportWordContract } from '~/api/export.api';
+import { DATE_FORMAT } from '~/consts/const';
 
 const cx = classNames.bind(styles);
 type Props = {
-    onFinished: (values: any) => void;
-    formItem: any;
+    onSave: (values: any) => void;
+    form: any;
     roomRentID: string;
 };
 
-const ContractCustomer = ({ onFinished, formItem, roomRentID }: Props) => {
+const ContractCustomer = ({ onSave, form, roomRentID }: Props) => {
     const handleDownloadContract = async () => {
         const { data } = await exportWordContract(roomRentID);
         await exportHtmlToWord(data);
@@ -25,7 +27,8 @@ const ContractCustomer = ({ onFinished, formItem, roomRentID }: Props) => {
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
                 style={{ marginTop: 20, padding: 20 }}
-                form={formItem}
+                // form={form}
+                onFinish={onSave}
             >
                 <p className={cx('title-contract')}>
                     Các thông tin nhập ở đây sẽ được sử dụng cho việc xuất/ in
@@ -40,19 +43,7 @@ const ContractCustomer = ({ onFinished, formItem, roomRentID }: Props) => {
                             labelAlign='left'
                             name='coinNumber'
                         >
-                            <Input
-                                name='coinNumber'
-                                onChange={(e) =>
-                                    onFinished(
-                                        formItem.setFieldValue(
-                                            'coinNumber',
-                                            e.target.value
-                                        )
-                                    )
-                                }
-                                style={{ width: 400 }}
-                                autoFocus
-                            />
+                            <Input style={{ width: 400 }} autoFocus />
                         </Form.Item>
                     </Col>
                     <Col span={8} offset={4}>
@@ -60,18 +51,11 @@ const ContractCustomer = ({ onFinished, formItem, roomRentID }: Props) => {
                             label={<>Ngày bắt đầu</>}
                             colon={false}
                             labelAlign='left'
+                            name='dateStart'
+                            initialValue={moment(new Date(), DATE_FORMAT)}
                         >
                             <DatePicker
-                                name='dateStart'
-                                format='YYYY/MM/DD'
-                                onChange={(e) =>
-                                    onFinished(
-                                        formItem.setFieldValue(
-                                            'dateStart',
-                                            e?.format('YYYY/MM/DD') || ''
-                                        )
-                                    )
-                                }
+                                format={DATE_FORMAT}
                                 style={{ width: 400 }}
                             />
                         </Form.Item>
@@ -86,19 +70,7 @@ const ContractCustomer = ({ onFinished, formItem, roomRentID }: Props) => {
                             labelAlign='left'
                             name='timeCoin'
                         >
-                            <Input
-                                name='timeCoin'
-                                onChange={(e) =>
-                                    onFinished(
-                                        formItem.setFieldValue(
-                                            'timeCoin',
-                                            e.target.value
-                                        )
-                                    )
-                                }
-                                style={{ width: 400 }}
-                                suffix={'Tháng'}
-                            />
+                            <Input style={{ width: 400 }} suffix={'Tháng'} />
                         </Form.Item>
                     </Col>
                     <Col span={8} offset={4}>
@@ -106,18 +78,10 @@ const ContractCustomer = ({ onFinished, formItem, roomRentID }: Props) => {
                             label={<>Ngày kết thúc</>}
                             colon={false}
                             labelAlign='left'
+                            name='dateLate'
                         >
                             <DatePicker
-                                name='dateLate'
-                                format='YYYY/MM/DD'
-                                onChange={(e) =>
-                                    onFinished(
-                                        formItem.setFieldValue(
-                                            'dateLate',
-                                            e?.format('YYYY/MM/DD') || ''
-                                        )
-                                    )
-                                }
+                                format={DATE_FORMAT}
                                 style={{ width: 400 }}
                             />
                         </Form.Item>

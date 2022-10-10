@@ -6,11 +6,10 @@ import {
     EyeOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 import styles from './Card.module.scss';
 import classNames from 'classnames/bind';
 import { generatePriceToVND } from '~/utils/helper';
-import { listCustomerToRoom } from '~/api/customer.api';
 export interface Props {
     roomName?: ReactNode | string;
     unitPrice: number;
@@ -46,12 +45,14 @@ const CardItem = ({
                         <Button>Đổi</Button>
                         <Button type='primary' icon={<EyeOutlined />}>
                             <Link
-                                to={`/customer/view?roomRentID=${roomRentID}`}
+                                to={`/customer/view?roomRentID=${roomRentID}&&roomName=${roomName}`}
                             >
                                 Xem
                             </Link>
                         </Button>
-                        <Link to={`/customer/edit?roomRentID=${roomRentID}`}>
+                        <Link
+                            to={`/customer/edit?roomRentID=${roomRentID}&&roomName=${roomName}`}
+                        >
                             <Button>Sửa</Button>
                         </Link>
                     </div>
