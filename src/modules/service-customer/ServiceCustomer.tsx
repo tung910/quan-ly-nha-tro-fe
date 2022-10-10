@@ -188,9 +188,10 @@ const ServiceCustomer = ({
     useEffect(() => {
         const result = state.map((item: IService) =>
             getServices.find((i: IService) => i._id === item._id)
-                ? item
+                ? { ...item, isUse: true }
                 : { ...item, isUse: false }
         );
+
         setNewData(result);
     }, [getServices]);
 

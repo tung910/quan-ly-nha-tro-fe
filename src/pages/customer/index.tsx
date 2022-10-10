@@ -31,11 +31,13 @@ const CustomerRedirect = () => {
     const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
     const [newdataService, setNewdataService] = useState([]);
     const [newdataMember, setNewdataMember] = useState([]);
-
+    const [newMotelRoomID, setNewMotelRoomID] = useState([]);
     useEffect(() => {
         if (roomRentID) {
             const dataRoom = async () => {
                 const { data } = await getDetailCustomerToRoom(roomRentID);
+
+                setNewMotelRoomID(data.motelRoomID);
                 setNewdataService(data.service);
                 setNewdataMember(data.member);
             };
@@ -64,6 +66,7 @@ const CustomerRedirect = () => {
                     dateOfBirth: moment(values.dateOfBirth).format(DATE_FORMAT),
                     startDate: moment(values.startDate).format(DATE_FORMAT),
                     roomName,
+                    motelRoomID: newMotelRoomID,
                 },
                 Service: service,
                 Member: member,
