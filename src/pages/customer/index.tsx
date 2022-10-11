@@ -20,6 +20,7 @@ import { MESSAGES } from '~/consts/message.const';
 import { IService } from '~/types/Service.type';
 import { DATE_FORMAT } from '~/consts/const';
 import { TypeCustomer } from '~/types/Customer';
+import { getProvinces } from '~/api/addressCheckout';
 const { TabPane } = Tabs;
 
 const CustomerRedirect = () => {
@@ -29,6 +30,7 @@ const CustomerRedirect = () => {
 
     const [form]: any = Form.useForm();
     const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
+    const [provinces, setProvinces] = useState([]);
     const [newdataService, setNewdataService] = useState([]);
     const [newdataMember, setNewdataMember] = useState([]);
     const [newMotelRoomID, setNewMotelRoomID] = useState([]);
@@ -43,6 +45,11 @@ const CustomerRedirect = () => {
             };
             dataRoom();
         }
+        const getDataProvince = async () => {
+            const { data } = await getProvinces();
+            setProvinces(data);
+        };
+        getDataProvince();
     }, []);
 
     const [service, setService] = useState<IService[]>([]);
@@ -140,6 +147,7 @@ const CustomerRedirect = () => {
                 <Tabs>
                     <TabPane tab='Thông tin khách thuê' key='tab-a'>
                         <FormCreate
+                            provinces={provinces}
                             onSave={onSave}
                             roomRentID={roomRentID}
                             form={form}
