@@ -29,6 +29,7 @@ import { RoomType } from '~/types/RoomType';
 import styles from './Booking.module.scss';
 import Table from '~/components/table';
 import { ColumnsType } from 'antd/lib/table';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 const Option = Select;
@@ -208,7 +209,7 @@ const BookingRoomDeposit = () => {
                                 type='primary'
                                 icon={<PlusOutlined />}
                             >
-                                Thêm mới
+                                <Link to='/booking/create'>Thêm mới</Link>
                             </Button>
                             <Button type='primary' icon={<FileExcelOutlined />}>
                                 Xuất file excel

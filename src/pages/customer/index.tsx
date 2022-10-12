@@ -70,7 +70,9 @@ const CustomerRedirect = () => {
                 _id: roomRentID,
                 CustomerInfo: {
                     ...values,
-                    dateOfBirth: moment(values.dateOfBirth).format(DATE_FORMAT),
+                    dateOfBirth: values.dateOfBirth
+                        ? moment(values.dateOfBirth).format(DATE_FORMAT)
+                        : undefined,
                     startDate: moment(values.startDate).format(DATE_FORMAT),
                     roomName,
                     motelRoomID: newMotelRoomID,
@@ -86,7 +88,9 @@ const CustomerRedirect = () => {
             const data = {
                 CustomerInfo: {
                     ...values,
-                    dateOfBirth: moment(values.dateOfBirth).format(DATE_FORMAT),
+                    dateOfBirth: values.dateOfBirth
+                        ? moment(values.dateOfBirth).format(DATE_FORMAT)
+                        : undefined,
                     startDate: moment(values.startDate).format(DATE_FORMAT),
                     dateStart: moment(values.dateStart).format(DATE_FORMAT),
                     motelRoomID: roomId,
