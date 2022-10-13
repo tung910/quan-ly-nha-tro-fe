@@ -167,9 +167,13 @@ const Calculate = () => {
                 ],
             };
 
-            await CalculatorMoney(values);
-            const { data } = await listCalculator();
-            setCalculator(data);
+            if (values.month <= moment().format('MM')) {
+                await CalculatorMoney(values);
+                const { data } = await listCalculator();
+                setCalculator(data);
+            } else {
+                alert('Tháng chưa đến!');
+            }
         } else {
             alert('Mời bạn chọn lại!');
         }
@@ -276,14 +280,13 @@ const Calculate = () => {
                                     labelAlign='left'
                                     label={<>Tháng/năm</>}
                                     colon={false}
+                                    name='month'
                                 >
                                     <DatePicker
                                         defaultValue={moment()}
                                         clearIcon={null}
                                         format={'MM/YYYY'}
-                                        name='month'
                                         picker='month'
-                                        onChange={handleChangeMonth}
                                         style={{ width: '375px' }}
                                     />
                                 </Form.Item>
