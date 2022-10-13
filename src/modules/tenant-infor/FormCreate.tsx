@@ -16,9 +16,17 @@ type Props = {
     form: any;
     roomName: string;
     roomId: string;
+    provinces: any;
 };
 
-const FormCreate = ({ onSave, roomRentID, roomName, form, roomId }: Props) => {
+const FormCreate = ({
+    onSave,
+    roomRentID,
+    roomName,
+    form,
+    provinces,
+    roomId,
+}: Props) => {
     useEffect(() => {
         if (roomId) {
             const readRoom = async () => {
@@ -42,19 +50,6 @@ const FormCreate = ({ onSave, roomRentID, roomName, form, roomId }: Props) => {
                     startDate: data.startDate
                         ? moment(data.startDate, DATE_FORMAT)
                         : moment(new Date(), DATE_FORMAT),
-                    issuedBy:
-                        data.issuedBy === 1
-                            ? 'Not Identified'
-                            : data.issuedBy === 2
-                            ? 'Closed'
-                            : 'Communicated',
-                    paymentPeriod: data.paymentPeriod === 1 ? 'Kỳ 30' : 'Kỳ 15',
-                    birthPlace:
-                        data.birthPlace === 1
-                            ? 'Not Identified'
-                            : data.birthPlace === 2
-                            ? 'Closed'
-                            : 'Communicated',
                 });
             };
             dataRoom();
@@ -179,9 +174,13 @@ const FormCreate = ({ onSave, roomRentID, roomName, form, roomId }: Props) => {
                                     )
                             }
                         >
-                            <Option value={1}>Not Identified</Option>
-                            <Option value={2}>Closed</Option>
-                            <Option value={3}>Communicated</Option>
+                            {provinces.map((item: any, index: any) => {
+                                return (
+                                    <Option key={index} value={item?.name}>
+                                        {item?.name}
+                                    </Option>
+                                );
+                            })}
                         </Select>
                     </Form.Item>
                 </Col>
@@ -252,9 +251,13 @@ const FormCreate = ({ onSave, roomRentID, roomName, form, roomId }: Props) => {
                                     )
                             }
                         >
-                            <Option value={1}>Not Identified</Option>
-                            <Option value={2}>Closed</Option>
-                            <Option value={3}>Communicated</Option>
+                            {provinces.map((item: any, index: any) => {
+                                return (
+                                    <Option key={index} value={item?.name}>
+                                        {item?.name}
+                                    </Option>
+                                );
+                            })}
                         </Select>
                     </Form.Item>
                 </Col>

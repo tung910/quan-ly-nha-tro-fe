@@ -13,6 +13,7 @@ import EditRoom from '~/pages/room/edit-room';
 import WaterPage from '~/pages/water';
 import PowerOnly from '~/pages/data-power';
 import Calculate from '~/pages/calculate';
+import BookingRoomDeposit from '~/pages/booking';
 
 export interface Route {
     path: string;
@@ -35,6 +36,7 @@ const routes: Route[] = [
     { path: '/service/edit-service', component: AddEditService },
     { path: '/data-power', component: PowerOnly },
     { path: '/calculator-money', component: Calculate },
+    { path: '/booking', component: BookingRoomDeposit },
 ];
 
 export default routes;
