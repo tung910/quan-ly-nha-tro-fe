@@ -18,9 +18,9 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MESSAGES } from '~/consts/message.const';
 import { IService } from '~/types/Service.type';
-import { DATE_FORMAT } from '~/consts/const';
 import { TypeCustomer } from '~/types/Customer';
 import { getProvinces } from '~/api/addressCheckout';
+import { convertDate } from '~/utils/helper';
 const { TabPane } = Tabs;
 
 const CustomerRedirect = () => {
@@ -71,9 +71,9 @@ const CustomerRedirect = () => {
                 CustomerInfo: {
                     ...values,
                     dateOfBirth: values.dateOfBirth
-                        ? moment(values.dateOfBirth).format(DATE_FORMAT)
+                        ? convertDate(values.dateOfBirth)
                         : undefined,
-                    startDate: moment(values.startDate).format(DATE_FORMAT),
+                    startDate: convertDate(values.startDate),
                     roomName,
                     motelRoomID: newMotelRoomID,
                 },
@@ -89,10 +89,10 @@ const CustomerRedirect = () => {
                 CustomerInfo: {
                     ...values,
                     dateOfBirth: values.dateOfBirth
-                        ? moment(values.dateOfBirth).format(DATE_FORMAT)
+                        ? convertDate(values.dateOfBirth)
                         : undefined,
-                    startDate: moment(values.startDate).format(DATE_FORMAT),
-                    dateStart: moment(values.dateStart).format(DATE_FORMAT),
+                    startDate: convertDate(values.startDate),
+                    dateStart: convertDate(values.dateStart),
                     motelRoomID: roomId,
                     roomName,
                 },
