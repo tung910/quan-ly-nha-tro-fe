@@ -39,6 +39,7 @@ const routes: Route[] = [
     { path: '/calculator-money', component: Calculate },
     { path: '/booking', component: BookingRoomDeposit },
     { path: '/booking/create', component: CreateBooking },
+    { path: '/booking/edit-booking', component: CreateBooking },
 ];
 
 export default routes;

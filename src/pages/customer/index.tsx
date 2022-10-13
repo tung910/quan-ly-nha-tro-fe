@@ -20,7 +20,7 @@ import { MESSAGES } from '~/consts/message.const';
 import { IService } from '~/types/Service.type';
 import { TypeCustomer } from '~/types/Customer';
 import { getProvinces } from '~/api/addressCheckout';
-import { convertDate } from '~/utils/helper';
+import { DateFormat } from '~/consts/const';
 const { TabPane } = Tabs;
 
 const CustomerRedirect = () => {
@@ -71,9 +71,13 @@ const CustomerRedirect = () => {
                 CustomerInfo: {
                     ...values,
                     dateOfBirth: values.dateOfBirth
-                        ? convertDate(values.dateOfBirth)
+                        ? moment(values.dateOfBirth).format(
+                              DateFormat.DATE_DEFAULT
+                          )
                         : undefined,
-                    startDate: convertDate(values.startDate),
+                    startDate: moment(values.startDate).format(
+                        DateFormat.DATE_DEFAULT
+                    ),
                     roomName,
                     motelRoomID: newMotelRoomID,
                 },
@@ -89,10 +93,16 @@ const CustomerRedirect = () => {
                 CustomerInfo: {
                     ...values,
                     dateOfBirth: values.dateOfBirth
-                        ? convertDate(values.dateOfBirth)
+                        ? moment(values.dateOfBirth).format(
+                              DateFormat.DATE_DEFAULT
+                          )
                         : undefined,
-                    startDate: convertDate(values.startDate),
-                    dateStart: convertDate(values.dateStart),
+                    startDate: moment(values.startDate).format(
+                        DateFormat.DATE_DEFAULT
+                    ),
+                    dateStart: moment(values.dateStart).format(
+                        DateFormat.DATE_DEFAULT
+                    ),
                     motelRoomID: roomId,
                     roomName,
                 },

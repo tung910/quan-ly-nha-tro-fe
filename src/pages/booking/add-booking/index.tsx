@@ -12,6 +12,7 @@ import {
     Select,
 } from 'antd';
 import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
@@ -21,7 +22,11 @@ import { getAllMotel } from '~/api/motel.api';
 import { getListRooms, getRooms } from '~/api/room.api';
 import { convertDate, generatePriceToVND, useGetParam } from '~/utils/helper';
 import { IBooking } from '~/types/Booking.type';
-import { createRoomDeposit } from '~/api/booking.api';
+import {
+    createRoomDeposit,
+    getlistSearchRoomDeposit,
+    updateRoomDeposit,
+} from '~/api/booking.api';
 import { DateFormat } from '~/consts/const';
 import { MESSAGES } from '~/consts/message.const';
 
@@ -31,6 +36,7 @@ const CreateBooking = () => {
     const [form] = Form.useForm();
     const [listMotels, setListMotels] = useState<MotelType[]>([]);
     const [listRooms, setListRooms] = useState<RoomType[]>([]);
+    const [param] = useGetParam('bookingId');
 
     useEffect(() => {
         const getListMotels = async () => {
@@ -57,6 +63,27 @@ const CreateBooking = () => {
     };
 
     const onSave = async (values: IBooking) => {
+        if (param) {
+            const result = {
+                data: {
+                    ...values,
+                    bookingDate: convertDate(
+                        values.bookingDate,
+                        DateFormat.DATE_M_D_Y
+                    ),
+                    dateOfArrival: values.dateOfArrival
+                        ? convertDate(values.bookingDate, DateFormat.DATE_M_D_Y)
+                        : undefined,
+                    telephone: +values.telephone,
+                },
+                isUpdate: true,
+            };
+            await updateRoomDeposit({ ...result, _id: param });
+            message.success(MESSAGES.EDIT_SUCCESS);
+            goBack();
+            return;
+        }
+
         const result = {
             data: {
                 ...values,
@@ -71,18 +98,42 @@ const CreateBooking = () => {
             },
             isUpdate: false,
         };
-
         await createRoomDeposit(result);
         message.success(MESSAGES.ADD_SUCCESS);
         goBack();
+        return;
     };
+
+    useEffect(() => {
+        if (param) {
+            const fetchData = async () => {
+                const { data } = await getlistSearchRoomDeposit(param);
+
+                form.setFieldsValue({
+                    bookingDate: moment(data.bookingDate),
+                    bookingAmount: data.bookingAmount,
+                    motelId: data.motelId,
+                    motelRoomId: data.motelRoomId,
+                    telephone: +data.telephone,
+                    fullName: data.fullName,
+                    dateOfArrival: moment(data.dateOfArrival),
+                    hasCancel: data.hasCancel,
+                    hasCheckIn: data.hasCheckIn,
+                    cancelDate: data.cancelDate,
+                    checkInDate: data.checkInDate,
+                    note: data.note,
+                });
+            };
+            fetchData();
+        }
+    }, [param]);
 
     return (
         <div>
             <div className={cx('title-header')}>
                 <PageHeader
                     ghost={true}
-                    title='Thêm cọc giữ phòng'
+                    title={`${param ? 'Sửa' : 'Thêm'} cọc phòng`}
                     extra={[
                         <Button
                             onClick={() => window.history.back()}
@@ -110,7 +161,7 @@ const CreateBooking = () => {
                     autoComplete='off'
                     style={{ marginTop: 20, padding: 20 }}
                     wrapperCol={{ span: 16 }}
-                    form={form}
+                    form={param ? form : undefined}
                     onFinish={onSave}
                 >
                     {/* Row1 */}
@@ -208,7 +259,7 @@ const CreateBooking = () => {
                                     },
                                 ]}
                                 validateTrigger={['onBlur', 'onChange']}
-                                initialValue={convertDate(new Date())}
+                                initialValue={moment(new Date())}
                             >
                                 <DatePicker
                                     style={{ width: 350 }}

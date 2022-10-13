@@ -325,11 +325,7 @@ const PowerOnly = () => {
             <div className={cx('header-bottom')}>
                 <Row gutter={[8, 8]}>
                     <Col span={6}>
-                        <Form.Item
-                            // initialValue={moment(new Date(), dateFormat)}
-                            label={<>Tháng/năm</>}
-                            colon={false}
-                        >
+                        <Form.Item label={<>Tháng/năm</>} colon={false}>
                             <DatePicker
                                 defaultValue={moment()}
                                 format={dateFormat}
