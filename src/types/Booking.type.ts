@@ -4,7 +4,7 @@ export interface IBooking {
     motelId: string;
     motelRoomId: string;
     fullName: string;
-    telephone: string;
+    telephone: number;
     bookingAmount: number;
     dateOfArrival: string;
     hasCancel?: boolean;

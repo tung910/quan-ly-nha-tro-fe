@@ -6,22 +6,24 @@ import {
     Form,
     Input,
     InputNumber,
+    message,
     PageHeader,
     Row,
     Select,
 } from 'antd';
 import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
-import moment from 'moment';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import classNames from 'classnames/bind';
 import styles from './addBooking.module.scss';
 import { getAllMotel } from '~/api/motel.api';
 import { getListRooms, getRooms } from '~/api/room.api';
-import { DATE_FORMAT } from '~/consts/const';
-import { generatePriceToVND } from '~/utils/helper';
+import { convertDate, generatePriceToVND, useGetParam } from '~/utils/helper';
 import { IBooking } from '~/types/Booking.type';
+import { createRoomDeposit } from '~/api/booking.api';
+import { DateFormat } from '~/consts/const';
+import { MESSAGES } from '~/consts/message.const';
 
 const Option = Select;
 const cx = classNames.bind(styles);
@@ -50,17 +52,31 @@ const CreateBooking = () => {
         setListRooms(data);
     };
 
-    const onSave = async (values: IBooking) => {
-        // console.log(values);
-
-        console.log({
-            ...values,
-            bookingDate: moment(values.bookingDate).format(DATE_FORMAT),
-            dateOfArrival: values.dateOfArrival
-                ? moment(values.dateOfArrival).format(DATE_FORMAT)
-                : undefined,
-        });
+    const goBack = () => {
+        window.history.back();
     };
+
+    const onSave = async (values: IBooking) => {
+        const result = {
+            data: {
+                ...values,
+                bookingDate: convertDate(
+                    values.bookingDate,
+                    DateFormat.DATE_M_D_Y
+                ),
+                dateOfArrival: values.dateOfArrival
+                    ? convertDate(values.bookingDate, DateFormat.DATE_M_D_Y)
+                    : undefined,
+                telephone: +values.telephone,
+            },
+            isUpdate: false,
+        };
+
+        await createRoomDeposit(result);
+        message.success(MESSAGES.ADD_SUCCESS);
+        goBack();
+    };
+
     return (
         <div>
             <div className={cx('title-header')}>
@@ -192,11 +208,11 @@ const CreateBooking = () => {
                                     },
                                 ]}
                                 validateTrigger={['onBlur', 'onChange']}
-                                initialValue={moment(new Date(), DATE_FORMAT)}
+                                initialValue={convertDate(new Date())}
                             >
                                 <DatePicker
                                     style={{ width: 350 }}
-                                    format={DATE_FORMAT}
+                                    format={DateFormat.DATE_DEFAULT}
                                 />
                             </Form.Item>
                         </Col>
@@ -247,7 +263,7 @@ const CreateBooking = () => {
                                 name='dateOfArrival'
                             >
                                 <DatePicker
-                                    format={DATE_FORMAT}
+                                    format={DateFormat.DATE_DEFAULT}
                                     style={{ width: 350 }}
                                 />
                             </Form.Item>
