@@ -6,6 +6,7 @@ import styles from './FormCreate.module.scss';
 import { useEffect } from 'react';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
 import { DATE_FORMAT } from '~/consts/const';
+import { getRoom } from '~/api/room.api';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
@@ -14,10 +15,21 @@ type Props = {
     roomRentID: string;
     form: any;
     roomName: string;
+    roomId: string;
 };
 
-const FormCreate = ({ onSave, roomRentID, roomName, form }: Props) => {
+const FormCreate = ({ onSave, roomRentID, roomName, form, roomId }: Props) => {
     useEffect(() => {
+        if (roomId) {
+            const readRoom = async () => {
+                const { data } = await getRoom(roomId);
+
+                form.setFieldsValue({
+                    priceRoom: data.unitPrice,
+                });
+            };
+            readRoom();
+        }
         if (roomRentID) {
             const dataRoom = async () => {
                 const { data } = await getDetailCustomerToRoom(roomRentID);
@@ -264,7 +276,6 @@ const FormCreate = ({ onSave, roomRentID, roomName, form }: Props) => {
                     <Form.Item
                         label={<>Tiền phòng</>}
                         name='priceRoom'
-                        initialValue={3000000}
                         colon={false}
                         labelAlign='left'
                     >

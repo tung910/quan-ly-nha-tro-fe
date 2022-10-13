@@ -3,6 +3,6 @@ export const listCalculator = () => {
     return instance.get('/calculator-money/list');
 };
 
-export const Calculator = () => {
-    return instance.put('/calculator-money/calculator');
+export const CalculatorMoney = (data: any) => {
+    return instance.post('/calculator-money/calculator', data);
 };

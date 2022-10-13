@@ -20,13 +20,19 @@ import {
     DollarCircleOutlined,
     PrinterOutlined,
 } from '@ant-design/icons';
-import { getStatisticalRoomStatus } from '~/api/room.api';
+import { getRooms, getStatisticalRoomStatus, getRoom } from '~/api/room.api';
 import { MotelType } from '~/types/MotelType';
 import { getAllMotel } from '~/api/motel.api';
 import moment from 'moment';
-import { Calculator, listCalculator } from '~/api/calculator.api';
+import { CalculatorMoney, listCalculator } from '~/api/calculator.api';
 import Table from '~/components/table';
 import Modal from '~/components/modal';
+import { RoomType } from '~/types/RoomType';
+
+import { getDataWaterByMotelRoomId } from '~/api/data-water.api';
+import { getDataPowerByMotelRoomId } from '~/api/data-power.api';
+import { DATE_FORMAT } from '~/consts/const';
+import { generatePriceToVND } from '~/utils/helper';
 
 const cx = classNames.bind(styles);
 const { Option } = Select;
@@ -38,11 +44,13 @@ const Calculate = () => {
     const [form] = Form.useForm();
 
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
+    const [listNameRoom, setListNameRoom] = useState<RoomType[]>([]);
     const [listStatusRoom, setListStatusRoom] = useState([]);
     const [calculator, setCalculator] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalReceipt, setIsModalReceipt] = useState(false);
     const [month, setMonth] = useState('');
+    const [room, setRoom] = useState<RoomType>();
 
     const ColumnsData: ColumnTypes[number][] = [
         {
@@ -79,8 +87,8 @@ const Calculate = () => {
         },
         {
             title: 'Nhà',
-            dataIndex: 'motelName',
-            key: 'motelName',
+            dataIndex: ['motelID', 'name'],
+            key: 'name',
         },
         {
             title: 'Phòng',
@@ -96,16 +104,25 @@ const Calculate = () => {
             title: 'Số tiền',
             dataIndex: 'totalAmount',
             key: 'totalAmount',
+            render: (totalAmount: number) => {
+                return <>{generatePriceToVND(+totalAmount)}</>;
+            },
         },
         {
             title: 'Đã trả',
             dataIndex: 'payAmount',
             key: 'payAmount',
+            render: (payAmount: number) => {
+                return <>{generatePriceToVND(+payAmount)}</>;
+            },
         },
         {
             title: 'Còn lại',
             dataIndex: 'remainAmount',
             key: 'remainAmount',
+            render: (remainAmount: number) => {
+                return <>{generatePriceToVND(+remainAmount)}</>;
+            },
         },
     ];
 
@@ -115,23 +132,46 @@ const Calculate = () => {
 
     const handleCancel = () => {
         setIsModalOpen(false);
-        // form.resetFields();
+        form.resetFields();
     };
-    const onCalculator = async () => {
-        const { data } = await listCalculator();
-        data.map(async (item: any) => {
-            if (item.totalAmount === 0) {
-                await Calculator();
-                const { data } = await listCalculator();
-                setCalculator(data);
-            }
-        });
-        if (!data) {
-            await Calculator();
+    const onClickMotel = async (value: string) => {
+        const { data } = await getRooms(value);
+        setListNameRoom(data);
+    };
+    const onClickRoom = async (value: string) => {
+        const { data } = await getRoom(value);
+        setRoom(data);
+    };
+    const onCalculator = async (values: any) => {
+        if (room?._id && room?.roomRentID) {
+            const dataPower = await getDataPowerByMotelRoomId(room?._id);
+            const dataWater = await getDataWaterByMotelRoomId(room?._id);
+
+            values = {
+                data: [
+                    {
+                        ...values,
+                        motelID: room.motelID,
+                        dataPowerID: dataPower.data._id,
+                        dataWaterID: dataWater.data._id,
+                        roomRentalDetailID: room.roomRentID,
+                        invoiceDate: moment(values.invoiceDate).format(
+                            DATE_FORMAT
+                        ),
+                        month: moment(values.month).format('MM'),
+                        year: moment(values.month).format('YYYY'),
+                    },
+                ],
+            };
+
+            await CalculatorMoney(values);
             const { data } = await listCalculator();
             setCalculator(data);
+        } else {
+            alert('Mời bạn chọn lại!');
         }
 
+        form.resetFields();
         setIsModalOpen(false);
     };
 
@@ -184,7 +224,7 @@ const Calculate = () => {
                     <Modal
                         title='Thông báo'
                         open={isModalOpen}
-                        onOk={onCalculator}
+                        onOk={form.submit}
                         onCancel={handleCancel}
                     >
                         <>
@@ -192,6 +232,7 @@ const Calculate = () => {
                                 autoComplete='off'
                                 form={form}
                                 labelCol={{ span: 5 }}
+                                onFinish={onCalculator}
                             >
                                 <Form.Item
                                     label={<>Kỳ</>}
@@ -215,26 +256,42 @@ const Calculate = () => {
                                     name='invoiceDate'
                                     initialValue={moment()}
                                 >
-                                    <DatePicker style={{ width: '375px' }} />
+                                    <DatePicker
+                                        format={'DD/MM/YYYY'}
+                                        style={{ width: '375px' }}
+                                    />
                                 </Form.Item>
                                 <Form.Item
-                                    label={<>Tháng</>}
-                                    colon={false}
                                     labelAlign='left'
-                                    name='month'
-                                    initialValue={moment()}
+                                    label={<>Tháng/năm</>}
+                                    colon={false}
                                 >
-                                    <DatePicker style={{ width: '375px' }} />
+                                    <DatePicker
+                                        defaultValue={moment()}
+                                        clearIcon={null}
+                                        format={'MM/YYYY'}
+                                        name='month'
+                                        picker='month'
+                                        onChange={handleChangeMonth}
+                                        style={{ width: '375px' }}
+                                    />
                                 </Form.Item>
                                 <Form.Item
                                     label={<>Nhà</>}
                                     colon={false}
                                     labelAlign='left'
                                     name='motelID'
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Vui lòng chọn!',
+                                        },
+                                    ]}
                                 >
                                     <Select
                                         placeholder='Mời bạn chọn nhà'
                                         showSearch
+                                        onChange={onClickMotel}
                                     >
                                         {listNameMotel &&
                                             listNameMotel.map((item, index) => {
@@ -254,11 +311,30 @@ const Calculate = () => {
                                     colon={false}
                                     labelAlign='left'
                                     name='roomID'
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Vui lòng chọn!',
+                                        },
+                                    ]}
                                 >
                                     <Select
                                         placeholder='Mời bạn chọn phòng'
                                         showSearch
-                                    ></Select>
+                                        onChange={onClickRoom}
+                                    >
+                                        {listNameRoom &&
+                                            listNameRoom.map((item, index) => {
+                                                return (
+                                                    <Option
+                                                        key={index}
+                                                        value={item._id}
+                                                    >
+                                                        {item.roomName}
+                                                    </Option>
+                                                );
+                                            })}
+                                    </Select>
                                 </Form.Item>
                             </Form>
                             <p>Bạn có muốn tính tiền tháng này không?</p>
