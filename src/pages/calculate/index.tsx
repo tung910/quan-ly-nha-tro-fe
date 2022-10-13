@@ -24,7 +24,11 @@ import { getRooms, getStatisticalRoomStatus, getRoom } from '~/api/room.api';
 import { MotelType } from '~/types/MotelType';
 import { getAllMotel } from '~/api/motel.api';
 import moment from 'moment';
-import { CalculatorMoney, listCalculator } from '~/api/calculator.api';
+import {
+    CalculatorMoney,
+    listCalculator,
+    listCalculatorByMonth,
+} from '~/api/calculator.api';
 import Table from '~/components/table';
 import Modal from '~/components/modal';
 import { RoomType } from '~/types/RoomType';
@@ -49,7 +53,6 @@ const Calculate = () => {
     const [calculator, setCalculator] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalReceipt, setIsModalReceipt] = useState(false);
-    const [month, setMonth] = useState('');
     const [room, setRoom] = useState<RoomType>();
 
     const ColumnsData: ColumnTypes[number][] = [
@@ -179,7 +182,15 @@ const Calculate = () => {
         date,
         dateString
     ) => {
-        setMonth(dateString);
+        const month = moment(date).format('MM');
+
+        const calculatorData = async () => {
+            const { data } = await listCalculatorByMonth({
+                month,
+            });
+            setCalculator(data);
+        };
+        calculatorData();
     };
 
     useEffect(() => {
