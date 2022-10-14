@@ -509,7 +509,7 @@ const Calculate = () => {
                                     </p>
                                     <hr />
                                     <p>
-                                        <b>Người thanh toán</b>
+                                        <b>Người thanh toán:</b>
                                     </p>
                                 </div>
                             );
