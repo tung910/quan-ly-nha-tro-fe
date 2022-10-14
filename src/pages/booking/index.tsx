@@ -192,7 +192,7 @@ const BookingRoomDeposit = () => {
                         <>
                             <DatePicker
                                 value={
-                                    newDate
+                                    newDate.checkInDate
                                         ? moment(newDate.checkInDate)
                                         : undefined
                                 }
