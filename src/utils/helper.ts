@@ -1,8 +1,9 @@
+import moment from 'moment';
 import { useLocation } from 'react-router-dom';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { IUser } from '~/types/User.type';
-import moment from 'moment';
+import { DateFormat } from '~/consts/const';
 
 const generatePriceToVND = (
     price?: number,
@@ -20,6 +21,9 @@ const generatePriceToVND = (
     });
 };
 
+const convertDate = (date: any, format = DateFormat.DATE_DEFAULT) => {
+    return moment(date).format(format);
+};
 const useGetParam = (param: string) => {
     const { search } = useLocation();
     const result = new URLSearchParams(search).get(param) || '';
@@ -3064,4 +3068,4 @@ const exportHtmlToWord = (data: {
     document.body.removeChild(fileDownload);
 };
 
-export { generatePriceToVND, useGetParam, exportHtmlToWord };
+export { generatePriceToVND, useGetParam, exportHtmlToWord, convertDate };

@@ -1,11 +1,11 @@
 import { Form, Button, Row, Col, Input, DatePicker } from 'antd';
-import moment from 'moment';
 import styles from './Contract.module.scss';
 import { DownloadOutlined } from '@ant-design/icons';
 import classNames from 'classnames/bind';
+import moment from 'moment';
 import { exportHtmlToWord } from '~/utils/helper';
 import { exportWordContract } from '~/api/export.api';
-import { DATE_FORMAT } from '~/consts/const';
+import { DateFormat } from '~/consts/const';
 
 const cx = classNames.bind(styles);
 type Props = {
@@ -52,10 +52,10 @@ const ContractCustomer = ({ onSave, form, roomRentID }: Props) => {
                             colon={false}
                             labelAlign='left'
                             name='dateStart'
-                            initialValue={moment(new Date(), DATE_FORMAT)}
+                            initialValue={moment(new Date())}
                         >
                             <DatePicker
-                                format={DATE_FORMAT}
+                                format={DateFormat.DATE_DEFAULT}
                                 style={{ width: 400 }}
                             />
                         </Form.Item>
@@ -81,7 +81,7 @@ const ContractCustomer = ({ onSave, form, roomRentID }: Props) => {
                             name='dateLate'
                         >
                             <DatePicker
-                                format={DATE_FORMAT}
+                                format={DateFormat.DATE_DEFAULT}
                                 style={{ width: 400 }}
                             />
                         </Form.Item>

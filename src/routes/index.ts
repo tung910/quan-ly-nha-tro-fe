@@ -14,6 +14,7 @@ import WaterPage from '~/pages/water';
 import PowerOnly from '~/pages/data-power';
 import Calculate from '~/pages/calculate';
 import BookingRoomDeposit from '~/pages/booking';
+import CreateBooking from '~/pages/booking/add-booking';
 
 export interface Route {
     path: string;
@@ -37,6 +38,8 @@ const routes: Route[] = [
     { path: '/data-power', component: PowerOnly },
     { path: '/calculator-money', component: Calculate },
     { path: '/booking', component: BookingRoomDeposit },
+    { path: '/booking/create', component: CreateBooking },
+    { path: '/booking/edit-booking', component: CreateBooking },
 ];
 
 export default routes;

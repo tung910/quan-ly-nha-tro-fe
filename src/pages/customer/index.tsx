@@ -18,9 +18,9 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MESSAGES } from '~/consts/message.const';
 import { IService } from '~/types/Service.type';
-import { DATE_FORMAT } from '~/consts/const';
 import { TypeCustomer } from '~/types/Customer';
 import { getProvinces } from '~/api/addressCheckout';
+import { DateFormat } from '~/consts/const';
 const { TabPane } = Tabs;
 
 const CustomerRedirect = () => {
@@ -69,8 +69,14 @@ const CustomerRedirect = () => {
                 _id: roomRentID,
                 CustomerInfo: {
                     ...values,
-                    dateOfBirth: moment(values.dateOfBirth).format(DATE_FORMAT),
-                    startDate: moment(values.startDate).format(DATE_FORMAT),
+                    dateOfBirth: values.dateOfBirth
+                        ? moment(values.dateOfBirth).format(
+                              DateFormat.DATE_DEFAULT
+                          )
+                        : undefined,
+                    startDate: moment(values.startDate).format(
+                        DateFormat.DATE_DEFAULT
+                    ),
                     roomName,
                     motelRoomID: newMotelRoomID,
                     motelID,
@@ -86,9 +92,17 @@ const CustomerRedirect = () => {
             const data = {
                 CustomerInfo: {
                     ...values,
-                    dateOfBirth: moment(values.dateOfBirth).format(DATE_FORMAT),
-                    startDate: moment(values.startDate).format(DATE_FORMAT),
-                    dateStart: moment(values.dateStart).format(DATE_FORMAT),
+                    dateOfBirth: values.dateOfBirth
+                        ? moment(values.dateOfBirth).format(
+                              DateFormat.DATE_DEFAULT
+                          )
+                        : undefined,
+                    startDate: moment(values.startDate).format(
+                        DateFormat.DATE_DEFAULT
+                    ),
+                    dateStart: moment(values.dateStart).format(
+                        DateFormat.DATE_DEFAULT
+                    ),
                     motelRoomID: roomId,
                     motelID,
                     roomName,
