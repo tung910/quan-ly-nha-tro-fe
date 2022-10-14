@@ -361,6 +361,15 @@ const Calculate = () => {
                 >
                     <h1>Hóa đơn</h1>
                 </Modal>
+                <Button
+                    type='primary'
+                    icon={<CalculatorOutlined />}
+                    key={2}
+                    onClick={showModal}
+                >
+                            hoa don
+                </Button>
+                {/* <button onClick={showModal}>xemmm</button>   */}
             </div>
         </div>
     );
