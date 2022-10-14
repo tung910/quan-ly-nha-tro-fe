@@ -55,6 +55,7 @@ const Calculate = () => {
     const [isModalReceipt, setIsModalReceipt] = useState(false);
     const [room, setRoom] = useState<RoomType>();
 
+
     const ColumnsData: ColumnTypes[number][] = [
         {
             title: '',
@@ -145,6 +146,7 @@ const Calculate = () => {
         const { data } = await getRoom(value);
         setRoom(data);
     };
+
     const onCalculator = async (values: any) => {
         if (room?._id && room?.roomRentID) {
             const dataPower = await getDataPowerByMotelRoomId(room?._id);
@@ -449,16 +451,15 @@ const Calculate = () => {
                 </Modal>
                 <Button
                     type='primary'
-                    icon={<CalculatorOutlined />}
                     key={2}
-                    onClick={showModal}
+                    onClick={() => setIsModalReceipt(true)}
                 >
                             hoa don
                 </Button>
-                {/* <button onClick={showModal}>xemmm</button>   */}
             </div>
         </div>
     );
 };
 
 export default Calculate;
+
