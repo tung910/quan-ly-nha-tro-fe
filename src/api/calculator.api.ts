@@ -9,3 +9,6 @@ export const listCalculatorByMonth = (month: any) => {
 export const CalculatorMoney = (data: any) => {
     return instance.post('/calculator-money/calculator', data);
 };
+export const deleteCalculator = (id: string) => {
+    return instance.delete(`/calculator-money/delete/${id}`);
+};

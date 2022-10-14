@@ -9,9 +9,9 @@ import {
     Form,
     DatePicker,
     Select,
-    message,
-    DatePickerProps,
     Space,
+    message,
+    Modal,
 } from 'antd';
 import {
     SearchOutlined,
@@ -19,24 +19,25 @@ import {
     EyeOutlined,
     DollarCircleOutlined,
     PrinterOutlined,
+    DeleteOutlined,
 } from '@ant-design/icons';
-import { getRooms, getStatisticalRoomStatus, getRoom } from '~/api/room.api';
+import { getRooms, getRoom } from '~/api/room.api';
 import { MotelType } from '~/types/MotelType';
 import { getAllMotel } from '~/api/motel.api';
 import moment from 'moment';
 import {
     CalculatorMoney,
+    deleteCalculator,
     listCalculator,
     listCalculatorByMonth,
 } from '~/api/calculator.api';
 import Table from '~/components/table';
-import Modal from '~/components/modal';
 import { RoomType } from '~/types/RoomType';
-
 import { getDataWaterByMotelRoomId } from '~/api/data-water.api';
 import { getDataPowerByMotelRoomId } from '~/api/data-power.api';
 import { generatePriceToVND } from '~/utils/helper';
 import { DateFormat } from '~/consts/const';
+import { MESSAGES } from '~/consts/message.const';
 
 const cx = classNames.bind(styles);
 const { Option } = Select;
@@ -49,7 +50,6 @@ const Calculate = () => {
 
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listNameRoom, setListNameRoom] = useState<RoomType[]>([]);
-    const [listStatusRoom, setListStatusRoom] = useState([]);
     const [calculator, setCalculator] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalReceipt, setIsModalReceipt] = useState(false);
@@ -60,7 +60,7 @@ const Calculate = () => {
             title: '',
             dataIndex: '_id',
             key: '_id',
-            render: () => {
+            render: (id: string) => {
                 return (
                     <Space>
                         <Button
@@ -83,6 +83,13 @@ const Calculate = () => {
                             icon={<PrinterOutlined />}
                             onClick={() => setIsModalReceipt(!isModalReceipt)}
                             title='In hóa đơn'
+                        />
+                        <Button
+                            htmlType='submit'
+                            icon={<DeleteOutlined />}
+                            onClick={() => handleDelete(id)}
+                            title='Xóa'
+                            danger
                         />
                     </Space>
                 );
@@ -188,7 +195,21 @@ const Calculate = () => {
         };
         calculatorData();
     };
-
+    const handleDelete = async (id: string) => {
+        Modal.confirm({
+            centered: true,
+            title: `Bạn có đồng ý xóa không ?`,
+            cancelText: 'Cancel',
+            okText: 'Lưu',
+            onOk: async () => {
+                await deleteCalculator(id);
+                setCalculator(
+                    calculator.filter((item: any) => item._id !== id)
+                );
+                message.success(MESSAGES.DEL_SUCCESS);
+            },
+        });
+    };
     useEffect(() => {
         const handleFetchData = async () => {
             try {
