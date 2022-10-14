@@ -57,7 +57,6 @@ const Calculate = () => {
     const [bill, setBill] = useState([]);
     const thisMonth = moment(new Date()).format('MM');
 
-
     const ColumnsData: ColumnTypes[number][] = [
         {
             title: '',
@@ -517,17 +516,9 @@ const Calculate = () => {
                             );
                         })}
                 </Modal>
-                <Button
-                    type='primary'
-                    key={2}
-                    onClick={() => setIsModalReceipt(true)}
-                >
-                            hoa don
-                </Button>
             </div>
         </div>
     );
 };
 
 export default Calculate;
-
