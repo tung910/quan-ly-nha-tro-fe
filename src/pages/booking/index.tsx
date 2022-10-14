@@ -250,6 +250,7 @@ const BookingRoomDeposit = () => {
     const onSave = async (values: any) => {
         const result = {
             data: {
+                ...values,
                 fromDate: convertDate(values.fromDate, DateFormat.DATE_M_D_Y),
                 toDate: convertDate(values.toDate, DateFormat.DATE_M_D_Y),
             },
