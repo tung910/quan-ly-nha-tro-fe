@@ -5,7 +5,7 @@ import classNames from 'classnames/bind';
 import styles from './FormCreate.module.scss';
 import { useEffect } from 'react';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
-import { DATE_FORMAT } from '~/consts/const';
+import { DateFormat } from '~/consts/const';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
@@ -32,11 +32,11 @@ const FormCreate = ({
                 form.setFieldsValue({
                     ...data,
                     dateOfBirth: data.dateOfBirth
-                        ? moment(data.dateOfBirth, DATE_FORMAT)
+                        ? moment(data.dateOfBirth, DateFormat.DATE_DEFAULT)
                         : '',
                     startDate: data.startDate
-                        ? moment(data.startDate, DATE_FORMAT)
-                        : moment(new Date(), DATE_FORMAT),
+                        ? moment(data.startDate, DateFormat.DATE_DEFAULT)
+                        : moment(new Date(), DateFormat.DATE_DEFAULT),
                 });
             };
             dataRoom();
@@ -205,7 +205,7 @@ const FormCreate = ({
                         name='dateOfBirth'
                     >
                         <DatePicker
-                            format={DATE_FORMAT}
+                            format={DateFormat.DATE_DEFAULT}
                             style={{ width: 400 }}
                         />
                     </Form.Item>
@@ -297,7 +297,7 @@ const FormCreate = ({
                         initialValue={moment()}
                     >
                         <DatePicker
-                            format={DATE_FORMAT}
+                            format={DateFormat.DATE_DEFAULT}
                             style={{ width: 400 }}
                         />
                     </Form.Item>
