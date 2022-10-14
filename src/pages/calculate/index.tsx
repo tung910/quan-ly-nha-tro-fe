@@ -178,15 +178,11 @@ const Calculate = () => {
         setIsModalOpen(false);
     };
 
-    const handleChangeMonth: DatePickerProps['onChange'] = (
-        date,
-        dateString
-    ) => {
-        const month = moment(date).format('MM');
-
+    const onSearch = (values: any) => {
         const calculatorData = async () => {
             const { data } = await listCalculatorByMonth({
-                month,
+                month: moment(values.month).format('MM'),
+                motelID: values.motelID,
             });
             setCalculator(data);
         };
@@ -196,15 +192,12 @@ const Calculate = () => {
     useEffect(() => {
         const handleFetchData = async () => {
             try {
-                const [motelRoom, calculatorData, statisticalRoomStatus] =
-                    await Promise.all([
-                        getAllMotel(),
-                        listCalculator(),
-                        getStatisticalRoomStatus(),
-                    ]);
+                const [motelRoom, calculatorData] = await Promise.all([
+                    getAllMotel(),
+                    listCalculator(),
+                ]);
                 setListNameMotel(motelRoom.data);
                 setCalculator(calculatorData.data);
-                setListStatusRoom(statisticalRoomStatus.data);
             } catch (error) {
                 // message.error(error);
             }
@@ -354,71 +347,83 @@ const Calculate = () => {
             </div>
 
             <div className={cx('header-bottom')}>
-                <Row gutter={[8, 8]}>
-                    <Col span={6}>
-                        <Form.Item label={<>Tháng/năm</>} colon={false}>
-                            <DatePicker
-                                defaultValue={moment()}
-                                clearIcon={null}
-                                format={'MM/YYYY'}
-                                name='date'
-                                picker='month'
-                                onChange={handleChangeMonth}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col span={6}>
-                        <Form.Item label={<>Kỳ</>} colon={false}>
-                            <Select
-                                style={{ width: 150 }}
-                                defaultValue='Tất cả'
-                                showSearch
+                <Form
+                    autoComplete='off'
+                    form={form}
+                    labelCol={{ span: 5 }}
+                    onFinish={onSearch}
+                >
+                    <Row gutter={[8, 8]}>
+                        <Col span={6}>
+                            <Form.Item
+                                label={<>Tháng/năm</>}
+                                name='month'
+                                colon={false}
+                                initialValue={moment()}
                             >
-                                <Option value={2}>Kỳ 30</Option>
-                                <Option value={3}>Kỳ 15</Option>
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col span={6}>
-                        <Form.Item label={<>Nhà</>} colon={false}>
-                            <Select
-                                style={{ width: 150 }}
-                                defaultValue='Tất cả'
-                                showSearch
+                                <DatePicker
+                                    clearIcon={null}
+                                    format={'MM/YYYY'}
+                                    picker='month'
+                                    // onChange={handleChangeMonth}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item
+                                label={<>Kỳ</>}
+                                name='paymentPeriod'
+                                colon={false}
                             >
-                                {listNameMotel &&
-                                    listNameMotel.map((item, index) => {
-                                        return (
-                                            <Option
-                                                key={index}
-                                                value={item._id}
-                                            >
-                                                {item.name}
-                                            </Option>
-                                        );
-                                    })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col span={6}>
-                        <Form.Item label={<>Trạng thái nhà</>} colon={false}>
-                            <Select
-                                style={{ width: 150 }}
-                                defaultValue='Tất cả'
-                                showSearch
+                                <Select
+                                    style={{ width: 150 }}
+                                    defaultValue='Tất cả'
+                                    showSearch
+                                >
+                                    <Option value={2}>Kỳ 30</Option>
+                                    <Option value={3}>Kỳ 15</Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item
+                                label={<>Nhà</>}
+                                name='motelID'
+                                colon={false}
                             >
-                                {listStatusRoom &&
-                                    listStatusRoom.map((item: any, index) => {
-                                        return (
-                                            <Option key={index}>
-                                                {item.statusName}
-                                            </Option>
-                                        );
-                                    })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
+                                <Select
+                                    style={{ width: 150 }}
+                                    defaultValue='Tất cả'
+                                    showSearch
+                                >
+                                    {listNameMotel &&
+                                        listNameMotel.map((item, index) => {
+                                            return (
+                                                <Option
+                                                    key={index}
+                                                    value={item._id}
+                                                >
+                                                    {item.name}
+                                                </Option>
+                                            );
+                                        })}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item colon={false}>
+                                <Button
+                                    type='primary'
+                                    icon={<SearchOutlined />}
+                                    htmlType='submit'
+                                >
+                                    Xem
+                                </Button>
+                                ,
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form>
             </div>
 
             <div>
