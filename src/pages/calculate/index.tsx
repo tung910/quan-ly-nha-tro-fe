@@ -35,8 +35,8 @@ import { RoomType } from '~/types/RoomType';
 
 import { getDataWaterByMotelRoomId } from '~/api/data-water.api';
 import { getDataPowerByMotelRoomId } from '~/api/data-power.api';
-import { DATE_FORMAT } from '~/consts/const';
 import { generatePriceToVND } from '~/utils/helper';
+import { DateFormat } from '~/consts/const';
 
 const cx = classNames.bind(styles);
 const { Option } = Select;
@@ -159,7 +159,7 @@ const Calculate = () => {
                         dataWaterID: dataWater.data._id,
                         roomRentalDetailID: room.roomRentID,
                         invoiceDate: moment(values.invoiceDate).format(
-                            DATE_FORMAT
+                            DateFormat.DATE_DEFAULT
                         ),
                         month: moment(values.month).format('MM'),
                         year: moment(values.month).format('YYYY'),
@@ -167,13 +167,9 @@ const Calculate = () => {
                 ],
             };
 
-            if (values.month <= moment().format('MM')) {
-                await CalculatorMoney(values);
-                const { data } = await listCalculator();
-                setCalculator(data);
-            } else {
-                alert('Tháng chưa đến!');
-            }
+            await CalculatorMoney(values);
+            const { data } = await listCalculator();
+            setCalculator(data);
         } else {
             alert('Mời bạn chọn lại!');
         }
