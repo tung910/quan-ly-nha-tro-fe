@@ -57,6 +57,7 @@ const Calculate = () => {
     const [bill, setBill] = useState([]);
     const thisMonth = moment(new Date()).format('MM');
 
+
     const ColumnsData: ColumnTypes[number][] = [
         {
             title: '',
@@ -154,6 +155,7 @@ const Calculate = () => {
         const { data } = await getRoom(value);
         setRoom(data);
     };
+
     const onCalculator = async (values: any) => {
         if (room?._id && room?.roomRentID) {
             const dataPower = await getDataPowerByMotelRoomId(room?._id);
@@ -515,9 +517,17 @@ const Calculate = () => {
                             );
                         })}
                 </Modal>
+                <Button
+                    type='primary'
+                    key={2}
+                    onClick={() => setIsModalReceipt(true)}
+                >
+                            hoa don
+                </Button>
             </div>
         </div>
     );
 };
 
 export default Calculate;
+
