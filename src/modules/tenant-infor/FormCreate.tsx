@@ -5,6 +5,7 @@ import classNames from 'classnames/bind';
 import styles from './FormCreate.module.scss';
 import { useEffect } from 'react';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
+import { getRoom } from '~/api/room.api';
 import { DateFormat } from '~/consts/const';
 const cx = classNames.bind(styles);
 
@@ -14,6 +15,7 @@ type Props = {
     roomRentID: string;
     form: any;
     roomName: string;
+    roomId: string;
     provinces: any;
 };
 
@@ -23,8 +25,19 @@ const FormCreate = ({
     roomName,
     form,
     provinces,
+    roomId,
 }: Props) => {
     useEffect(() => {
+        if (roomId) {
+            const readRoom = async () => {
+                const { data } = await getRoom(roomId);
+
+                form.setFieldsValue({
+                    priceRoom: data.unitPrice,
+                });
+            };
+            readRoom();
+        }
         if (roomRentID) {
             const dataRoom = async () => {
                 const { data } = await getDetailCustomerToRoom(roomRentID);
@@ -266,7 +279,6 @@ const FormCreate = ({
                     <Form.Item
                         label={<>Tiền phòng</>}
                         name='priceRoom'
-                        initialValue={3000000}
                         colon={false}
                         labelAlign='left'
                     >

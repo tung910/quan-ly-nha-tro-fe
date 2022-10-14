@@ -27,7 +27,7 @@ const CustomerRedirect = () => {
     const { search } = useLocation();
     const roomName = new URLSearchParams(search).get('roomName') || '';
     const roomId = new URLSearchParams(search).get('roomId') || '';
-
+    const motelID = new URLSearchParams(search).get('motelId') || '';
     const [form]: any = Form.useForm();
     const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
     const [provinces, setProvinces] = useState([]);
@@ -38,7 +38,6 @@ const CustomerRedirect = () => {
         if (roomRentID) {
             const dataRoom = async () => {
                 const { data } = await getDetailCustomerToRoom(roomRentID);
-
                 setNewMotelRoomID(data.motelRoomID);
                 setNewdataService(data.service);
                 setNewdataMember(data.member);
@@ -80,6 +79,7 @@ const CustomerRedirect = () => {
                     ),
                     roomName,
                     motelRoomID: newMotelRoomID,
+                    motelID,
                 },
                 Service: service,
                 Member: member,
@@ -104,6 +104,7 @@ const CustomerRedirect = () => {
                         DateFormat.DATE_DEFAULT
                     ),
                     motelRoomID: roomId,
+                    motelID,
                     roomName,
                 },
                 Service: service,
@@ -166,6 +167,7 @@ const CustomerRedirect = () => {
                             roomRentID={roomRentID}
                             form={form}
                             roomName={roomName}
+                            roomId={roomId}
                         />
                     </TabPane>
                     <TabPane tab='Dịch vụ' key='tab-b'>
