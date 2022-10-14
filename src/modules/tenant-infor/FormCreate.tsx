@@ -5,7 +5,8 @@ import classNames from 'classnames/bind';
 import styles from './FormCreate.module.scss';
 import { useEffect } from 'react';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
-import { DATE_FORMAT } from '~/consts/const';
+import { getRoom } from '~/api/room.api';
+import { DateFormat } from '~/consts/const';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
@@ -14,6 +15,7 @@ type Props = {
     roomRentID: string;
     form: any;
     roomName: string;
+    roomId: string;
     provinces: any;
 };
 
@@ -23,8 +25,19 @@ const FormCreate = ({
     roomName,
     form,
     provinces,
+    roomId,
 }: Props) => {
     useEffect(() => {
+        if (roomId) {
+            const readRoom = async () => {
+                const { data } = await getRoom(roomId);
+
+                form.setFieldsValue({
+                    priceRoom: data.unitPrice,
+                });
+            };
+            readRoom();
+        }
         if (roomRentID) {
             const dataRoom = async () => {
                 const { data } = await getDetailCustomerToRoom(roomRentID);
@@ -32,11 +45,11 @@ const FormCreate = ({
                 form.setFieldsValue({
                     ...data,
                     dateOfBirth: data.dateOfBirth
-                        ? moment(data.dateOfBirth, DATE_FORMAT)
+                        ? moment(data.dateOfBirth, DateFormat.DATE_DEFAULT)
                         : '',
                     startDate: data.startDate
-                        ? moment(data.startDate, DATE_FORMAT)
-                        : moment(new Date(), DATE_FORMAT),
+                        ? moment(data.startDate, DateFormat.DATE_DEFAULT)
+                        : moment(new Date(), DateFormat.DATE_DEFAULT),
                 });
             };
             dataRoom();
@@ -205,7 +218,7 @@ const FormCreate = ({
                         name='dateOfBirth'
                     >
                         <DatePicker
-                            format={DATE_FORMAT}
+                            format={DateFormat.DATE_DEFAULT}
                             style={{ width: 400 }}
                         />
                     </Form.Item>
@@ -266,7 +279,6 @@ const FormCreate = ({
                     <Form.Item
                         label={<>Tiền phòng</>}
                         name='priceRoom'
-                        initialValue={3000000}
                         colon={false}
                         labelAlign='left'
                     >
@@ -297,7 +309,7 @@ const FormCreate = ({
                         initialValue={moment()}
                     >
                         <DatePicker
-                            format={DATE_FORMAT}
+                            format={DateFormat.DATE_DEFAULT}
                             style={{ width: 400 }}
                         />
                     </Form.Item>

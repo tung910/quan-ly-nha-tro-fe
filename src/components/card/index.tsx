@@ -18,6 +18,7 @@ export interface Props {
     customerName: string;
     idRoom?: string;
     roomRentID?: string;
+    motelID?: string;
     onRemoveMotel: () => void;
 }
 const cx = classNames.bind(styles);
@@ -30,6 +31,7 @@ const CardItem = ({
     customerName,
     onRemoveMotel,
     roomRentID,
+    motelID,
 }: Props) => {
     return (
         <Card
@@ -59,7 +61,7 @@ const CardItem = ({
                 ) : (
                     <Button type='primary' icon={<PlusSquareOutlined />}>
                         <Link
-                            to={`/customer/create?roomId=${idRoom}&&roomName=${roomName}`}
+                            to={`/customer/create?roomId=${idRoom}&&roomName=${roomName}&&motelId=${motelID}`}
                             style={{ color: 'white' }}
                         >
                             Thêm khách

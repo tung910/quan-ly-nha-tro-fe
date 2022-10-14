@@ -18,16 +18,16 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MESSAGES } from '~/consts/message.const';
 import { IService } from '~/types/Service.type';
-import { DATE_FORMAT } from '~/consts/const';
 import { TypeCustomer } from '~/types/Customer';
 import { getProvinces } from '~/api/addressCheckout';
+import { DateFormat } from '~/consts/const';
 const { TabPane } = Tabs;
 
 const CustomerRedirect = () => {
     const { search } = useLocation();
     const roomName = new URLSearchParams(search).get('roomName') || '';
     const roomId = new URLSearchParams(search).get('roomId') || '';
-
+    const motelID = new URLSearchParams(search).get('motelId') || '';
     const [form]: any = Form.useForm();
     const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
     const [provinces, setProvinces] = useState([]);
@@ -38,7 +38,6 @@ const CustomerRedirect = () => {
         if (roomRentID) {
             const dataRoom = async () => {
                 const { data } = await getDetailCustomerToRoom(roomRentID);
-
                 setNewMotelRoomID(data.motelRoomID);
                 setNewdataService(data.service);
                 setNewdataMember(data.member);
@@ -70,10 +69,17 @@ const CustomerRedirect = () => {
                 _id: roomRentID,
                 CustomerInfo: {
                     ...values,
-                    dateOfBirth: moment(values.dateOfBirth).format(DATE_FORMAT),
-                    startDate: moment(values.startDate).format(DATE_FORMAT),
+                    dateOfBirth: values.dateOfBirth
+                        ? moment(values.dateOfBirth).format(
+                              DateFormat.DATE_DEFAULT
+                          )
+                        : undefined,
+                    startDate: moment(values.startDate).format(
+                        DateFormat.DATE_DEFAULT
+                    ),
                     roomName,
                     motelRoomID: newMotelRoomID,
+                    motelID,
                 },
                 Service: service,
                 Member: member,
@@ -86,10 +92,19 @@ const CustomerRedirect = () => {
             const data = {
                 CustomerInfo: {
                     ...values,
-                    dateOfBirth: moment(values.dateOfBirth).format(DATE_FORMAT),
-                    startDate: moment(values.startDate).format(DATE_FORMAT),
-                    dateStart: moment(values.dateStart).format(DATE_FORMAT),
+                    dateOfBirth: values.dateOfBirth
+                        ? moment(values.dateOfBirth).format(
+                              DateFormat.DATE_DEFAULT
+                          )
+                        : undefined,
+                    startDate: moment(values.startDate).format(
+                        DateFormat.DATE_DEFAULT
+                    ),
+                    dateStart: moment(values.dateStart).format(
+                        DateFormat.DATE_DEFAULT
+                    ),
                     motelRoomID: roomId,
+                    motelID,
                     roomName,
                 },
                 Service: service,
@@ -152,6 +167,7 @@ const CustomerRedirect = () => {
                             roomRentID={roomRentID}
                             form={form}
                             roomName={roomName}
+                            roomId={roomId}
                         />
                     </TabPane>
                     <TabPane tab='Dịch vụ' key='tab-b'>

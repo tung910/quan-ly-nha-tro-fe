@@ -7,3 +7,6 @@ export const listDataWater = () => {
 export const editDataWater = (data: any) => {
     return instance.put(`/data-water/edit/${data.data._id}`, data);
 };
+export const getDataWaterByMotelRoomId = (id: string) => {
+    return instance.get(`/data-water/detail/${id}`);
+};
