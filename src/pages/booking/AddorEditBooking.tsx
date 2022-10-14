@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* eslint-disable indent */
 import {
     Button,
     Col,
@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import classNames from 'classnames/bind';
-import styles from './addBooking.module.scss';
+import styles from './Booking.module.scss';
 import { getAllMotel } from '~/api/motel.api';
 import { getListRooms, getRooms } from '~/api/room.api';
 import { convertDate, generatePriceToVND, useGetParam } from '~/utils/helper';
@@ -32,7 +32,7 @@ import { MESSAGES } from '~/consts/message.const';
 
 const Option = Select;
 const cx = classNames.bind(styles);
-const CreateBooking = () => {
+const AddEditBooking = () => {
     const [form] = Form.useForm();
     const [listMotels, setListMotels] = useState<MotelType[]>([]);
     const [listRooms, setListRooms] = useState<RoomType[]>([]);
@@ -54,7 +54,6 @@ const CreateBooking = () => {
 
     const handleSelectRoom = async (id: any) => {
         const { data } = await getRooms(id);
-
         setListRooms(data);
     };
 
@@ -72,7 +71,10 @@ const CreateBooking = () => {
                         DateFormat.DATE_M_D_Y
                     ),
                     dateOfArrival: values.dateOfArrival
-                        ? convertDate(values.bookingDate, DateFormat.DATE_M_D_Y)
+                        ? convertDate(
+                              values.dateOfArrival,
+                              DateFormat.DATE_M_D_Y
+                          )
                         : undefined,
                     telephone: +values.telephone,
                 },
@@ -92,12 +94,13 @@ const CreateBooking = () => {
                     DateFormat.DATE_M_D_Y
                 ),
                 dateOfArrival: values.dateOfArrival
-                    ? convertDate(values.bookingDate, DateFormat.DATE_M_D_Y)
+                    ? convertDate(values.dateOfArrival, DateFormat.DATE_M_D_Y)
                     : undefined,
                 telephone: +values.telephone,
             },
             isUpdate: false,
         };
+
         await createRoomDeposit(result);
         message.success(MESSAGES.ADD_SUCCESS);
         goBack();
@@ -108,6 +111,9 @@ const CreateBooking = () => {
         if (param) {
             const fetchData = async () => {
                 const { data } = await getlistSearchRoomDeposit(param);
+
+                const resposive = await getRooms(data.motelId);
+                setListRooms(resposive.data);
 
                 form.setFieldsValue({
                     bookingDate: moment(data.bookingDate),
@@ -130,40 +136,41 @@ const CreateBooking = () => {
 
     return (
         <div>
-            <div className={cx('title-header')}>
-                <PageHeader
-                    ghost={true}
-                    title={`${param ? 'Sửa' : 'Thêm'} cọc phòng`}
-                    extra={[
-                        <Button
-                            onClick={() => window.history.back()}
-                            key={1}
-                            icon={<RollbackOutlined />}
-                        >
-                            Quay lại
-                        </Button>,
-                        <Button
-                            type='primary'
-                            icon={<CheckOutlined />}
-                            key={2}
-                            htmlType='submit'
-                            onClick={form.submit}
-                        >
-                            Lưu
-                        </Button>,
-                    ]}
-                />
-            </div>
-
             <div>
                 <Form
                     labelCol={{ span: 9 }}
                     autoComplete='off'
-                    style={{ marginTop: 20, padding: 20 }}
+                    style={{ padding: 20 }}
                     wrapperCol={{ span: 16 }}
                     form={param ? form : undefined}
                     onFinish={onSave}
                 >
+                    <div
+                        className={cx('title-header')}
+                        style={{ marginBottom: 30 }}
+                    >
+                        <PageHeader
+                            ghost={true}
+                            title={`${param ? 'Sửa' : 'Thêm'} cọc phòng`}
+                            extra={[
+                                <Button
+                                    onClick={() => window.history.back()}
+                                    key={1}
+                                    icon={<RollbackOutlined />}
+                                >
+                                    Quay lại
+                                </Button>,
+                                <Button
+                                    type='primary'
+                                    icon={<CheckOutlined />}
+                                    key={2}
+                                    htmlType='submit'
+                                >
+                                    Lưu
+                                </Button>,
+                            ]}
+                        />
+                    </div>
                     {/* Row1 */}
                     <Row>
                         <Col span={8}>
@@ -321,6 +328,38 @@ const CreateBooking = () => {
                         </Col>
                     </Row>
                     {/* Row5 */}
+                    {param ? (
+                        <Row>
+                            <Col span={8}>
+                                <Form.Item
+                                    labelAlign='left'
+                                    label={<>Đã đến</>}
+                                    colon={false}
+                                    name='bookingDate'
+                                >
+                                    <DatePicker
+                                        format={DateFormat.DATE_DEFAULT}
+                                        style={{ width: 350 }}
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={8} offset={4}>
+                                <Form.Item
+                                    labelAlign='left'
+                                    label={<>Đã hủy</>}
+                                    colon={false}
+                                    name='bookingDate'
+                                >
+                                    <DatePicker
+                                        format={DateFormat.DATE_DEFAULT}
+                                        style={{ width: 350 }}
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                    ) : (
+                        ''
+                    )}
                     <Col span={8}>
                         <Form.Item
                             labelAlign='left'
@@ -343,4 +382,4 @@ const CreateBooking = () => {
     );
 };
 
-export default CreateBooking;
+export default AddEditBooking;
