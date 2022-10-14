@@ -29,7 +29,6 @@ import {
     CalculatorMoney,
     deleteCalculator,
     listCalculator,
-    listCalculatorByMonth,
 } from '~/api/calculator.api';
 import Table from '~/components/table';
 import { RoomType } from '~/types/RoomType';
@@ -54,6 +53,7 @@ const Calculate = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalReceipt, setIsModalReceipt] = useState(false);
     const [room, setRoom] = useState<RoomType>();
+    const thisMonth = moment(new Date()).format('MM');
 
     const ColumnsData: ColumnTypes[number][] = [
         {
@@ -175,7 +175,9 @@ const Calculate = () => {
             };
 
             await CalculatorMoney(values);
-            const { data } = await listCalculator();
+            const { data } = await listCalculator({
+                month: thisMonth,
+            });
             setCalculator(data);
         } else {
             alert('Mời bạn chọn lại!');
@@ -187,7 +189,7 @@ const Calculate = () => {
 
     const onSearch = (values: any) => {
         const calculatorData = async () => {
-            const { data } = await listCalculatorByMonth({
+            const { data } = await listCalculator({
                 month: moment(values.month).format('MM'),
                 motelID: values.motelID,
             });
@@ -215,7 +217,9 @@ const Calculate = () => {
             try {
                 const [motelRoom, calculatorData] = await Promise.all([
                     getAllMotel(),
-                    listCalculator(),
+                    listCalculator({
+                        month: thisMonth,
+                    }),
                 ]);
                 setListNameMotel(motelRoom.data);
                 setCalculator(calculatorData.data);

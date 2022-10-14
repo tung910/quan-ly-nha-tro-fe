@@ -1,8 +1,6 @@
 import instance from './instance';
-export const listCalculator = () => {
-    return instance.get('/calculator-money/list');
-};
-export const listCalculatorByMonth = (month: any) => {
+
+export const listCalculator = (month: any) => {
     return instance.post('/calculator-money/list', { data: month });
 };
 
