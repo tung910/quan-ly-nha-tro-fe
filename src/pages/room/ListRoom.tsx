@@ -41,6 +41,7 @@ const ListRoom = ({ motelId }: Props) => {
                                 onRemoveMotel={() => onRemove(item._id)}
                                 customerName={item.customerName}
                                 maxPerson={item.maxPerson}
+                                motelID={item.motelID}
                             ></CardItem>
                         );
                     })}
