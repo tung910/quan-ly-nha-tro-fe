@@ -9,9 +9,9 @@ import {
     Form,
     DatePicker,
     Select,
-    message,
-    DatePickerProps,
     Space,
+    message,
+    Modal,
 } from 'antd';
 import {
     SearchOutlined,
@@ -19,24 +19,25 @@ import {
     EyeOutlined,
     DollarCircleOutlined,
     PrinterOutlined,
+    DeleteOutlined,
 } from '@ant-design/icons';
-import { getRooms, getStatisticalRoomStatus, getRoom } from '~/api/room.api';
+import { getRooms, getRoom } from '~/api/room.api';
 import { MotelType } from '~/types/MotelType';
 import { getAllMotel } from '~/api/motel.api';
 import moment from 'moment';
 import {
     CalculatorMoney,
+    deleteCalculator,
+    getCalculator,
     listCalculator,
-    listCalculatorByMonth,
 } from '~/api/calculator.api';
 import Table from '~/components/table';
-import Modal from '~/components/modal';
 import { RoomType } from '~/types/RoomType';
-
 import { getDataWaterByMotelRoomId } from '~/api/data-water.api';
 import { getDataPowerByMotelRoomId } from '~/api/data-power.api';
 import { generatePriceToVND } from '~/utils/helper';
 import { DateFormat } from '~/consts/const';
+import { MESSAGES } from '~/consts/message.const';
 
 const cx = classNames.bind(styles);
 const { Option } = Select;
@@ -49,25 +50,26 @@ const Calculate = () => {
 
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listNameRoom, setListNameRoom] = useState<RoomType[]>([]);
-    const [listStatusRoom, setListStatusRoom] = useState([]);
-    const [calculator, setCalculator] = useState([]);
+    const [calculators, setCalculators] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalReceipt, setIsModalReceipt] = useState(false);
     const [room, setRoom] = useState<RoomType>();
+    const [bill, setBill] = useState([]);
+    const thisMonth = moment(new Date()).format('MM');
 
     const ColumnsData: ColumnTypes[number][] = [
         {
             title: '',
             dataIndex: '_id',
             key: '_id',
-            render: () => {
+            render: (id: string) => {
                 return (
                     <Space>
                         <Button
                             htmlType='submit'
                             type='primary'
                             icon={<EyeOutlined />}
-                            onClick={() => setIsModalReceipt(!isModalReceipt)}
+                            onClick={() => seeTheBill(id)}
                             title='Xem hóa đơn'
                         ></Button>
                         <Button
@@ -83,6 +85,13 @@ const Calculate = () => {
                             icon={<PrinterOutlined />}
                             onClick={() => setIsModalReceipt(!isModalReceipt)}
                             title='In hóa đơn'
+                        />
+                        <Button
+                            htmlType='submit'
+                            icon={<DeleteOutlined />}
+                            onClick={() => handleDelete(id)}
+                            title='Xóa'
+                            danger
                         />
                     </Space>
                 );
@@ -145,6 +154,7 @@ const Calculate = () => {
         const { data } = await getRoom(value);
         setRoom(data);
     };
+
     const onCalculator = async (values: any) => {
         if (room?._id && room?.roomRentID) {
             const dataPower = await getDataPowerByMotelRoomId(room?._id);
@@ -168,8 +178,10 @@ const Calculate = () => {
             };
 
             await CalculatorMoney(values);
-            const { data } = await listCalculator();
-            setCalculator(data);
+            const { data } = await listCalculator({
+                month: thisMonth,
+            });
+            setCalculators(data);
         } else {
             alert('Mời bạn chọn lại!');
         }
@@ -177,34 +189,47 @@ const Calculate = () => {
         form.resetFields();
         setIsModalOpen(false);
     };
-
-    const handleChangeMonth: DatePickerProps['onChange'] = (
-        date,
-        dateString
-    ) => {
-        const month = moment(date).format('MM');
-
+    const seeTheBill = async (id: string) => {
+        setIsModalReceipt(true);
+        const { data } = await getCalculator(id);
+        setBill(data);
+    };
+    const onSearch = (values: any) => {
         const calculatorData = async () => {
-            const { data } = await listCalculatorByMonth({
-                month,
+            const { data } = await listCalculator({
+                month: moment(values.month).format('MM'),
+                motelID: values.motelID,
             });
-            setCalculator(data);
+            setCalculators(data);
         };
         calculatorData();
     };
-
+    const handleDelete = async (id: string) => {
+        Modal.confirm({
+            centered: true,
+            title: `Bạn có đồng ý xóa không ?`,
+            cancelText: 'Cancel',
+            okText: 'Lưu',
+            onOk: async () => {
+                await deleteCalculator(id);
+                setCalculators(
+                    calculators.filter((item: any) => item._id !== id)
+                );
+                message.success(MESSAGES.DEL_SUCCESS);
+            },
+        });
+    };
     useEffect(() => {
         const handleFetchData = async () => {
             try {
-                const [motelRoom, calculatorData, statisticalRoomStatus] =
-                    await Promise.all([
-                        getAllMotel(),
-                        listCalculator(),
-                        getStatisticalRoomStatus(),
-                    ]);
+                const [motelRoom, calculatorData] = await Promise.all([
+                    getAllMotel(),
+                    listCalculator({
+                        month: thisMonth,
+                    }),
+                ]);
                 setListNameMotel(motelRoom.data);
-                setCalculator(calculatorData.data);
-                setListStatusRoom(statisticalRoomStatus.data);
+                setCalculators(calculatorData.data);
             } catch (error) {
                 // message.error(error);
             }
@@ -354,75 +379,81 @@ const Calculate = () => {
             </div>
 
             <div className={cx('header-bottom')}>
-                <Row gutter={[8, 8]}>
-                    <Col span={6}>
-                        <Form.Item label={<>Tháng/năm</>} colon={false}>
-                            <DatePicker
-                                defaultValue={moment()}
-                                clearIcon={null}
-                                format={'MM/YYYY'}
-                                name='date'
-                                picker='month'
-                                onChange={handleChangeMonth}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col span={6}>
-                        <Form.Item label={<>Kỳ</>} colon={false}>
-                            <Select
-                                style={{ width: 150 }}
-                                defaultValue='Tất cả'
-                                showSearch
+                <Form autoComplete='off' form={form} onFinish={onSearch}>
+                    <Row gutter={[8, 8]}>
+                        <Col span={6}>
+                            <Form.Item
+                                label={<>Tháng/năm</>}
+                                name='month'
+                                colon={false}
+                                initialValue={moment()}
                             >
-                                <Option value={2}>Kỳ 30</Option>
-                                <Option value={3}>Kỳ 15</Option>
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col span={6}>
-                        <Form.Item label={<>Nhà</>} colon={false}>
-                            <Select
-                                style={{ width: 150 }}
-                                defaultValue='Tất cả'
-                                showSearch
+                                <DatePicker
+                                    clearIcon={null}
+                                    format={'MM/YYYY'}
+                                    picker='month'
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item
+                                label={<>Kỳ</>}
+                                name='paymentPeriod'
+                                colon={false}
                             >
-                                {listNameMotel &&
-                                    listNameMotel.map((item, index) => {
-                                        return (
-                                            <Option
-                                                key={index}
-                                                value={item._id}
-                                            >
-                                                {item.name}
-                                            </Option>
-                                        );
-                                    })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col span={6}>
-                        <Form.Item label={<>Trạng thái nhà</>} colon={false}>
-                            <Select
-                                style={{ width: 150 }}
-                                defaultValue='Tất cả'
-                                showSearch
+                                <Select
+                                    style={{ width: 150 }}
+                                    defaultValue='Tất cả'
+                                    showSearch
+                                >
+                                    <Option value={2}>Kỳ 30</Option>
+                                    <Option value={3}>Kỳ 15</Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item
+                                label={<>Nhà</>}
+                                name='motelID'
+                                colon={false}
                             >
-                                {listStatusRoom &&
-                                    listStatusRoom.map((item: any, index) => {
-                                        return (
-                                            <Option key={index}>
-                                                {item.statusName}
-                                            </Option>
-                                        );
-                                    })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
+                                <Select
+                                    style={{ width: 150 }}
+                                    defaultValue='Tất cả'
+                                    showSearch
+                                >
+                                    {listNameMotel &&
+                                        listNameMotel.map((item, index) => {
+                                            return (
+                                                <Option
+                                                    key={index}
+                                                    value={item._id}
+                                                >
+                                                    {item.name}
+                                                </Option>
+                                            );
+                                        })}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item colon={false}>
+                                <Button
+                                    type='primary'
+                                    icon={<SearchOutlined />}
+                                    htmlType='submit'
+                                >
+                                    Xem
+                                </Button>
+                                ,
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form>
             </div>
 
             <div>
-                <Table columns={ColumnsData} dataSource={calculator} />
+                <Table columns={ColumnsData} dataSource={calculators} />
                 <Modal
                     open={isModalReceipt}
                     title='Hóa đơn'
@@ -432,12 +463,12 @@ const Calculate = () => {
                         <Button type='primary' key='button_1'>
                             Tải file PDF
                         </Button>,
-                        <Button type='ghost' key='button_1'>
+                        <Button type='ghost' key='button_2'>
                             Gửi mail
                         </Button>,
                         <Button
                             type='primary'
-                            key='button_2'
+                            key='button_3'
                             onClick={() => setIsModalReceipt(false)}
                             danger
                         >
@@ -446,6 +477,44 @@ const Calculate = () => {
                     ]}
                 >
                     <h1>Hóa đơn</h1>
+                    <hr />
+                    {bill &&
+                        bill.map((item: any) => {
+                            return (
+                                <div key={item._id}>
+                                    <p>
+                                        1.Khách hàng:{' '}
+                                        {item.roomRentalDetailID.customerName}
+                                    </p>
+                                    <p>
+                                        2.Phòng:{' '}
+                                        {item.roomRentalDetailID.roomName}
+                                    </p>
+                                    <p>
+                                        3.Sử dụng điện:{' '}
+                                        {item.dataPowerID.useValue} số
+                                    </p>
+                                    <p>
+                                        4.sử dụng nước:{' '}
+                                        {item.dataWaterID.useValue} khối
+                                    </p>
+                                    <hr />
+                                    <p>
+                                        <b>
+                                            Tổng tiền:{' '}
+                                            {generatePriceToVND(
+                                                +item.totalAmount
+                                            )}{' '}
+                                            VND
+                                        </b>
+                                    </p>
+                                    <hr />
+                                    <p>
+                                        <b>Người thanh toán:</b>
+                                    </p>
+                                </div>
+                            );
+                        })}
                 </Modal>
             </div>
         </div>
