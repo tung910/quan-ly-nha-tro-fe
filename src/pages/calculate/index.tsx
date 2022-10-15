@@ -28,6 +28,7 @@ import moment from 'moment';
 import {
     CalculatorMoney,
     deleteCalculator,
+    getCalculator,
     listCalculator,
 } from '~/api/calculator.api';
 import Table from '~/components/table';
@@ -50,10 +51,11 @@ const Calculate = () => {
 
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listNameRoom, setListNameRoom] = useState<RoomType[]>([]);
-    const [calculator, setCalculator] = useState([]);
+    const [calculators, setCalculators] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalReceipt, setIsModalReceipt] = useState(false);
     const [room, setRoom] = useState<RoomType>();
+    const [bill, setBill] = useState([]);
     const thisMonth = moment(new Date()).format('MM');
 
     const ColumnsData: ColumnTypes[number][] = [
@@ -68,7 +70,7 @@ const Calculate = () => {
                             htmlType='submit'
                             type='primary'
                             icon={<EyeOutlined />}
-                            onClick={() => setIsModalReceipt(!isModalReceipt)}
+                            onClick={() => seeTheBill(id)}
                             title='Xem hóa đơn'
                         ></Button>
                         <Button
@@ -153,6 +155,7 @@ const Calculate = () => {
         const { data } = await getRoom(value);
         setRoom(data);
     };
+
     const onCalculator = async (values: any) => {
         if (room?._id && room?.roomRentID) {
             const dataPower = await getDataPowerByMotelRoomId(room?._id);
@@ -179,7 +182,7 @@ const Calculate = () => {
             const { data } = await listCalculator({
                 month: thisMonth,
             });
-            setCalculator(data);
+            setCalculators(data);
         } else {
             alert('Mời bạn chọn lại!');
         }
@@ -187,14 +190,18 @@ const Calculate = () => {
         form.resetFields();
         setIsModalOpen(false);
     };
-
+    const seeTheBill = async (id: string) => {
+        setIsModalReceipt(true);
+        const { data } = await getCalculator(id);
+        setBill(data);
+    };
     const onSearch = (values: any) => {
         const calculatorData = async () => {
             const { data } = await listCalculator({
                 month: moment(values.month).format('MM'),
                 motelID: values.motelID,
             });
-            setCalculator(data);
+            setCalculators(data);
         };
         calculatorData();
     };
@@ -206,8 +213,8 @@ const Calculate = () => {
             okText: 'Lưu',
             onOk: async () => {
                 await deleteCalculator(id);
-                setCalculator(
-                    calculator.filter((item: any) => item._id !== id)
+                setCalculators(
+                    calculators.filter((item: any) => item._id !== id)
                 );
                 message.success(MESSAGES.DEL_SUCCESS);
             },
@@ -223,7 +230,7 @@ const Calculate = () => {
                     }),
                 ]);
                 setListNameMotel(motelRoom.data);
-                setCalculator(calculatorData.data);
+                setCalculators(calculatorData.data);
             } catch (error) {
                 // message.error(error);
             }
@@ -391,7 +398,6 @@ const Calculate = () => {
                                     clearIcon={null}
                                     format={'MM/YYYY'}
                                     picker='month'
-                                    // onChange={handleChangeMonth}
                                 />
                             </Form.Item>
                         </Col>
@@ -453,7 +459,7 @@ const Calculate = () => {
             </div>
 
             <div>
-                <Table columns={ColumnsData} dataSource={calculator} />
+                <Table columns={ColumnsData} dataSource={calculators} />
                 <Modal
                     open={isModalReceipt}
                     title='Hóa đơn'
@@ -463,12 +469,12 @@ const Calculate = () => {
                         <Button type='primary' key='button_1'>
                             Tải file PDF
                         </Button>,
-                        <Button type='ghost' key='button_1'>
+                        <Button type='ghost' key='button_2'>
                             Gửi mail
                         </Button>,
                         <Button
                             type='primary'
-                            key='button_2'
+                            key='button_3'
                             onClick={() => setIsModalReceipt(false)}
                             danger
                         >
@@ -477,6 +483,44 @@ const Calculate = () => {
                     ]}
                 >
                     <h1>Hóa đơn</h1>
+                    <hr />
+                    {bill &&
+                        bill.map((item: any) => {
+                            return (
+                                <div key={item._id}>
+                                    <p>
+                                        1.Khách hàng:{' '}
+                                        {item.roomRentalDetailID.customerName}
+                                    </p>
+                                    <p>
+                                        2.Phòng:{' '}
+                                        {item.roomRentalDetailID.roomName}
+                                    </p>
+                                    <p>
+                                        3.Sử dụng điện:{' '}
+                                        {item.dataPowerID.useValue} số
+                                    </p>
+                                    <p>
+                                        4.sử dụng nước:{' '}
+                                        {item.dataWaterID.useValue} khối
+                                    </p>
+                                    <hr />
+                                    <p>
+                                        <b>
+                                            Tổng tiền:{' '}
+                                            {generatePriceToVND(
+                                                +item.totalAmount
+                                            )}{' '}
+                                            VND
+                                        </b>
+                                    </p>
+                                    <hr />
+                                    <p>
+                                        <b>Người thanh toán:</b>
+                                    </p>
+                                </div>
+                            );
+                        })}
                 </Modal>
             </div>
         </div>
