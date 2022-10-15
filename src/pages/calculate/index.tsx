@@ -46,6 +46,7 @@ type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 
 const Calculate = () => {
     const [form] = Form.useForm();
+    const [formSearch] = Form.useForm();
 
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listNameRoom, setListNameRoom] = useState<RoomType[]>([]);
@@ -374,7 +375,7 @@ const Calculate = () => {
             <div className={cx('header-bottom')}>
                 <Form
                     autoComplete='off'
-                    form={form}
+                    form={formSearch}
                     labelCol={{ span: 5 }}
                     onFinish={onSearch}
                 >
