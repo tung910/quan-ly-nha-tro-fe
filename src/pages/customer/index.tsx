@@ -21,6 +21,8 @@ import { IService } from '~/types/Service.type';
 import { TypeCustomer } from '~/types/Customer';
 import { getProvinces } from '~/api/addressCheckout';
 import { DateFormat } from '~/consts/const';
+import { checkImage } from '~/utils/helper';
+import uploadImg from '~/api/upload-image.api';
 const { TabPane } = Tabs;
 
 const CustomerRedirect = () => {
@@ -34,6 +36,33 @@ const CustomerRedirect = () => {
     const [newdataService, setNewdataService] = useState([]);
     const [newdataMember, setNewdataMember] = useState([]);
     const [newMotelRoomID, setNewMotelRoomID] = useState([]);
+    const [base64Image, setBase64Image] = useState<any>();
+    const [imgPreview, setImgPreview] = useState('');
+
+    const uploadImage = async (base64Image: string | ArrayBuffer | null) => {
+        try {
+            const { data } = await uploadImg(base64Image);
+            return data.url;
+        } catch (err) {
+            return message.error('upload image fail');
+        }
+    };
+
+    const handlerOnChange = (event: any) => {
+        const file = event?.target.files[0];
+        if (!checkImage(file, message)) {
+            return;
+        }
+
+        file.preview = URL.createObjectURL(file);
+        setImgPreview(file.preview);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+            setBase64Image(reader?.result);
+        };
+    };
+
     useEffect(() => {
         if (roomRentID) {
             const dataRoom = async () => {
@@ -64,6 +93,8 @@ const CustomerRedirect = () => {
         setMember(dataSource);
     };
     const onSave = async (values: TypeCustomer) => {
+        const img = await uploadImage(base64Image);
+
         if (roomRentID) {
             const data = {
                 _id: roomRentID,
@@ -106,14 +137,16 @@ const CustomerRedirect = () => {
                     motelRoomID: roomId,
                     motelID,
                     roomName,
+                    img,
                 },
                 Service: service,
                 Member: member,
             };
 
-            await addCustomerToRoom(data);
-            await message.success(MESSAGES.ADD_SUCCESS);
-            navigate('/motel-room');
+            console.log(data);
+            // await addCustomerToRoom(data);
+            // await message.success(MESSAGES.ADD_SUCCESS);
+            // navigate('/motel-room');
         }
     };
 
@@ -168,6 +201,8 @@ const CustomerRedirect = () => {
                             form={form}
                             roomName={roomName}
                             roomId={roomId}
+                            handlerOnChange={handlerOnChange}
+                            imgPreview={imgPreview}
                         />
                     </TabPane>
                     <TabPane tab='Dịch vụ' key='tab-b'>

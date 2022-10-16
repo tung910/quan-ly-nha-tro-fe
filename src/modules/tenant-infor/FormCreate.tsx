@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
 import { getRoom } from '~/api/room.api';
 import { DateFormat } from '~/consts/const';
+import Image from '~/components/image';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
@@ -17,6 +18,8 @@ type Props = {
     roomName: string;
     roomId: string;
     provinces: any;
+    handlerOnChange: (event: any) => void;
+    imgPreview: string;
 };
 
 const FormCreate = ({
@@ -26,6 +29,8 @@ const FormCreate = ({
     form,
     provinces,
     roomId,
+    handlerOnChange,
+    imgPreview,
 }: Props) => {
     useEffect(() => {
         if (roomId) {
@@ -424,9 +429,13 @@ const FormCreate = ({
                     <Form.Item
                         label={<>Hình ảnh</>}
                         colon={false}
+                        name='image'
                         labelAlign='left'
                     >
-                        <Input type='file' style={{ width: 400 }} />
+                        <Image
+                            onChange={handlerOnChange}
+                            imgPreview={imgPreview}
+                        />
                     </Form.Item>
                 </Col>
             </Row>
