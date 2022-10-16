@@ -101,10 +101,14 @@ const AddEditBooking = () => {
             isUpdate: false,
         };
 
-        await createRoomDeposit(result);
-        message.success(MESSAGES.ADD_SUCCESS);
-        goBack();
-        return;
+        try {
+            await createRoomDeposit(result);
+            message.success(MESSAGES.ADD_SUCCESS);
+            goBack();
+            return;
+        } catch (error: any) {
+            message.error(error.messages);
+        }
     };
 
     useEffect(() => {
