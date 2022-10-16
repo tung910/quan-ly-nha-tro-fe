@@ -2,7 +2,7 @@ import { CheckCircleOutlined } from '@ant-design/icons';
 import styles from './signin.module.scss';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { IUser } from '~/types/User.type';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { signIn } from '../userSlice';
 import { useAppDispatch } from '~/app/hooks';
 import { notification } from 'antd';
@@ -14,9 +14,14 @@ const LoginPage = () => {
         handleSubmit,
         formState: { errors },
     } = useForm();
+    const navidate = useNavigate();
     const onSubmit: SubmitHandler<any> = async (data: IUser) => {
         try {
             await dispatch(signIn(data)).unwrap();
+            await notification.success({
+                message: 'Đăng nhập thành công',
+            });
+            return navidate('/');
         } catch (error: any) {
             return notification.error({
                 message: error.messages,
@@ -43,20 +48,6 @@ const LoginPage = () => {
                         )}
                         {/* <span></span> */}
                         <label htmlFor=''>Email đăng nhập</label>
-                    </div>
-                    <div className={styles['txt_field']}>
-                        <input
-                            type='number'
-                            {...register('phone', {
-                                required: true,
-                            })}
-                        />
-                        {errors?.email?.type === 'required' && (
-                            <span className={styles['my-error']}>
-                                Vui lòng không bỏ trống trường này
-                            </span>
-                        )}
-                        <label htmlFor=''>Số điện thoại</label>
                     </div>
                     <div className={styles['txt_field']}>
                         <input
