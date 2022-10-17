@@ -93,8 +93,6 @@ const CustomerRedirect = () => {
         setMember(dataSource);
     };
     const onSave = async (values: TypeCustomer) => {
-        const img = await uploadImage(base64Image);
-
         if (roomRentID) {
             const data = {
                 _id: roomRentID,
@@ -137,16 +135,14 @@ const CustomerRedirect = () => {
                     motelRoomID: roomId,
                     motelID,
                     roomName,
-                    img,
                 },
                 Service: service,
                 Member: member,
             };
 
-            console.log(data);
-            // await addCustomerToRoom(data);
-            // await message.success(MESSAGES.ADD_SUCCESS);
-            // navigate('/motel-room');
+            await addCustomerToRoom(data);
+            await message.success(MESSAGES.ADD_SUCCESS);
+            navigate('/motel-room');
         }
     };
 
@@ -201,8 +197,6 @@ const CustomerRedirect = () => {
                             form={form}
                             roomName={roomName}
                             roomId={roomId}
-                            handlerOnChange={handlerOnChange}
-                            imgPreview={imgPreview}
                         />
                     </TabPane>
                     <TabPane tab='Dịch vụ' key='tab-b'>

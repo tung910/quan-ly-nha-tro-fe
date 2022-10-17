@@ -1,5 +1,14 @@
 /* eslint-disable indent */
-import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from 'antd';
+import {
+    Col,
+    DatePicker,
+    Form,
+    Image,
+    Input,
+    InputNumber,
+    Row,
+    Select,
+} from 'antd';
 import moment from 'moment';
 import classNames from 'classnames/bind';
 import styles from './FormCreate.module.scss';
@@ -7,7 +16,6 @@ import { useEffect } from 'react';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
 import { getRoom } from '~/api/room.api';
 import { DateFormat } from '~/consts/const';
-import Image from '~/components/image';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
@@ -18,8 +26,6 @@ type Props = {
     roomName: string;
     roomId: string;
     provinces: any;
-    handlerOnChange: (event: any) => void;
-    imgPreview: string;
 };
 
 const FormCreate = ({
@@ -29,8 +35,6 @@ const FormCreate = ({
     form,
     provinces,
     roomId,
-    handlerOnChange,
-    imgPreview,
 }: Props) => {
     useEffect(() => {
         if (roomId) {
@@ -432,10 +436,7 @@ const FormCreate = ({
                         name='image'
                         labelAlign='left'
                     >
-                        <Image
-                            onChange={handlerOnChange}
-                            imgPreview={imgPreview}
-                        />
+                        <Image typeof='file' />
                     </Form.Item>
                 </Col>
             </Row>
