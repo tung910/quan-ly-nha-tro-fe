@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { IUser } from '~/types/User.type';
-import { MessageApi } from 'antd/lib/message';
 import { DateFormat } from '~/consts/const';
 
 const generatePriceToVND = (
@@ -20,21 +19,6 @@ const generatePriceToVND = (
         currency: 'VND',
         style: 'currency',
     });
-};
-
-export const checkImage = (
-    file: any,
-    fallback: MessageApi
-): boolean | undefined => {
-    // if (file?.type != 'image/png' || file?.type != 'image/jpeg') {
-    // 	fallback.warning('Vui lòng đúng định dạng');
-    // 	return false;
-    // }
-    if (+file?.size >= 600000) {
-        fallback.warning('Dung lượng ảnh quá lơn');
-        return false;
-    }
-    return true;
 };
 
 const convertDate = (date: any, format = DateFormat.DATE_DEFAULT) => {
