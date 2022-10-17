@@ -34,6 +34,7 @@ const CustomerRedirect = () => {
     const [newdataService, setNewdataService] = useState([]);
     const [newdataMember, setNewdataMember] = useState([]);
     const [newMotelRoomID, setNewMotelRoomID] = useState([]);
+
     useEffect(() => {
         if (roomRentID) {
             const dataRoom = async () => {

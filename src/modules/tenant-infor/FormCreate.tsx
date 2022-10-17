@@ -1,5 +1,14 @@
 /* eslint-disable indent */
-import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from 'antd';
+import {
+    Col,
+    DatePicker,
+    Form,
+    Image,
+    Input,
+    InputNumber,
+    Row,
+    Select,
+} from 'antd';
 import moment from 'moment';
 import classNames from 'classnames/bind';
 import styles from './FormCreate.module.scss';
@@ -424,9 +433,10 @@ const FormCreate = ({
                     <Form.Item
                         label={<>Hình ảnh</>}
                         colon={false}
+                        name='image'
                         labelAlign='left'
                     >
-                        <Input type='file' style={{ width: 400 }} />
+                        <Image typeof='file' />
                     </Form.Item>
                 </Col>
             </Row>
