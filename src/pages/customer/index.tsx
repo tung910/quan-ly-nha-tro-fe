@@ -21,8 +21,6 @@ import { IService } from '~/types/Service.type';
 import { TypeCustomer } from '~/types/Customer';
 import { getProvinces } from '~/api/addressCheckout';
 import { DateFormat } from '~/consts/const';
-import { checkImage } from '~/utils/helper';
-import uploadImg from '~/api/upload-image.api';
 const { TabPane } = Tabs;
 
 const CustomerRedirect = () => {
@@ -36,32 +34,6 @@ const CustomerRedirect = () => {
     const [newdataService, setNewdataService] = useState([]);
     const [newdataMember, setNewdataMember] = useState([]);
     const [newMotelRoomID, setNewMotelRoomID] = useState([]);
-    const [base64Image, setBase64Image] = useState<any>();
-    const [imgPreview, setImgPreview] = useState('');
-
-    const uploadImage = async (base64Image: string | ArrayBuffer | null) => {
-        try {
-            const { data } = await uploadImg(base64Image);
-            return data.url;
-        } catch (err) {
-            return message.error('upload image fail');
-        }
-    };
-
-    const handlerOnChange = (event: any) => {
-        const file = event?.target.files[0];
-        if (!checkImage(file, message)) {
-            return;
-        }
-
-        file.preview = URL.createObjectURL(file);
-        setImgPreview(file.preview);
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => {
-            setBase64Image(reader?.result);
-        };
-    };
 
     useEffect(() => {
         if (roomRentID) {

@@ -3,7 +3,6 @@ import axios from 'axios';
 import { STATUS_CODE } from '~/types/Api-Response.type';
 
 const baseURL = import.meta.env.VITE_BASE_URL;
-export const API_UPLOAD = import.meta.env.VITE_API_UPLOAD;
 const instance = axios.create({
     baseURL,
     headers: {
