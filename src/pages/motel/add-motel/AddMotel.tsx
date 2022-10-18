@@ -8,7 +8,7 @@ const { Option } = Select;
 import { addMotel } from '~/api/motel.api';
 import { useNavigate } from 'react-router-dom';
 import HeaderPage from '~/components/page-header';
-import { MESSAGES } from '~/consts/message.const';
+import { MESSAGES } from '~/constants/message.const';
 import { useEffect, useState } from 'react';
 import {
     getDistrict,

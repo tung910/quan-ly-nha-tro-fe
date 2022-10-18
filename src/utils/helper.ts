@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { IUser } from '~/types/User.type';
-import { DateFormat } from '~/consts/const';
+import { DateFormat } from '~/constants/const';
 
 const generatePriceToVND = (
     price?: number,
@@ -20,7 +20,17 @@ const generatePriceToVND = (
         style: 'currency',
     });
 };
-
+const generateFileToBase64 = (
+    file: any,
+    callback: React.Dispatch<React.SetStateAction<string | ArrayBuffer | null>>
+) => {
+    file.preview = URL.createObjectURL(file);
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+        callback(reader?.result);
+    };
+};
 const convertDate = (date: any, format = DateFormat.DATE_DEFAULT) => {
     return moment(date).format(format);
 };
@@ -3068,4 +3078,10 @@ const exportHtmlToWord = (data: {
     document.body.removeChild(fileDownload);
 };
 
-export { generatePriceToVND, useGetParam, exportHtmlToWord, convertDate };
+export {
+    generatePriceToVND,
+    useGetParam,
+    exportHtmlToWord,
+    convertDate,
+    generateFileToBase64,
+};

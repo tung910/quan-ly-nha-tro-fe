@@ -36,8 +36,8 @@ import { RoomType } from '~/types/RoomType';
 import { getDataWaterByMotelRoomId } from '~/api/data-water.api';
 import { getDataPowerByMotelRoomId } from '~/api/data-power.api';
 import { generatePriceToVND } from '~/utils/helper';
-import { DateFormat } from '~/consts/const';
-import { MESSAGES } from '~/consts/message.const';
+import { DateFormat } from '~/constants/const';
+import { MESSAGES } from '~/constants/message.const';
 
 const cx = classNames.bind(styles);
 const { Option } = Select;
