@@ -22,7 +22,7 @@ import { IDataWater } from '~/types/DataWater.type';
 import { MotelType } from '~/types/MotelType';
 import { getAllMotel } from '~/api/motel.api';
 import { editDataWater, listDataWater } from '~/api/data-water.api';
-import { MESSAGES } from '~/consts/message.const';
+import { MESSAGES } from '~/constants/message.const';
 import moment from 'moment';
 
 const cx = classNames.bind(styles);

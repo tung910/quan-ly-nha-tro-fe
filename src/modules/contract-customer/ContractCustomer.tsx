@@ -5,7 +5,7 @@ import classNames from 'classnames/bind';
 import moment from 'moment';
 import { exportHtmlToWord } from '~/utils/helper';
 import { exportWordContract } from '~/api/export.api';
-import { DateFormat } from '~/consts/const';
+import { DateFormat } from '~/constants/const';
 
 const cx = classNames.bind(styles);
 type Props = {

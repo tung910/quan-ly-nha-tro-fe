@@ -17,8 +17,8 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { DateFormat } from '~/consts/const';
-import { ACTION } from '~/consts/member.const';
+import { DateFormat } from '~/constants/const';
+import { ACTION } from '~/constants/member.const';
 import { DataTable } from '~/types/Member.type';
 import { convertDate } from '~/utils/helper';
 const { Option } = Select;

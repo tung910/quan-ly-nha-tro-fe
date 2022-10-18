@@ -26,7 +26,7 @@
             "~/features/*": ["src/features/*"],
             "~/api/*": ["src/api/*"],
             "~/app/*": ["src/app/*"],
-            "~/consts/*": ["src/consts/*"],
+            "~/constants/*": ["src/constants/*"],
             "~/utils/*": ["src/utils/*"]
         }
     },

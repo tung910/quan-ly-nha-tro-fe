@@ -19,7 +19,7 @@ import { getAllMotel } from '~/api/motel.api';
 import { addRoom } from '~/api/room.api';
 import { useNavigate } from 'react-router-dom';
 import { RoomType } from '~/types/RoomType';
-import { MESSAGES } from '~/consts/message.const';
+import { MESSAGES } from '~/constants/message.const';
 const { Option } = Select;
 const { Dragger } = Upload;
 const cx = classNames.bind(styles);
