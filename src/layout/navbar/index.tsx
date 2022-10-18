@@ -10,6 +10,7 @@ import {
     SwapOutlined,
     AlertOutlined,
     ScheduleOutlined,
+    UserOutlined,
 } from '@ant-design/icons';
 import classNames from 'classnames/bind';
 import styles from './Navbar.module.scss';
@@ -41,6 +42,7 @@ const itemsMenu: MenuItem[] = [
     getItem('Phát sinh', '/other-fee', <AlertOutlined />),
     getItem('Tính tiền', '/calculator-money', <CalculatorOutlined />),
     getItem('Cọc giữ phòng', '/booking', <ScheduleOutlined />),
+    getItem('Tài khoản', '/tenant-account', <UserOutlined />),
 ];
 const Navbar = () => {
     const navigate = useNavigate();

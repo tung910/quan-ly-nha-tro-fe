@@ -15,6 +15,7 @@ import PowerOnly from '~/pages/data-power';
 import Calculate from '~/pages/calculate';
 import BookingRoomDeposit from '~/pages/booking';
 import AddEditBooking from '~/pages/booking/AddorEditBooking';
+import TenantAccount from '~/pages/tenant-account';
 
 export interface Route {
     path: string;
@@ -40,6 +41,7 @@ const routes: Route[] = [
     { path: '/booking', component: BookingRoomDeposit },
     { path: '/booking/create', component: AddEditBooking },
     { path: '/booking/edit-booking', component: AddEditBooking },
+    { path: '/tenant-account', component: TenantAccount },
 ];
 
 export default routes;
