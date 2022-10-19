@@ -33,9 +33,9 @@ import { ColumnsType } from 'antd/lib/table';
 import { Link } from 'react-router-dom';
 import { IBooking } from '~/types/Booking.type';
 import { deleteRoomDeposit, listSearchRoomDeposit } from '~/api/booking.api';
-import { DateFormat } from '~/consts/const';
+import { DateFormat } from '~/constants/const';
 import { convertDate, generatePriceToVND } from '~/utils/helper';
-import { MESSAGES } from '~/consts/message.const';
+import { MESSAGES } from '~/constants/message.const';
 
 const cx = classNames.bind(styles);
 const Option = Select;

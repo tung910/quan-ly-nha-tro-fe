@@ -10,3 +10,6 @@ export enum Role {
     ADMIN = 1,
     USER = 0,
 }
+
+export const BASE_IMG =
+    'https://res.cloudinary.com/dhfndew6y/image/upload/v1666108397/upload-by-nodejs/kbd0oqh53vnet31epfdf.png';

@@ -16,18 +16,23 @@ import {
     getDetailCustomerToRoom,
 } from '~/api/customer.api';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { MESSAGES } from '~/consts/message.const';
+import { MESSAGES } from '~/constants/message.const';
 import { IService } from '~/types/Service.type';
 import { TypeCustomer } from '~/types/Customer';
 import { getProvinces } from '~/api/addressCheckout';
-import { DateFormat } from '~/consts/const';
+import { DateFormat } from '~/constants/const';
+import uploadImg from '~/api/upload-images.api';
+import { useAppDispatch } from '~/app/hooks';
+import { setIsLoading } from '~/feature/service/appSlice';
 const { TabPane } = Tabs;
 
 const CustomerRedirect = () => {
     const { search } = useLocation();
+    const dispatch = useAppDispatch();
     const roomName = new URLSearchParams(search).get('roomName') || '';
     const roomId = new URLSearchParams(search).get('roomId') || '';
     const motelID = new URLSearchParams(search).get('motelId') || '';
+    const [img, setImg] = useState<string | ArrayBuffer | any>('');
     const [form]: any = Form.useForm();
     const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
     const [provinces, setProvinces] = useState([]);
@@ -65,56 +70,61 @@ const CustomerRedirect = () => {
         setMember(dataSource);
     };
     const onSave = async (values: TypeCustomer) => {
-        if (roomRentID) {
-            const data = {
-                _id: roomRentID,
-                CustomerInfo: {
-                    ...values,
-                    dateOfBirth: values.dateOfBirth
-                        ? moment(values.dateOfBirth).format(
-                              DateFormat.DATE_DEFAULT
-                          )
-                        : undefined,
-                    startDate: moment(values.startDate).format(
-                        DateFormat.DATE_DEFAULT
-                    ),
-                    roomName,
-                    motelRoomID: newMotelRoomID,
-                    motelID,
-                },
-                Service: service,
-                Member: member,
-            };
+        dispatch(setIsLoading(true));
+        try {
+            if (roomRentID) {
+                const data = {
+                    _id: roomRentID,
+                    CustomerInfo: {
+                        ...values,
+                        dateOfBirth: values.dateOfBirth
+                            ? moment(values.dateOfBirth).format(
+                                  DateFormat.DATE_DEFAULT
+                              )
+                            : undefined,
+                        startDate: moment(values.startDate).format(
+                            DateFormat.DATE_DEFAULT
+                        ),
+                        roomName,
+                        motelRoomID: newMotelRoomID,
+                        motelID,
+                    },
+                    Service: service,
+                    Member: member,
+                };
+                await editCustomerToRoom(data);
+            } else {
+                const { data: resImg } = await uploadImg(img);
 
-            await editCustomerToRoom(data);
-            await message.success(MESSAGES.EDIT_SUCCESS);
+                const data = {
+                    CustomerInfo: {
+                        ...values,
+                        dateOfBirth: values.dateOfBirth
+                            ? moment(values.dateOfBirth).format(
+                                  DateFormat.DATE_DEFAULT
+                              )
+                            : undefined,
+                        startDate: moment(values.startDate).format(
+                            DateFormat.DATE_DEFAULT
+                        ),
+                        dateStart: moment(values.dateStart).format(
+                            DateFormat.DATE_DEFAULT
+                        ),
+                        motelRoomID: roomId,
+                        motelID,
+                        roomName,
+                        image: resImg.secure_url,
+                    },
+                    Service: service,
+                    Member: member,
+                };
+                await addCustomerToRoom(data);
+            }
+            dispatch(setIsLoading(false));
+            message.success(MESSAGES.ADD_SUCCESS);
             navigate('/motel-room');
-        } else {
-            const data = {
-                CustomerInfo: {
-                    ...values,
-                    dateOfBirth: values.dateOfBirth
-                        ? moment(values.dateOfBirth).format(
-                              DateFormat.DATE_DEFAULT
-                          )
-                        : undefined,
-                    startDate: moment(values.startDate).format(
-                        DateFormat.DATE_DEFAULT
-                    ),
-                    dateStart: moment(values.dateStart).format(
-                        DateFormat.DATE_DEFAULT
-                    ),
-                    motelRoomID: roomId,
-                    motelID,
-                    roomName,
-                },
-                Service: service,
-                Member: member,
-            };
-
-            await addCustomerToRoom(data);
-            await message.success(MESSAGES.ADD_SUCCESS);
-            navigate('/motel-room');
+        } catch (error) {
+            //
         }
     };
 
@@ -169,6 +179,7 @@ const CustomerRedirect = () => {
                             form={form}
                             roomName={roomName}
                             roomId={roomId}
+                            setImg={setImg}
                         />
                     </TabPane>
                     <TabPane tab='Dịch vụ' key='tab-b'>
