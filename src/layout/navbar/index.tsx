@@ -10,9 +10,12 @@ import {
     SwapOutlined,
     AlertOutlined,
     ScheduleOutlined,
+    IdcardOutlined,
 } from '@ant-design/icons';
 import classNames from 'classnames/bind';
 import styles from './Navbar.module.scss';
+import { useAppSelector } from '~/app/hooks';
+import { Role } from '~/consts/const';
 
 const cx = classNames.bind(styles);
 
@@ -42,12 +45,21 @@ const itemsMenu: MenuItem[] = [
     getItem('Tính tiền', '/calculator-money', <CalculatorOutlined />),
     getItem('Cọc giữ phòng', '/booking', <ScheduleOutlined />),
 ];
+
+const itemsMenuUser: MenuItem[] = [
+    getItem('Thông tin khách thuê', '/user', <IdcardOutlined />),
+    getItem('Nhà trọ đang ở', '/user/motel-room', <HomeOutlined />),
+];
 const Navbar = () => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
     const handlerNavigate = ({ key }: { key: string }) => {
         navigate(key);
     };
+    const user = useAppSelector((state: any) => {
+        return state.user.user.role;
+    });
+
     return (
         <nav>
             <div className={cx('logo')}></div>
@@ -56,7 +68,7 @@ const Navbar = () => {
                 onClick={handlerNavigate}
                 selectedKeys={[pathname]}
                 mode='inline'
-                items={itemsMenu}
+                items={user === Role.ADMIN ? itemsMenu : itemsMenuUser}
             />
         </nav>
     );
