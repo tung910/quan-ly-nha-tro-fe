@@ -94,7 +94,7 @@ const CustomerRedirect = () => {
                 };
                 await editCustomerToRoom(data);
             } else {
-                const { data: resImg } = await uploadImg(img);
+                const resImg = await uploadImg(img);
 
                 const data = {
                     CustomerInfo: {
@@ -113,7 +113,7 @@ const CustomerRedirect = () => {
                         motelRoomID: roomId,
                         motelID,
                         roomName,
-                        image: resImg.secure_url,
+                        image: resImg,
                     },
                     Service: service,
                     Member: member,
