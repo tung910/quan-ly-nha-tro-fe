@@ -5,11 +5,10 @@ import { appSelector } from './feature/service/appSlice';
 import SignIn from './feature/user/signIn';
 import SignUpPage from './feature/user/signUp';
 import MainLayout from './layout/main-layout';
-import routes from './routes';
+import routes, { routesUser } from './routes';
 
 function App() {
     const state = useAppSelector((state) => appSelector(state));
-
     return (
         <Spin spinning={state.isLoading}>
             <BrowserRouter>
@@ -18,6 +17,20 @@ function App() {
                     <Route path='/login' element={<SignIn />} />
                     <Route path='/' element={<MainLayout />}>
                         {routes.map((item, index) => {
+                            let Comp;
+                            if (item.component) {
+                                Comp = item.component;
+                            }
+
+                            return (
+                                <Route
+                                    key={index}
+                                    path={item.path}
+                                    element={<Comp />}
+                                ></Route>
+                            );
+                        })}
+                        {routesUser.map((item, index) => {
                             let Comp;
                             if (item.component) {
                                 Comp = item.component;
