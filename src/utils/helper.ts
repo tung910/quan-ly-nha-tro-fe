@@ -1,9 +1,9 @@
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
+import { DateFormat } from '~/constants/const';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { IUser } from '~/types/User.type';
-import { DateFormat } from '~/constants/const';
 
 const generatePriceToVND = (
     price?: number,
