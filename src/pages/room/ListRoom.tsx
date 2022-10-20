@@ -14,6 +14,7 @@ import {
     RetweetOutlined,
     UndoOutlined,
     EyeOutlined,
+    DownloadOutlined,
 } from '@ant-design/icons';
 import Table from '~/components/table';
 import { useAppDispatch } from '~/app/hooks';
@@ -90,6 +91,7 @@ const ListRoom = ({ motelId }: Props) => {
                                 src={avatarCustomer ?? BASE_IMG}
                                 loading='lazy'
                                 width={'60px'}
+                                style={{ marginLeft: 20 }}
                             />
                         }
                     </>
@@ -115,7 +117,34 @@ const ListRoom = ({ motelId }: Props) => {
             },
         },
         {
-            title: 'Hoạt động',
+            title: 'Số tiền đã trả',
+            dataIndex: 'unitPrice',
+            key: 'unitPrice',
+            render: (unitPrice) => {
+                return <>{generatePriceToVND(unitPrice)}</>;
+            },
+        },
+        {
+            title: 'Hợp đồng',
+            dataIndex: '',
+            key: '',
+            render: () => {
+                return (
+                    <>
+                        {
+                            <Tooltip title='Tải xuống'>
+                                <Button
+                                    type='primary'
+                                    icon={<DownloadOutlined />}
+                                ></Button>
+                            </Tooltip>
+                        }
+                    </>
+                );
+            },
+        },
+        {
+            title: '',
             dataIndex: '_id',
             render: (text, record: any) => {
                 return (
@@ -125,6 +154,10 @@ const ListRoom = ({ motelId }: Props) => {
                                 <Tooltip title='Trả phòng'>
                                     <Button
                                         type='primary'
+                                        style={{
+                                            background: 'orange',
+                                            border: 'none',
+                                        }}
                                         icon={<UndoOutlined />}
                                     ></Button>
                                 </Tooltip>
@@ -132,6 +165,10 @@ const ListRoom = ({ motelId }: Props) => {
                                     <Button
                                         type='primary'
                                         icon={<RetweetOutlined />}
+                                        style={{
+                                            background: 'green',
+                                            border: 'none',
+                                        }}
                                     ></Button>
                                 </Tooltip>
                                 <Tooltip title='Xem chi tiết'>
@@ -140,6 +177,10 @@ const ListRoom = ({ motelId }: Props) => {
                                     >
                                         <Button
                                             type='primary'
+                                            style={{
+                                                background: 'black',
+                                                border: 'none',
+                                            }}
                                             icon={<EyeOutlined />}
                                         ></Button>
                                     </Link>
