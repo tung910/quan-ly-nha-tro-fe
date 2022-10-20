@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from 'antd';
-import moment from 'moment';
 import classNames from 'classnames/bind';
-import styles from './FormCreate.module.scss';
-import { useEffect, useState } from 'react';
+import moment from 'moment';
+import { useEffect } from 'react';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
 import { getRoom } from '~/api/room.api';
 import { DateFormat } from '~/constants/const';
 import { generateFileToBase64 } from '~/utils/helper';
+import styles from './FormCreate.module.scss';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
