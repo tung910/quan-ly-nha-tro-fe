@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable camelcase */
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { STATUS_CODE } from '~/types/Api-Response.type';
 
 const baseURL = import.meta.env.VITE_BASE_URL;
@@ -9,8 +10,17 @@ const instance = axios.create({
         'Content-Type': 'application/json',
     },
 });
+
+const persist = localStorage.getItem('persist:root')
+    ? JSON.parse(localStorage.getItem('persist:root') || '')
+    : '';
+const user = persist ? JSON.parse(persist?.user) : '';
 instance.interceptors.request.use(
-    (config) => config,
+    (config: AxiosRequestConfig<any> | any) => {
+        config.headers['Authorization'] = `Bearer ${user?.token || ''}`;
+        config.headers['AuthId'] = String(user?.user?._id || '');
+        return config;
+    },
     (error) => {
         return Promise.reject(error);
     }
