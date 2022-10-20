@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable camelcase */
+import { notification } from 'antd';
 import axios, { AxiosRequestConfig } from 'axios';
 import { STATUS_CODE } from '~/types/Api-Response.type';
 
@@ -35,6 +36,7 @@ instance.interceptors.response.use(
     },
     (error) => {
         const { data } = error.response;
+        notification.error({ message: data?.messages });
         return Promise.reject(data);
     }
 );
