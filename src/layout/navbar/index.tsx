@@ -15,7 +15,7 @@ import {
 import classNames from 'classnames/bind';
 import styles from './Navbar.module.scss';
 import { useAppSelector } from '~/app/hooks';
-import { Role } from '~/consts/const';
+import { Role } from '~/constants/const';
 
 const cx = classNames.bind(styles);
 
