@@ -2,9 +2,9 @@ import { CheckCircleOutlined } from '@ant-design/icons';
 import styles from './signin.module.scss';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { IUser } from '~/types/User.type';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { signIn } from '../userSlice';
-import { useAppDispatch } from '~/app/hooks';
+import { useAppDispatch, useAppSelector } from '~/app/hooks';
 import { notification } from 'antd';
 
 const LoginPage = () => {
@@ -17,10 +17,17 @@ const LoginPage = () => {
     const navidate = useNavigate();
     const onSubmit: SubmitHandler<any> = async (data: IUser) => {
         try {
-            await dispatch(signIn(data)).unwrap();
+            const a = await dispatch(signIn(data)).unwrap();
+            if (a.user.role === 0) {
+                await notification.success({
+                    message: 'Đăng nhập thành công',
+                });
+                return navidate('/user');
+            }
             await notification.success({
                 message: 'Đăng nhập thành công',
             });
+
             return navidate('/');
         } catch (error: any) {
             return notification.error({
