@@ -1,4 +1,13 @@
-import { Form, Input, Row, Col, Upload, Select, InputNumber } from 'antd';
+import {
+    Form,
+    Input,
+    Row,
+    Col,
+    Upload,
+    Select,
+    InputNumber,
+    message,
+} from 'antd';
 import { RollbackOutlined, InboxOutlined } from '@ant-design/icons';
 import { Content } from 'antd/lib/layout/layout';
 import { useEffect, useState } from 'react';
@@ -11,6 +20,9 @@ import HeaderPage from '~/components/page-header';
 import { getAllMotel } from '~/api/motel.api';
 import { editRoom, getRoom } from '~/api/room.api';
 import { RoomType } from '~/types/RoomType';
+import { useAppDispatch } from '~/app/hooks';
+import { setIsLoading } from '~/feature/service/appSlice';
+import { MESSAGES } from '~/constants/message.const';
 const { Option } = Select;
 const { Dragger } = Upload;
 const cx = classNames.bind(styles);
@@ -18,34 +30,39 @@ const { TextArea } = Input;
 
 const EditRoom = () => {
     const [form] = Form.useForm();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const id = (useParams().id as string) || '';
     const [motels, setMotels] = useState<MotelType[]>();
     const [fileList, setFileList] = useState<any>([]);
 
     useEffect(() => {
-        const getMotels = async () => {
-            const { data } = await getAllMotel();
-
-            setMotels(data);
+        const handleFetchData = async () => {
+            dispatch(setIsLoading(true));
+            try {
+                const res = await Promise.all([getAllMotel(), getRoom(id)]);
+                const [{ data: motels }, { data: room }] = res;
+                setMotels(motels);
+                setFileList(room.images);
+                form.setFieldsValue(room);
+            } catch (error) {
+                //
+            }
+            dispatch(setIsLoading(false));
         };
-        getMotels();
-        const readRoom = async () => {
-            const { data } = await getRoom(id);
-
-            form.setFieldsValue(data);
-        };
-        readRoom();
+        handleFetchData();
     }, []);
 
     const onFinish = async (values: RoomType) => {
-        values._id = id;
-        const edit = async () => {
-            await editRoom(values);
-            alert('Bạn thêm thành công!');
+        dispatch(setIsLoading(true));
+        try {
+            await editRoom({ ...values, images: fileList, _id: id });
+            message.success(MESSAGES.EDIT_SUCCESS);
             navigate('/motel-room');
-        };
-        edit();
+        } catch (error) {
+            //
+        }
+        dispatch(setIsLoading(false));
     };
 
     const handleBeforeUpload = (file: any) => {
@@ -65,7 +82,6 @@ const EditRoom = () => {
     return (
         <div>
             <Content>
-                <div></div>
                 <div className={cx('form-edit')}>
                     <Form
                         autoComplete='off'
@@ -231,11 +247,6 @@ const EditRoom = () => {
                                         <p className='ant-upload-text'>
                                             Click or drag file to this area to
                                             upload
-                                        </p>
-                                        <p className='ant-upload-hint'>
-                                            Support for a single or bulk upload.
-                                            Strictly prohibit from uploading
-                                            company data or other band files
                                         </p>
                                     </Dragger>
                                 </Form.Item>

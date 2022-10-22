@@ -11,4 +11,5 @@ export interface RoomType {
     isDebit: boolean;
     customerName: string;
     roomRentID: string;
+    images?: string[];
 }
