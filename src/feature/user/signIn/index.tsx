@@ -17,10 +17,17 @@ const LoginPage = () => {
     const navidate = useNavigate();
     const onSubmit: SubmitHandler<any> = async (data: IUser) => {
         try {
-            const res = await dispatch(signIn(data)).unwrap();
+            const a = await dispatch(signIn(data)).unwrap();
+            if (a.user.role === 0) {
+                await notification.success({
+                    message: 'Đăng nhập thành công',
+                });
+                return navidate('/user');
+            }
             await notification.success({
                 message: 'Đăng nhập thành công',
             });
+
             return navidate('/');
         } catch (error: any) {
             return notification.error({
