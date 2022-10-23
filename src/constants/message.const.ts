@@ -4,5 +4,6 @@ enum MESSAGES {
     EDIT_SUCCESS = 'Sửa thành công',
     ERROR = 'Không thành công ',
     CHECK_ROLE = 'Bạn không có quyền truy cập!',
+    CHANGE_PASSWORD = 'Đổi mật khẩu thành công ',
 }
 export { MESSAGES };

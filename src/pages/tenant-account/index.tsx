@@ -1,16 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, PageHeader, Space, Table } from 'antd';
+import {
+    Button,
+    Form,
+    Input,
+    Modal,
+    PageHeader,
+    Space,
+    Table,
+    message,
+} from 'antd';
 import { DeleteOutlined, KeyOutlined } from '@ant-design/icons';
 
 import styles from './TenantAccount.module.scss';
 import classNames from 'classnames/bind';
-import { getAllAccount } from '~/api/auth.api';
+import { changePassword, getAllAccount } from '~/api/auth.api';
+import { MESSAGES } from '~/constants/message.const';
 const cx = classNames.bind(styles);
 type EditableTableProps = Parameters<typeof Table>[0];
 
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 const TenantAccount = () => {
+    const [form] = Form.useForm();
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [listAccount, setListAccount] = useState([]);
+    const [idAccount, setIdAccount] = useState<string>();
     const ColumnsData: ColumnTypes[number][] = [
         {
             title: 'Nhà',
@@ -44,7 +57,10 @@ const TenantAccount = () => {
                             type='primary'
                             icon={<KeyOutlined />}
                             title='Reset'
-                            onClick={() => handleResetPassword()}
+                            onClick={() => {
+                                setIsModalOpen(true);
+                                setIdAccount(id);
+                            }}
                         ></Button>
                         <Button
                             htmlType='submit'
@@ -59,16 +75,11 @@ const TenantAccount = () => {
             },
         },
     ];
-    const handleResetPassword = async () => {
-        Modal.confirm({
-            centered: true,
-            title: `Bạn có muốn reset password không ?`,
-            cancelText: 'Cancel',
-            okText: 'Lưu',
-            onOk: async () => {
-                //
-            },
-        });
+    const handleChangePassword = async (value: string) => {
+        await changePassword(idAccount, value);
+        form.resetFields();
+        setIsModalOpen(false);
+        message.success(MESSAGES.CHANGE_PASSWORD);
     };
     const handleDeleteAccount = async (id: string) => {
         Modal.confirm({
@@ -96,6 +107,36 @@ const TenantAccount = () => {
                 title='Danh sách tài khoản'
             />
             <Table columns={ColumnsData} dataSource={listAccount} />
+            <Modal
+                title='Nhập mật khẩu mời'
+                open={isModalOpen}
+                onOk={form.submit}
+                onCancel={() => setIsModalOpen(false)}
+            >
+                <Form
+                    autoComplete='off'
+                    form={form}
+                    labelCol={{ span: 5 }}
+                    onFinish={handleChangePassword}
+                >
+                    <Form.Item
+                        colon={false}
+                        labelAlign='left'
+                        name='password'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập mật khẩu!',
+                            },
+                        ]}
+                    >
+                        <Input
+                            type='password'
+                            placeholder='Mời bạn nhập mật khẩu'
+                        />
+                    </Form.Item>
+                </Form>
+            </Modal>
         </div>
     );
 };
