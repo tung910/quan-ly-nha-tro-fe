@@ -10,6 +10,7 @@ import {
     SwapOutlined,
     AlertOutlined,
     ScheduleOutlined,
+    UserOutlined,
     IdcardOutlined,
 } from '@ant-design/icons';
 import classNames from 'classnames/bind';
@@ -44,12 +45,14 @@ const itemsMenu: MenuItem[] = [
     getItem('Phát sinh', '/other-fee', <AlertOutlined />),
     getItem('Tính tiền', '/calculator-money', <CalculatorOutlined />),
     getItem('Cọc giữ phòng', '/booking', <ScheduleOutlined />),
+    getItem('Tài khoản', '/tenant-account', <UserOutlined />),
 ];
 
 const itemsMenuUser: MenuItem[] = [
     getItem('Thông tin khách thuê', '/user', <IdcardOutlined />),
     getItem('Nhà trọ đang ở', '/user/motel-room', <HomeOutlined />),
 ];
+
 const Navbar = () => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
