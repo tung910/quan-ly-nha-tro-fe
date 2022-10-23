@@ -11,5 +11,8 @@ const signUp = (user: IUser) => {
 const verifyOtp = (user: { email: string; otp: string }) => {
     return instance.post('/verify-otp', user);
 };
+const getAllAccount = () => {
+    return instance.get('/users');
+};
 
-export { loginApi, signUp, verifyOtp };
+export { loginApi, signUp, verifyOtp, getAllAccount };

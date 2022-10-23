@@ -1,22 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, PageHeader, Space, Table } from 'antd';
 import { DeleteOutlined, KeyOutlined } from '@ant-design/icons';
 
 import styles from './TenantAccount.module.scss';
 import classNames from 'classnames/bind';
+import { getAllAccount } from '~/api/auth.api';
 const cx = classNames.bind(styles);
 type EditableTableProps = Parameters<typeof Table>[0];
 
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 const TenantAccount = () => {
-    const [listAccount, setListAccount] = useState([
-        {
-            motelID: { name: 'Nhà 1' },
-            roomName: 'P01',
-            customerName: 'Khach 01',
-            email: 'Email@gmail.com',
-        },
-    ]);
+    const [listAccount, setListAccount] = useState([]);
     const ColumnsData: ColumnTypes[number][] = [
         {
             title: 'Nhà',
@@ -57,7 +51,7 @@ const TenantAccount = () => {
                             type='primary'
                             icon={<DeleteOutlined />}
                             title='Xóa'
-                            onClick={() => handleDeleteAccount()}
+                            onClick={() => handleDeleteAccount(id)}
                             danger
                         />
                     </Space>
@@ -76,7 +70,7 @@ const TenantAccount = () => {
             },
         });
     };
-    const handleDeleteAccount = async () => {
+    const handleDeleteAccount = async (id: string) => {
         Modal.confirm({
             centered: true,
             title: `Bạn có muốn xóa tài khoản không ?`,
@@ -87,6 +81,13 @@ const TenantAccount = () => {
             },
         });
     };
+    useEffect(() => {
+        const getAccount = async () => {
+            const { data } = await getAllAccount();
+            setListAccount(data);
+        };
+        getAccount();
+    }, []);
     return (
         <div>
             <PageHeader
