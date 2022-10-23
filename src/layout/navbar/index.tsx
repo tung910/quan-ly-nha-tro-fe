@@ -53,10 +53,6 @@ const itemsMenuUser: MenuItem[] = [
     getItem('Nhà trọ đang ở', '/user/motel-room', <HomeOutlined />),
 ];
 
-const itemsMenuUser: MenuItem[] = [
-    getItem('Thông tin khách thuê', '/user', <IdcardOutlined />),
-    getItem('Nhà trọ đang ở', '/user/motel-room', <HomeOutlined />),
-];
 const Navbar = () => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
