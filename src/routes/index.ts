@@ -18,7 +18,6 @@ import AddEditBooking from '~/pages/booking/AddorEditBooking';
 import TenantAccount from '~/pages/tenant-account';
 import UserInformation from '~/pages/User/user-infomation';
 import UserMotelRoom from '~/pages/User/motelroom-user';
-import PrivateRouter from '~/components/privateRouter';
 
 export interface Route {
     path: string;

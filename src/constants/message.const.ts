@@ -5,5 +5,6 @@ enum MESSAGES {
     ERROR = 'Không thành công ',
     CHECK_ROLE = 'Bạn không có quyền truy cập!',
     CHANGE_PASSWORD = 'Đổi mật khẩu thành công ',
+    CHECK_ADMIN = 'Bạn không có quyền truy cập!',
 }
 export { MESSAGES };
