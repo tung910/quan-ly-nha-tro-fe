@@ -17,5 +17,15 @@ const getAllAccount = () => {
 const changePassword = (id: string, password: string) => {
     return instance.put(`/users/${id}`, password);
 };
+const deleteAccount = (id: string) => {
+    return instance.delete(`/users/delete/${id}`);
+};
 
-export { loginApi, signUp, verifyOtp, getAllAccount, changePassword };
+export {
+    loginApi,
+    signUp,
+    verifyOtp,
+    getAllAccount,
+    changePassword,
+    deleteAccount,
+};

@@ -13,7 +13,7 @@ import { DeleteOutlined, KeyOutlined } from '@ant-design/icons';
 
 import styles from './TenantAccount.module.scss';
 import classNames from 'classnames/bind';
-import { changePassword, getAllAccount } from '~/api/auth.api';
+import { changePassword, deleteAccount, getAllAccount } from '~/api/auth.api';
 import { MESSAGES } from '~/constants/message.const';
 const cx = classNames.bind(styles);
 type EditableTableProps = Parameters<typeof Table>[0];
@@ -23,7 +23,7 @@ const TenantAccount = () => {
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [listAccount, setListAccount] = useState([]);
-    const [idAccount, setIdAccount] = useState<string>();
+    const [idAccount, setIdAccount] = useState<string>('');
     const ColumnsData: ColumnTypes[number][] = [
         {
             title: 'Nhà',
@@ -88,7 +88,11 @@ const TenantAccount = () => {
             cancelText: 'Cancel',
             okText: 'Lưu',
             onOk: async () => {
-                //
+                await deleteAccount(id);
+                setListAccount(
+                    listAccount.filter((item: any) => item._id !== id)
+                );
+                message.success(MESSAGES.DEL_SUCCESS);
             },
         });
     };
