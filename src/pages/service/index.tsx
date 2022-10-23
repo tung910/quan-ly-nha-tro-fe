@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '~/app/hooks';
 import { deleteService, fetchService } from '~/feature/service/serviceSlice';
 import { generatePriceToVND } from '~/utils/helper';
 import { RootState } from '~/app/store';
-import { MESSAGES } from '~/consts/message.const';
+import { MESSAGES } from '~/constants/message.const';
 
 const ServicePage = () => {
     const dispatch = useAppDispatch();

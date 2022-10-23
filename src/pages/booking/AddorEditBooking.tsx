@@ -27,8 +27,8 @@ import {
     getlistSearchRoomDeposit,
     updateRoomDeposit,
 } from '~/api/booking.api';
-import { DateFormat } from '~/consts/const';
-import { MESSAGES } from '~/consts/message.const';
+import { DateFormat } from '~/constants/const';
+import { MESSAGES } from '~/constants/message.const';
 
 const Option = Select;
 const cx = classNames.bind(styles);

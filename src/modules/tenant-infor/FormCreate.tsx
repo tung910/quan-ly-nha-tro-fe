@@ -1,21 +1,13 @@
-/* eslint-disable indent */
-import {
-    Col,
-    DatePicker,
-    Form,
-    Image,
-    Input,
-    InputNumber,
-    Row,
-    Select,
-} from 'antd';
-import moment from 'moment';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from 'antd';
 import classNames from 'classnames/bind';
-import styles from './FormCreate.module.scss';
+import moment from 'moment';
 import { useEffect } from 'react';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
 import { getRoom } from '~/api/room.api';
-import { DateFormat } from '~/consts/const';
+import { DateFormat } from '~/constants/const';
+import { generateFileToBase64 } from '~/utils/helper';
+import styles from './FormCreate.module.scss';
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
@@ -26,6 +18,7 @@ type Props = {
     roomName: string;
     roomId: string;
     provinces: any;
+    setImg: React.Dispatch<any>;
 };
 
 const FormCreate = ({
@@ -35,6 +28,7 @@ const FormCreate = ({
     form,
     provinces,
     roomId,
+    setImg,
 }: Props) => {
     useEffect(() => {
         if (roomId) {
@@ -436,7 +430,17 @@ const FormCreate = ({
                         name='image'
                         labelAlign='left'
                     >
-                        <Image typeof='file' />
+                        <Input
+                            type='file'
+                            onChange={(
+                                event: React.ChangeEvent<HTMLInputElement> | any
+                            ) =>
+                                generateFileToBase64(
+                                    event?.target.files[0],
+                                    setImg
+                                )
+                            }
+                        />
                     </Form.Item>
                 </Col>
             </Row>

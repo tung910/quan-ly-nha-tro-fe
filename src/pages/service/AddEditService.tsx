@@ -13,13 +13,13 @@ import {
 import { useEffect } from 'react';
 import { RollbackOutlined, SaveOutlined } from '@ant-design/icons';
 
-import { serviceTypeOptions } from '~/consts/service.const';
+import { serviceTypeOptions } from '~/constants/service.const';
 import { IService } from '~/types/Service.type';
 import { createService, updateService } from '~/feature/service/serviceSlice';
 import { useAppDispatch } from '~/app/hooks';
 import { useGetParam } from '~/utils/helper';
 import { getServiceAPI } from '~/api/service.api';
-import { MESSAGES } from '~/consts/message.const';
+import { MESSAGES } from '~/constants/message.const';
 const { Option } = Select;
 
 const AddEditService = () => {

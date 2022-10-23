@@ -19,7 +19,10 @@ import { getAllMotel } from '~/api/motel.api';
 import { addRoom } from '~/api/room.api';
 import { useNavigate } from 'react-router-dom';
 import { RoomType } from '~/types/RoomType';
-import { MESSAGES } from '~/consts/message.const';
+import { MESSAGES } from '~/constants/message.const';
+import uploadImg from '~/api/upload-images.api';
+import { useAppDispatch } from '~/app/hooks';
+import { setIsLoading } from '~/feature/service/appSlice';
 const { Option } = Select;
 const { Dragger } = Upload;
 const cx = classNames.bind(styles);
@@ -28,25 +31,27 @@ const { TextArea } = Input;
 const AddRoom = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const [motels, setMotels] = useState<MotelType[]>();
     const [fileList, setFileList] = useState<any>([]);
-
     useEffect(() => {
         const getMotels = async () => {
             const { data } = await getAllMotel();
-
             setMotels(data);
         };
         getMotels();
     }, []);
 
     const onFinish = async (values: RoomType) => {
-        const add = async () => {
-            await addRoom(values);
+        dispatch(setIsLoading(true));
+        try {
+            await addRoom({ ...values, images: fileList });
             message.success(MESSAGES.ADD_SUCCESS);
             navigate('/motel-room');
-        };
-        add();
+        } catch (error) {
+            //
+        }
+        dispatch(setIsLoading(false));
     };
 
     const handleBeforeUpload = (file: any) => {
@@ -66,7 +71,6 @@ const AddRoom = () => {
     return (
         <div>
             <Content>
-                <div></div>
                 <div className={cx('form-edit')}>
                     <Form
                         autoComplete='off'
@@ -232,11 +236,6 @@ const AddRoom = () => {
                                         <p className='ant-upload-text'>
                                             Click or drag file to this area to
                                             upload
-                                        </p>
-                                        <p className='ant-upload-hint'>
-                                            Support for a single or bulk upload.
-                                            Strictly prohibit from uploading
-                                            company data or other band files
                                         </p>
                                     </Dragger>
                                 </Form.Item>
