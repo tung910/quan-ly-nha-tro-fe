@@ -9,7 +9,7 @@ import {
     Table,
     message,
 } from 'antd';
-import { DeleteOutlined, KeyOutlined } from '@ant-design/icons';
+import { LockOutlined, KeyOutlined } from '@ant-design/icons';
 
 import styles from './TenantAccount.module.scss';
 import classNames from 'classnames/bind';
@@ -65,7 +65,7 @@ const TenantAccount = () => {
                         <Button
                             htmlType='submit'
                             type='primary'
-                            icon={<DeleteOutlined />}
+                            icon={<LockOutlined />}
                             title='Xóa'
                             onClick={() => handleDeleteAccount(id)}
                             danger
@@ -86,7 +86,7 @@ const TenantAccount = () => {
             centered: true,
             title: `Bạn có muốn xóa tài khoản không ?`,
             cancelText: 'Cancel',
-            okText: 'Lưu',
+            okText: 'Xóa',
             onOk: async () => {
                 await deleteAccount(id);
                 setListAccount(
