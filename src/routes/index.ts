@@ -17,7 +17,6 @@ import BookingRoomDeposit from '~/pages/booking';
 import AddEditBooking from '~/pages/booking/AddorEditBooking';
 import UserInformation from '~/pages/User/user-infomation';
 import UserMotelRoom from '~/pages/User/motelroom-user';
-import PrivateRouter from '~/components/privateRouter';
 
 export interface Route {
     path: string;
