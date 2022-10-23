@@ -27,7 +27,6 @@ const LoginPage = () => {
             await notification.success({
                 message: 'Đăng nhập thành công',
             });
-
             return navidate('/');
         } catch (error: any) {
             return notification.error({
