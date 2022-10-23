@@ -1,7 +1,8 @@
 import { Spin } from 'antd';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useAppSelector } from './app/hooks';
-import PrivateRouter from './components/privateRouter';
+import PrivateRouter from './components/privateRouter/privateRouterAdmin';
+import PrivateRouterUser from './components/privateRouter/privateRouterUser';
 import { appSelector } from './feature/service/appSlice';
 import SignIn from './feature/user/signIn';
 import SignUpPage from './feature/user/signUp';
@@ -14,46 +15,55 @@ function App() {
         <Spin spinning={state.isLoading}>
             <BrowserRouter>
                 <Routes>
-                    <Route path='/sign-up' element={<SignUpPage />} />
-                    <Route path='/login' element={<SignIn />} />
-                    <Route
-                        path='/'
-                        element={
-                            <PrivateRouter>
-                                <MainLayout />
-                            </PrivateRouter>
-                        }
-                    >
-                        {routes.map((item, index) => {
-                            let Comp;
-                            if (item.component) {
-                                Comp = item.component;
+                    <Route path='/'>
+                        <Route path='/sign-up' element={<SignUpPage />} />
+                        <Route path='/login' element={<SignIn />} />
+                        <Route
+                            path='/'
+                            element={
+                                <PrivateRouter>
+                                    <MainLayout />
+                                </PrivateRouter>
                             }
+                        >
+                            {routes.map((item, index) => {
+                                let Comp;
+                                if (item.component) {
+                                    Comp = item.component;
+                                }
 
-                            return (
-                                <Route
-                                    key={index}
-                                    path={item.path}
-                                    element={<Comp />}
-                                ></Route>
-                            );
-                        })}
-                    </Route>
-                    <Route path='/' element={<MainLayout />}>
-                        {routesUser.map((item, index) => {
-                            let Comp;
-                            if (item.component) {
-                                Comp = item.component;
+                                return (
+                                    <Route
+                                        key={index}
+                                        path={item.path}
+                                        element={<Comp />}
+                                    ></Route>
+                                );
+                            })}
+                        </Route>
+                        <Route
+                            path='/'
+                            element={
+                                <PrivateRouterUser>
+                                    <MainLayout />
+                                </PrivateRouterUser>
                             }
+                        >
+                            {routesUser.map((item, index) => {
+                                let Comp;
+                                if (item.component) {
+                                    Comp = item.component;
+                                }
 
-                            return (
-                                <Route
-                                    key={index}
-                                    path={item.path}
-                                    element={<Comp />}
-                                ></Route>
-                            );
-                        })}
+                                return (
+                                    <Route
+                                        key={index}
+                                        path={item.path}
+                                        element={<Comp />}
+                                    ></Route>
+                                );
+                            })}
+                        </Route>
                     </Route>
                 </Routes>
             </BrowserRouter>
