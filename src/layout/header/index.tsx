@@ -1,65 +1,64 @@
 import {
-    MenuUnfoldOutlined,
-    MenuFoldOutlined,
-    SearchOutlined,
-    QuestionCircleOutlined,
     BellOutlined,
+    MenuFoldOutlined,
+    MenuUnfoldOutlined,
+    QuestionCircleOutlined,
+    SearchOutlined,
 } from '@ant-design/icons';
-import { Avatar, Badge, Dropdown, Image, Layout, Menu } from 'antd';
+import { Badge, Button, Dropdown, Layout, Menu } from 'antd';
 import classNames from 'classnames/bind';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '~/app/hooks';
+import { logOut } from '~/feature/user/userSlice';
 import styles from './Header.module.scss';
 const cx = classNames.bind(styles);
 
 const { Header: HeaderAntd } = Layout;
 
-const menu = (
-    <Menu
-        items={[
-            {
-                key: '1',
-                label: (
-                    <a
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        href='https://www.antgroup.com'
-                    >
-                        Thông tin tài khoản
-                    </a>
-                ),
-            },
-            {
-                key: '2',
-                label: (
-                    <a
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        href='https://www.antgroup.com'
-                    >
-                        Đổi mật khẩu
-                    </a>
-                ),
-            },
-            {
-                key: '3',
-                label: (
-                    <a
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        href='https://www.antgroup.com'
-                    >
-                        Đăng xuất
-                    </a>
-                ),
-            },
-        ]}
-    />
-);
 interface HeaderProps {
     collapsed: boolean;
     setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
+    const { user }: any = useAppSelector((state) => {
+        return state.user;
+    });
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
+    const handleLogOut = async () => {
+        try {
+            dispatch(logOut());
+            navigate('/login');
+        } catch (error) {
+            //
+        }
+    };
+
+    const menu = (
+        <Menu
+            items={[
+                {
+                    key: '1',
+                    label: <Button type='text'>Thông tin tài khoản</Button>,
+                },
+                {
+                    key: '2',
+                    label: <Button type='text'>Đổi mật khẩu</Button>,
+                },
+                {
+                    key: '3',
+                    label: (
+                        <Button type='text' onClick={handleLogOut}>
+                            Đăng xuất
+                        </Button>
+                    ),
+                },
+            ]}
+        />
+    );
+
     return (
         <HeaderAntd className={cx('header')}>
             {React.createElement(
@@ -78,19 +77,10 @@ const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
                     <BellOutlined style={{ fontSize: 18, marginRight: 20 }} />
                 </Badge>
                 <Dropdown overlay={menu}>
-                    <Avatar
-                        style={{ marginLeft: 20 }}
-                        src={
-                            <Image
-                                src='https://joeschmoe.io/api/v1/random'
-                                style={{ width: 32 }}
-                            />
-                        }
-                    />
+                    <span style={{ marginRight: 20, textAlign: 'center' }}>
+                        {user.name}
+                    </span>
                 </Dropdown>
-                <span style={{ marginRight: 20, textAlign: 'center' }}>
-                    Nguyễn Xuân Tường
-                </span>
             </div>
         </HeaderAntd>
     );

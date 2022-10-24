@@ -1,25 +1,25 @@
-import { Button, Space, Tooltip, Image, Spin } from 'antd';
-import classNames from 'classnames/bind';
-import styles from './ListRoom.module.scss';
-import { generatePriceToVND } from '~/utils/helper';
+import {
+    DeleteOutlined,
+    DownloadOutlined,
+    EditOutlined,
+    EyeOutlined,
+    RetweetOutlined,
+    UndoOutlined,
+    UserAddOutlined,
+} from '@ant-design/icons';
+import { Button, Image, Space, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getRooms, removeRoom } from '~/api/room.api';
-import { RoomType } from '~/types/RoomType';
-import {
-    EditOutlined,
-    UserAddOutlined,
-    DeleteOutlined,
-    RetweetOutlined,
-    UndoOutlined,
-    EyeOutlined,
-    DownloadOutlined,
-} from '@ant-design/icons';
-import Table from '~/components/table';
 import { useAppDispatch } from '~/app/hooks';
-import { setIsLoading } from '~/feature/service/appSlice';
+import Table from '~/components/table';
 import { BASE_IMG } from '~/constants/const';
+import { setIsLoading } from '~/feature/service/appSlice';
+import { RoomType } from '~/types/RoomType';
+import { generatePriceToVND } from '~/utils/helper';
+import styles from './ListRoom.module.scss';
 export interface Props {
     motelId: string;
 }
@@ -30,13 +30,13 @@ const ListRoom = ({ motelId }: Props) => {
     const [rooms, setRooms] = useState<RoomType[]>([]);
 
     useEffect(() => {
-        const Room = async () => {
+        const room = async () => {
             dispatch(setIsLoading(true));
             const { data } = await getRooms(motelId);
             setRooms(data);
             dispatch(setIsLoading(false));
         };
-        Room();
+        room();
     }, []);
 
     const onRemove = async (id: string) => {
@@ -47,7 +47,7 @@ const ListRoom = ({ motelId }: Props) => {
         }
     };
 
-    const defaultColums: ColumnsType<object> | undefined = [
+    const defaultColumns: ColumnsType<object> | undefined = [
         {
             title: '',
             dataIndex: '_id',
@@ -126,19 +126,26 @@ const ListRoom = ({ motelId }: Props) => {
         },
         {
             title: 'Hợp đồng',
-            dataIndex: '',
-            key: '',
-            render: () => {
+            dataIndex: 'roomRentID',
+            key: 'roomRentID',
+            render: (roomRentID) => {
                 return (
                     <>
-                        {
+                        {roomRentID && (
                             <Tooltip title='Tải xuống'>
                                 <Button
                                     type='primary'
-                                    icon={<DownloadOutlined />}
+                                    icon={
+                                        <Link
+                                            to={`/export-pdf?roomRentId=${roomRentID}`}
+                                            target='_blank'
+                                        >
+                                            <DownloadOutlined />
+                                        </Link>
+                                    }
                                 ></Button>
                             </Tooltip>
-                        }
+                        )}
                     </>
                 );
             },
@@ -221,7 +228,7 @@ const ListRoom = ({ motelId }: Props) => {
 
     return (
         <div className={cx('table')}>
-            <Table dataSource={rooms} columns={defaultColums} />
+            <Table dataSource={rooms} columns={defaultColumns} />
         </div>
     );
 };

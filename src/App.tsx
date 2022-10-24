@@ -1,16 +1,18 @@
 import { Spin } from 'antd';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { useAppSelector } from './app/hooks';
-import PrivateRouter from './components/privateRouter/privateRouterAdmin';
-import PrivateRouterUser from './components/privateRouter/privateRouterUser';
 import { appSelector } from './feature/service/appSlice';
 import SignIn from './feature/user/signIn';
 import SignUpPage from './feature/user/signUp';
 import MainLayout from './layout/main-layout';
+import ExportPdf from './pages/export-pdf';
 import routes, { routesUser } from './routes';
 
 function App() {
     const state = useAppSelector((state) => appSelector(state));
+    const user = useAppSelector((state: any) => {
+        return state.user.user;
+    });
     return (
         <Spin spinning={state.isLoading}>
             <BrowserRouter>
@@ -18,12 +20,16 @@ function App() {
                     <Route path='/'>
                         <Route path='/sign-up' element={<SignUpPage />} />
                         <Route path='/login' element={<SignIn />} />
+                        <Route path='/export-pdf' element={<ExportPdf />} />
+
                         <Route
                             path='/'
                             element={
-                                <PrivateRouter>
+                                +user.role === 1 ? (
                                     <MainLayout />
-                                </PrivateRouter>
+                                ) : (
+                                    <Navigate to='/login' />
+                                )
                             }
                         >
                             {routes.map((item, index) => {
@@ -42,11 +48,13 @@ function App() {
                             })}
                         </Route>
                         <Route
-                            path='/'
+                            path='/user'
                             element={
-                                <PrivateRouterUser>
+                                +user.role === 0 ? (
                                     <MainLayout />
-                                </PrivateRouterUser>
+                                ) : (
+                                    <Navigate to='/login' />
+                                )
                             }
                         >
                             {routesUser.map((item, index) => {

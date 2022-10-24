@@ -45,7 +45,11 @@ const OweRoomFees = () => {
     return (
         <div>
             <Card title='Danh sách khách nợ tiền phòng' bordered={true}>
-                <Table dataSource={dataSource} columns={columnsOweRoomFees} />
+                <Table
+                    dataSource={dataSource}
+                    columns={columnsOweRoomFees}
+                    rowKey='key'
+                />
             </Card>
         </div>
     );

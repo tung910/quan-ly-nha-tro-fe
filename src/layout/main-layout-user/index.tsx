@@ -7,7 +7,6 @@ import Navbar from '../navbar';
 import Header from '../header';
 import styles from './DashboardUser.module.scss';
 
-
 const cx = classNames.bind(styles);
 const { Content, Sider } = Layout;
 

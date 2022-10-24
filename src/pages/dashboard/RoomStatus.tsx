@@ -1,13 +1,13 @@
 import { Card } from 'antd';
 import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
+    ArcElement,
     BarElement,
+    CategoryScale,
+    Chart as ChartJS,
+    Legend,
+    LinearScale,
     Title,
     Tooltip,
-    Legend,
-    ArcElement,
 } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import { StateRoomStatus } from '.';

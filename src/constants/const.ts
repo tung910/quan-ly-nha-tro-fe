@@ -1,4 +1,4 @@
-export enum DateFormat {
+enum DateFormat {
     DATE_DEFAULT = 'DD/MM/YYYY',
     TIME = 'HH:mm',
     TIME_FULL = 'HH:mm:ss',
@@ -6,10 +6,19 @@ export enum DateFormat {
     DATE_M_D_Y = 'MM/DD/YYYY',
 }
 
-export enum Role {
+enum Role {
     ADMIN = 1,
     USER = 0,
 }
 
-export const BASE_IMG =
+enum NotificationType {
+    OPEN = 'open',
+    SUCCESS = 'success',
+    INFO = 'info',
+    WARNING = 'warning',
+}
+
+const BASE_IMG =
     'https://res.cloudinary.com/dhfndew6y/image/upload/v1666108397/upload-by-nodejs/kbd0oqh53vnet31epfdf.png';
+
+export { DateFormat, Role, BASE_IMG, NotificationType };
