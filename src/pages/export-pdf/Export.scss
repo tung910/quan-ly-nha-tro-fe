@@ -1,0 +1,715 @@
+/* Font Definitions */
+@font-face {
+    font-family: Wingdings;
+    panose-1: 5 0 0 0 0 0 0 0 0 0;
+    mso-font-charset: 2;
+    mso-generic-font-family: auto;
+    mso-font-pitch: variable;
+    mso-font-signature: 0 268435456 0 0 -2147483648 0;
+}
+@font-face {
+    font-family: 'Cambria Math';
+    panose-1: 2 4 5 3 5 4 6 3 2 4;
+    mso-font-charset: 0;
+    mso-generic-font-family: roman;
+    mso-font-pitch: variable;
+    mso-font-signature: -536869121 1107305727 33554432 0 415 0;
+}
+/* Style Definitions */
+p.MsoNormal,
+li.MsoNormal,
+div.MsoNormal {
+    mso-style-unhide: no;
+    mso-style-qformat: yes;
+    mso-style-parent: '';
+    margin: 0cm;
+    mso-pagination: widow-orphan;
+    font-size: 12pt;
+    font-family: 'Times New Roman', serif;
+    mso-fareast-font-family: 'Times New Roman';
+    mso-fareast-theme-font: minor-fareast;
+}
+a:link,
+span.MsoHyperlink {
+    mso-style-noshow: yes;
+    mso-style-priority: 99;
+    color: blue;
+    text-decoration: underline;
+    text-underline: single;
+}
+a:visited,
+span.MsoHyperlinkFollowed {
+    mso-style-noshow: yes;
+    mso-style-priority: 99;
+    color: purple;
+    text-decoration: underline;
+    text-underline: single;
+}
+p {
+    mso-style-noshow: yes;
+    mso-style-priority: 99;
+    mso-margin-top-alt: auto;
+    margin-right: 0cm;
+    mso-margin-bottom-alt: auto;
+    margin-left: 0cm;
+    mso-pagination: widow-orphan;
+    font-size: 12pt;
+    font-family: 'Times New Roman', serif;
+    mso-fareast-font-family: 'Times New Roman';
+    mso-fareast-theme-font: minor-fareast;
+}
+p.msonormal0,
+li.msonormal0,
+div.msonormal0 {
+    mso-style-name: msonormal;
+    mso-style-unhide: no;
+    mso-margin-top-alt: auto;
+    margin-right: 0cm;
+    mso-margin-bottom-alt: auto;
+    margin-left: 0cm;
+    mso-pagination: widow-orphan;
+    font-size: 12pt;
+    font-family: 'Times New Roman', serif;
+    mso-fareast-font-family: 'Times New Roman';
+    mso-fareast-theme-font: minor-fareast;
+}
+.MsoChpDefault {
+    mso-style-type: export-only;
+    mso-default-props: yes;
+    font-size: 10pt;
+    mso-ansi-font-size: 10pt;
+    mso-bidi-font-size: 10pt;
+}
+@page WordSection1 {
+    size: 612pt 792pt;
+    margin: 57.6pt 72pt 57.6pt 72pt;
+    mso-header-margin: 36pt;
+    mso-footer-margin: 36pt;
+    mso-paper-source: 0;
+}
+div.WordSection1 {
+    page: WordSection1;
+}
+/* List Definitions */
+@list l0 {
+    mso-list-id: 5714517;
+    mso-list-template-ids: 957926690;
+}
+@list l0:level1 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 36pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Symbol;
+}
+@list l0:level2 {
+    mso-level-number-format: bullet;
+    mso-level-text: o;
+    mso-level-tab-stop: 72pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: 'Courier New';
+    mso-bidi-font-family: 'Times New Roman';
+}
+@list l0:level3 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 108pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l0:level4 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 144pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l0:level5 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 180pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l0:level6 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 216pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l0:level7 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 252pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l0:level8 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 288pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l0:level9 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 324pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l1 {
+    mso-list-id: 663044915;
+    mso-list-template-ids: -1893564628;
+}
+@list l1:level1 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 36pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Symbol;
+}
+@list l1:level2 {
+    mso-level-number-format: bullet;
+    mso-level-text: o;
+    mso-level-tab-stop: 72pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: 'Courier New';
+    mso-bidi-font-family: 'Times New Roman';
+}
+@list l1:level3 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 108pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l1:level4 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 144pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l1:level5 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 180pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l1:level6 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 216pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l1:level7 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 252pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l1:level8 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 288pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l1:level9 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 324pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l2 {
+    mso-list-id: 813906759;
+    mso-list-template-ids: -1835519156;
+}
+@list l2:level1 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 36pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Symbol;
+}
+@list l2:level2 {
+    mso-level-number-format: bullet;
+    mso-level-text: o;
+    mso-level-tab-stop: 72pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: 'Courier New';
+    mso-bidi-font-family: 'Times New Roman';
+}
+@list l2:level3 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 108pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l2:level4 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 144pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l2:level5 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 180pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l2:level6 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 216pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l2:level7 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 252pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l2:level8 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 288pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l2:level9 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 324pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l3 {
+    mso-list-id: 864635239;
+    mso-list-template-ids: 1598305798;
+}
+@list l3:level1 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 36pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Symbol;
+}
+@list l3:level2 {
+    mso-level-number-format: bullet;
+    mso-level-text: o;
+    mso-level-tab-stop: 72pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: 'Courier New';
+    mso-bidi-font-family: 'Times New Roman';
+}
+@list l3:level3 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 108pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l3:level4 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 144pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l3:level5 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 180pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l3:level6 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 216pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l3:level7 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 252pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l3:level8 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 288pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l3:level9 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 324pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l4 {
+    mso-list-id: 1353799827;
+    mso-list-template-ids: -1553592572;
+}
+@list l4:level1 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 36pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Symbol;
+}
+@list l4:level2 {
+    mso-level-number-format: bullet;
+    mso-level-text: o;
+    mso-level-tab-stop: 72pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: 'Courier New';
+    mso-bidi-font-family: 'Times New Roman';
+}
+@list l4:level3 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 108pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l4:level4 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 144pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l4:level5 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 180pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l4:level6 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 216pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l4:level7 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 252pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l4:level8 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 288pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l4:level9 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 324pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l5 {
+    mso-list-id: 1616863490;
+    mso-list-template-ids: -1690037512;
+}
+@list l5:level1 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 36pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Symbol;
+}
+@list l5:level2 {
+    mso-level-number-format: bullet;
+    mso-level-text: o;
+    mso-level-tab-stop: 72pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: 'Courier New';
+    mso-bidi-font-family: 'Times New Roman';
+}
+@list l5:level3 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 108pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l5:level4 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 144pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l5:level5 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 180pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l5:level6 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 216pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l5:level7 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 252pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l5:level8 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 288pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l5:level9 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 324pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l6 {
+    mso-list-id: 1693336881;
+    mso-list-template-ids: 1821013932;
+}
+@list l6:level1 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 36pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Symbol;
+}
+@list l6:level2 {
+    mso-level-number-format: bullet;
+    mso-level-text: o;
+    mso-level-tab-stop: 72pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: 'Courier New';
+    mso-bidi-font-family: 'Times New Roman';
+}
+@list l6:level3 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 108pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l6:level4 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 144pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l6:level5 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 180pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l6:level6 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 216pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l6:level7 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 252pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l6:level8 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 288pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+@list l6:level9 {
+    mso-level-number-format: bullet;
+    mso-level-text: ;
+    mso-level-tab-stop: 324pt;
+    mso-level-number-position: left;
+    text-indent: -18pt;
+    mso-ansi-font-size: 10pt;
+    font-family: Wingdings;
+}
+ol {
+    margin-bottom: 0cm;
+}
+ul {
+    margin-bottom: 0cm;
+}
+/* Style Definitions */
+table.MsoNormalTable {
+    mso-style-name: 'Table Normal';
+    mso-tstyle-rowband-size: 0;
+    mso-tstyle-colband-size: 0;
+    mso-style-noshow: yes;
+    mso-style-priority: 99;
+    mso-style-parent: '';
+    mso-padding-alt: 0cm 5.4pt 0cm 5.4pt;
+    mso-para-margin: 0cm;
+    mso-pagination: widow-orphan;
+    font-size: 10pt;
+    font-family: 'Times New Roman', serif;
+}

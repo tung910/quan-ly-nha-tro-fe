@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Dashboard from '~/pages/dashboard';
 import { ReactNode } from 'react';
+import BookingRoomDeposit from '~/pages/booking';
+import AddEditBooking from '~/pages/booking/AddorEditBooking';
+import Calculate from '~/pages/calculate';
+import CustomerRedirect from '~/pages/customer';
+import Dashboard from '~/pages/dashboard';
+import PowerOnly from '~/pages/data-power';
 import Motel from '~/pages/motel';
 import AddMotel from '~/pages/motel/add-motel/AddMotel';
 import EditMotel from '~/pages/motel/edit-motel/EditMotel';
+import ListCustomer from '~/pages/motel/list-customer';
 import AddRoom from '~/pages/room/add-room/AddRoom';
-import CustomerRedirect from '~/pages/customer';
+import EditRoom from '~/pages/room/edit-room';
 import ServicePage from '~/pages/service';
 import AddEditService from '~/pages/service/AddEditService';
-import ListCustomer from '~/pages/motel/list-customer';
-import EditRoom from '~/pages/room/edit-room';
-import WaterPage from '~/pages/water';
-import PowerOnly from '~/pages/data-power';
-import Calculate from '~/pages/calculate';
-import BookingRoomDeposit from '~/pages/booking';
-import AddEditBooking from '~/pages/booking/AddorEditBooking';
 import TenantAccount from '~/pages/tenant-account';
-import UserInformation from '~/pages/User/user-infomation';
 import UserMotelRoom from '~/pages/User/motelroom-user';
+import UserInformation from '~/pages/User/user-infomation';
+import WaterPage from '~/pages/water';
 
 export interface Route {
     path: string;
