@@ -45,6 +45,7 @@ const AvailableRooms = () => {
                 <Table
                     dataSource={dataSource}
                     columns={columnsAvailableRooms}
+                    rowKey='key'
                 />
             </Card>
         </div>

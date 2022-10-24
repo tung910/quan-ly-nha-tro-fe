@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { Card } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+import { useState } from 'react';
 import Table from '~/components/table';
 const columnsExpiresContract: ColumnsType = [
     {
@@ -33,6 +33,7 @@ const ExpiresContract = () => {
                 <Table
                     dataSource={dataSource}
                     columns={columnsExpiresContract}
+                    rowKey='key'
                 />
             </Card>
         </div>

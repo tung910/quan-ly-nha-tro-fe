@@ -1,29 +1,29 @@
 /* eslint-disable no-console */
-import classNames from 'classnames/bind';
-import styles from './DataPower.module.scss';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import { CheckOutlined, SaveOutlined, SearchOutlined } from '@ant-design/icons';
 import {
     Button,
     Col,
+    DatePicker,
+    Form,
+    InputNumber,
+    message,
+    Modal,
     PageHeader,
     Row,
-    Form,
-    DatePicker,
     Select,
     Table,
-    InputNumber,
-    Modal,
-    message,
 } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
-import { SearchOutlined, CheckOutlined, SaveOutlined } from '@ant-design/icons';
+import classNames from 'classnames/bind';
+import moment from 'moment';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { editDataPower, listDataPower } from '~/api/data-power.api';
+import { getAllMotel } from '~/api/motel.api';
 import { getStatisticalRoomStatus } from '~/api/room.api';
+import { MESSAGES } from '~/constants/message.const';
 import { IDataPower } from '~/types/DataPower.type';
 import { MotelType } from '~/types/MotelType';
-import { getAllMotel } from '~/api/motel.api';
-import { editDataPower, listDataPower } from '~/api/data-power.api';
-import { MESSAGES } from '~/constants/message.const';
-import moment from 'moment';
+import styles from './DataPower.module.scss';
 
 const cx = classNames.bind(styles);
 const { Option } = Select;
