@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
 import { Col, Form, Row } from 'antd';
 import classNames from 'classnames/bind';
+import { useEffect, useState } from 'react';
 
-import Revenue from './Revenue';
-import RoomStatus from './RoomStatus';
-import styles from './Dasboard.module.scss';
-import AvailableRooms from './AvailableRooms';
-import OweRoomFees from './OweRoomFees';
-import UnfinishedWork from './UnfinishedWork';
-import ExpiresContract from './ExpiresContract';
 import { getStatisticalRoomStatus } from '~/api/room.api';
 import { IStatistical } from '~/types/Statistical.type';
+import AvailableRooms from './AvailableRooms';
+import styles from './Dasboard.module.scss';
+import ExpiresContract from './ExpiresContract';
+import OweRoomFees from './OweRoomFees';
+import Revenue from './Revenue';
+import RoomStatus from './RoomStatus';
+import UnfinishedWork from './UnfinishedWork';
 
 const cx = classNames.bind(styles);
 export interface StateRoomStatus {

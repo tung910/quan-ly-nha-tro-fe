@@ -5,6 +5,10 @@ const loginApi = (user: IUser) => {
     return instance.post('/signin', user);
 };
 
+const logOutApi = () => {
+    return instance.delete('/logout');
+};
+
 const signUp = (user: IUser) => {
     return instance.post('/signup', user);
 };
@@ -28,4 +32,5 @@ export {
     getAllAccount,
     changePassword,
     deleteAccount,
+    logOutApi,
 };
