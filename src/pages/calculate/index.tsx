@@ -13,6 +13,7 @@ import {
     message,
     Modal,
     Input,
+    InputNumber,
 } from 'antd';
 import {
     SearchOutlined,
@@ -40,6 +41,7 @@ import { getDataPowerByMotelRoomId } from '~/api/data-power.api';
 import { generatePriceToVND } from '~/utils/helper';
 import { DateFormat } from '~/consts/const';
 import { MESSAGES } from '~/consts/message.const';
+import { log } from 'console';
 
 const cx = classNames.bind(styles);
 const { Option } = Select;
@@ -57,10 +59,10 @@ const Calculate = () => {
     const [calculators, setCalculators] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalReceipt, setIsModalReceipt] = useState(false);
-    const [prepayment, setPrepayment] = useState(false);
+    const [prepayment, setPrepayment] = useState(false)
     const [room, setRoom] = useState<RoomType>();
     const [bill, setBill] = useState([]);
-    const [idCalculator, setIdCalculator] = useState<string>();
+    const [idCalculator, setIdCalculator] = useState<string>('');
     const thisMonth = moment(new Date()).format('MM');
 
     const ColumnsData: ColumnTypes[number][] = [
@@ -205,20 +207,32 @@ const Calculate = () => {
         setBill(data);
     };
     const onPayment = async (values: any) =>{
-        
-            const data = {
+    //  console.log('123',values)
+            
+        values = {
             ...values,
             _id: idCalculator,
             invoiceDate: moment(values.invoiceDate).format(
                             DateFormat.DATE_DEFAULT
                         ),
-            month: moment(values.month).format('MM'),
-            year: moment(values.month).format('YYYY'),
         }
-        await paymentMoney(data)
+        
+
+
+        await paymentMoney(values)
+        
+        
+        const { data } = await getCalculator(idCalculator);
+        
+        setCalculators(data) 
+
+        
+
         
         
         setPrepayment(false)
+        
+            
         
     }
    
@@ -581,7 +595,21 @@ const Calculate = () => {
                                 labelAlign='left'
                                 name='payAmount'
                         >
-                                <Input />
+                                <InputNumber
+                                        style={{ width: '375px' }}
+                                        formatter={(value) =>
+                                            ` ${value}`.replace(
+                                                /\B(?=(\d{3})+(?!\d))/g,
+                                                ','
+                                            )
+                                        }
+                                        parser={(value) =>
+                                            ` ${value}`.replace(/\$\s?|(,*)/g,
+                                                ''
+                                            )
+                                        }
+                                        addonAfter='VNĐ'
+                                    />
                                 </Form.Item>
                             </Form>
                         </>
