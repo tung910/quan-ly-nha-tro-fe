@@ -207,8 +207,6 @@ const Calculate = () => {
         setBill(data);
     };
     const onPayment = async (values: any) =>{
-    //  console.log('123',values)
-            
         values = {
             ...values,
             _id: idCalculator,
@@ -216,24 +214,13 @@ const Calculate = () => {
                             DateFormat.DATE_DEFAULT
                         ),
         }
-        
-
-
         await paymentMoney(values)
-        
-        
+         
         const { data } = await getCalculator(idCalculator);
-        
+
         setCalculators(data) 
 
-        
-
-        
-        
         setPrepayment(false)
-        
-            
-        
     }
    
 
