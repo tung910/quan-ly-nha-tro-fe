@@ -10,7 +10,7 @@ import ExpiresContract from './ExpiresContract';
 import OweRoomFees from './OweRoomFees';
 import Revenue from './Revenue';
 import RoomStatus from './RoomStatus';
-import UnfinishedWork from './UnfinishedWork';
+import PaymentTracking from './Paymenttracking';
 
 const cx = classNames.bind(styles);
 export interface StateRoomStatus {
@@ -63,7 +63,7 @@ const Dashboard = () => {
                         <ExpiresContract />
                     </Col>
                     <Col span={12}>
-                        <UnfinishedWork />
+                        <PaymentTracking />
                     </Col>
                 </Row>
             </Form>

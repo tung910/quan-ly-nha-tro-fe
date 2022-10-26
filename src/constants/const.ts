@@ -4,6 +4,9 @@ enum DateFormat {
     TIME_FULL = 'HH:mm:ss',
     TIME_AM_PM = 'DD/MM/YYYY hh:mm A',
     DATE_M_D_Y = 'MM/DD/YYYY',
+    DATE_M_Y = 'MM/YYYY',
+    DATE_Y = 'YYYY',
+    DATE_M = 'MM',
 }
 
 enum Role {
