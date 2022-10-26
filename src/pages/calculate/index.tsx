@@ -1,43 +1,45 @@
-import classNames from 'classnames/bind';
-import styles from './Calculate.module.scss';
-import { useEffect, useState } from 'react';
+import {
+    CalculatorOutlined,
+    DeleteOutlined,
+    DollarCircleOutlined,
+    EyeOutlined,
+    PrinterOutlined,
+    SearchOutlined,
+} from '@ant-design/icons';
 import {
     Button,
     Col,
-    PageHeader,
-    Row,
-    Form,
     DatePicker,
-    Select,
-    Space,
+    Form,
     message,
     Modal,
+    PageHeader,
+    Row,
+    Select,
+    Space,
 } from 'antd';
-import {
-    SearchOutlined,
-    CalculatorOutlined,
-    EyeOutlined,
-    DollarCircleOutlined,
-    PrinterOutlined,
-    DeleteOutlined,
-} from '@ant-design/icons';
-import { getRooms, getRoom } from '~/api/room.api';
-import { MotelType } from '~/types/MotelType';
-import { getAllMotel } from '~/api/motel.api';
+import classNames from 'classnames/bind';
 import moment from 'moment';
+import { useEffect, useState } from 'react';
 import {
     CalculatorMoney,
     deleteCalculator,
     getCalculator,
     listCalculator,
+    sendEmail,
 } from '~/api/calculator.api';
-import Table from '~/components/table';
-import { RoomType } from '~/types/RoomType';
-import { getDataWaterByMotelRoomId } from '~/api/data-water.api';
 import { getDataPowerByMotelRoomId } from '~/api/data-power.api';
-import { generatePriceToVND } from '~/utils/helper';
+import { getDataWaterByMotelRoomId } from '~/api/data-water.api';
+import { getAllMotel } from '~/api/motel.api';
+import { getRoom, getRooms } from '~/api/room.api';
+import notification from '~/components/notification';
+import Table from '~/components/table';
 import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
+import { MotelType } from '~/types/MotelType';
+import { RoomType } from '~/types/RoomType';
+import { generatePriceToVND } from '~/utils/helper';
+import styles from './Calculate.module.scss';
 
 const cx = classNames.bind(styles);
 const { Option } = Select;
@@ -55,7 +57,7 @@ const Calculate = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalReceipt, setIsModalReceipt] = useState(false);
     const [room, setRoom] = useState<RoomType>();
-    const [bill, setBill] = useState([]);
+    const [bill, setBill] = useState<any>([]);
     const thisMonth = moment(new Date()).format('MM');
 
     const ColumnsData: ColumnTypes[number][] = [
@@ -195,6 +197,14 @@ const Calculate = () => {
         const { data } = await getCalculator(id);
         setBill(data);
     };
+    const handleSendEmail = async (id: string) => {
+        try {
+            await sendEmail(id);
+            notification({ message: 'Gửi email thành công' });
+        } catch (error) {
+            //
+        }
+    };
     const onSearch = (values: any) => {
         const calculatorData = async () => {
             const { data } = await listCalculator({
@@ -220,6 +230,8 @@ const Calculate = () => {
             },
         });
     };
+    console.log(bill);
+
     useEffect(() => {
         const handleFetchData = async () => {
             try {
@@ -469,7 +481,11 @@ const Calculate = () => {
                         <Button type='primary' key='button_1'>
                             Tải file PDF
                         </Button>,
-                        <Button type='ghost' key='button_2'>
+                        <Button
+                            type='ghost'
+                            key='button_2'
+                            onClick={() => handleSendEmail(bill[0]._id)}
+                        >
                             Gửi mail
                         </Button>,
                         <Button
