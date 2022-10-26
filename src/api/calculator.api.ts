@@ -13,6 +13,6 @@ export const CalculatorMoney = (data: any) => {
 export const deleteCalculator = (id: string) => {
     return instance.delete(`/calculator-money/delete/${id}`);
 };
-export const paymentMoney = (data: any) =>{
-    return instance.put(`/calculator-money/payment/${data._id}`,{data})
-}
+export const paymentMoney = (data: any, id: string) => {
+    return instance.put(`/calculator-money/payment/${id}`, { data });
+};
