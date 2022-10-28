@@ -7,16 +7,28 @@ import {
     UndoOutlined,
     UserAddOutlined,
 } from '@ant-design/icons';
-import { Button, Image, Space, Tooltip } from 'antd';
+import {
+    Button,
+    Image,
+    Space,
+    Tooltip,
+    Modal,
+    Form,
+    DatePicker,
+    Select,
+} from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import classNames from 'classnames/bind';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getAllMotel } from '~/api/motel.api';
 import { getRooms, removeRoom } from '~/api/room.api';
 import { useAppDispatch } from '~/app/hooks';
 import Table from '~/components/table';
-import { BASE_IMG } from '~/constants/const';
+import { BASE_IMG, DateFormat } from '~/constants/const';
 import { setIsLoading } from '~/feature/service/appSlice';
+import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { generatePriceToVND } from '~/utils/helper';
 import styles from './ListRoom.module.scss';
@@ -24,21 +36,36 @@ export interface Props {
     motelId: string;
 }
 const cx = classNames.bind(styles);
-
+const { Option } = Select;
 const ListRoom = ({ motelId }: Props) => {
+    const [form] = Form.useForm();
     const dispatch = useAppDispatch();
     const [rooms, setRooms] = useState<RoomType[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
+    const [listNameRoom, setListNameRoom] = useState<RoomType[]>([]);
 
     useEffect(() => {
-        const room = async () => {
-            dispatch(setIsLoading(true));
-            const { data } = await getRooms(motelId);
-            setRooms(data);
-            dispatch(setIsLoading(false));
+        const handleFetchData = async () => {
+            try {
+                dispatch(setIsLoading(true));
+                const [motels, rooms] = await Promise.all([
+                    getAllMotel(),
+                    getRooms(motelId),
+                ]);
+                setListNameMotel(motels.data);
+                setRooms(rooms.data);
+                dispatch(setIsLoading(false));
+            } catch (error) {
+                // message.error(error);
+            }
         };
-        room();
+        handleFetchData();
     }, []);
-
+    const onClickMotel = async (value: string) => {
+        const { data } = await getRooms(value);
+        setListNameRoom(data);
+    };
     const onRemove = async (id: string) => {
         const confirm = window.confirm('Bạn muốn xóa không?');
         if (confirm) {
@@ -176,6 +203,7 @@ const ListRoom = ({ motelId }: Props) => {
                                             background: 'green',
                                             border: 'none',
                                         }}
+                                        onClick={() => setIsModalOpen(true)}
                                     ></Button>
                                 </Tooltip>
                                 <Tooltip title='Xem chi tiết'>
@@ -229,6 +257,95 @@ const ListRoom = ({ motelId }: Props) => {
     return (
         <div className={cx('table')}>
             <Table dataSource={rooms} columns={defaultColumns} />
+            <div>
+                <Modal
+                    title='Đổi phòng'
+                    open={isModalOpen}
+                    onOk={form.submit}
+                    onCancel={() => setIsModalOpen(false)}
+                >
+                    <>
+                        <Form
+                            autoComplete='off'
+                            form={form}
+                            labelCol={{ span: 5 }}
+                        >
+                            <Form.Item
+                                label={<>Ngày</>}
+                                colon={false}
+                                labelAlign='left'
+                                name='invoiceDate'
+                                initialValue={moment()}
+                            >
+                                <DatePicker
+                                    format={DateFormat.DATE_DEFAULT}
+                                    style={{ width: '375px' }}
+                                />
+                            </Form.Item>
+
+                            <Form.Item
+                                label={<>Nhà</>}
+                                colon={false}
+                                labelAlign='left'
+                                name='motelID'
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Vui lòng chọn!',
+                                    },
+                                ]}
+                            >
+                                <Select
+                                    placeholder='Mời bạn chọn nhà'
+                                    showSearch
+                                    onChange={onClickMotel}
+                                >
+                                    {listNameMotel &&
+                                        listNameMotel.map((item, index) => {
+                                            return (
+                                                <Option
+                                                    key={index}
+                                                    value={item._id}
+                                                >
+                                                    {item.name}
+                                                </Option>
+                                            );
+                                        })}
+                                </Select>
+                            </Form.Item>
+                            <Form.Item
+                                label={<>Phòng</>}
+                                colon={false}
+                                labelAlign='left'
+                                name='roomID'
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Vui lòng chọn!',
+                                    },
+                                ]}
+                            >
+                                <Select
+                                    placeholder='Mời bạn chọn phòng'
+                                    showSearch
+                                >
+                                    {listNameRoom &&
+                                        listNameRoom.map((item, index) => {
+                                            return (
+                                                <Option
+                                                    key={index}
+                                                    value={item._id}
+                                                >
+                                                    {item.roomName}
+                                                </Option>
+                                            );
+                                        })}
+                                </Select>
+                            </Form.Item>
+                        </Form>
+                    </>
+                </Modal>
+            </div>
         </div>
     );
 };
