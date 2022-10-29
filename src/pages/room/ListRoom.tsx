@@ -16,17 +16,20 @@ import {
     Form,
     DatePicker,
     Select,
+    message,
 } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { changeRoom } from '~/api/customer.api';
 import { getAllMotel } from '~/api/motel.api';
 import { getRooms, removeRoom } from '~/api/room.api';
 import { useAppDispatch } from '~/app/hooks';
 import Table from '~/components/table';
 import { BASE_IMG, DateFormat } from '~/constants/const';
+import { MESSAGES } from '~/constants/message.const';
 import { setIsLoading } from '~/feature/service/appSlice';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
@@ -44,6 +47,7 @@ const ListRoom = ({ motelId }: Props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listNameRoom, setListNameRoom] = useState<RoomType[]>([]);
+    const [roomRentId, setRoomRentId] = useState<string>('');
 
     useEffect(() => {
         const handleFetchData = async () => {
@@ -64,7 +68,28 @@ const ListRoom = ({ motelId }: Props) => {
     }, []);
     const onClickMotel = async (value: string) => {
         const { data } = await getRooms(value);
-        setListNameRoom(data);
+        const room: any = [];
+        data.map((item: RoomType) => {
+            if (item.isRent === false) {
+                room.push(item);
+            }
+        });
+        setListNameRoom(room);
+    };
+    const onChangeRoom = async (values: any) => {
+        const data = {
+            DateChangeRoom: moment(values.date).format(DateFormat.DATE_DEFAULT),
+            NewRoomID: values.roomID,
+        };
+        await changeRoom(data, roomRentId);
+        const listRooms = async () => {
+            const { data } = await getRooms(motelId);
+            setRooms(data);
+        };
+        listRooms();
+        setIsModalOpen(false);
+        form.resetFields();
+        message.success(MESSAGES.CHANGE_ROOM);
     };
     const onRemove = async (id: string) => {
         const confirm = window.confirm('Bạn muốn xóa không?');
@@ -203,7 +228,10 @@ const ListRoom = ({ motelId }: Props) => {
                                             background: 'green',
                                             border: 'none',
                                         }}
-                                        onClick={() => setIsModalOpen(true)}
+                                        onClick={() => {
+                                            setRoomRentId(record.roomRentID);
+                                            setIsModalOpen(true);
+                                        }}
                                     ></Button>
                                 </Tooltip>
                                 <Tooltip title='Xem chi tiết'>
@@ -269,12 +297,13 @@ const ListRoom = ({ motelId }: Props) => {
                             autoComplete='off'
                             form={form}
                             labelCol={{ span: 5 }}
+                            onFinish={onChangeRoom}
                         >
                             <Form.Item
                                 label={<>Ngày</>}
                                 colon={false}
                                 labelAlign='left'
-                                name='invoiceDate'
+                                name='date'
                                 initialValue={moment()}
                             >
                                 <DatePicker
@@ -291,7 +320,7 @@ const ListRoom = ({ motelId }: Props) => {
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Vui lòng chọn!',
+                                        message: 'Vui lòng chọn nhà!',
                                     },
                                 ]}
                             >
@@ -321,7 +350,7 @@ const ListRoom = ({ motelId }: Props) => {
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Vui lòng chọn!',
+                                        message: 'Vui lòng chọn phòng!',
                                     },
                                 ]}
                             >
@@ -342,6 +371,10 @@ const ListRoom = ({ motelId }: Props) => {
                                         })}
                                 </Select>
                             </Form.Item>
+                            <p>
+                                Bạn nhập chỉ số điện và nước của phòng này trước
+                                khi đổi để tính luôn tiền điện và nước.
+                            </p>
                         </Form>
                     </>
                 </Modal>
