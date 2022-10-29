@@ -169,7 +169,7 @@ const Calculate = () => {
     };
 
     const onCalculator = async (values: any) => {
-        if (room?._id && room?.roomRentID) {
+        if (room?._id && room?.isRent === true) {
             const dataPower = await getDataPowerByMotelRoomId(room?._id);
             const dataWater = await getDataWaterByMotelRoomId(room?._id);
             values = {
