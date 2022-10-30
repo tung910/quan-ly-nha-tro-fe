@@ -14,3 +14,6 @@ export const editCustomerToRoom = (data: any) => {
 export const getDetailCustomerToRoom = (id: string) => {
     return instance.get(`/room-rental-detail/${id}`);
 };
+export const changeRoom = (data: any, id: string) => {
+    return instance.post(`/room-rental-detail/change-room/${id}`, data);
+};
