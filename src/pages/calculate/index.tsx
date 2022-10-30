@@ -170,8 +170,12 @@ const Calculate = () => {
 
     const onCalculator = async (values: any) => {
         if (room?._id && room?.isRent === true) {
-            const dataPower = await getDataPowerByMotelRoomId(room?._id);
-            const dataWater = await getDataWaterByMotelRoomId(room?._id);
+            const dataRoom = {
+                motelRoomID: room._id,
+                month: moment(values.month).format('MM'),
+            };
+            const dataPower = await getDataPowerByMotelRoomId(dataRoom);
+            const dataWater = await getDataWaterByMotelRoomId(dataRoom);
             values = {
                 data: [
                     {
@@ -256,7 +260,7 @@ const Calculate = () => {
             centered: true,
             title: `Bạn có đồng ý xóa không ?`,
             cancelText: 'Cancel',
-            okText: 'Lưu',
+            okText: 'Xóa',
             onOk: async () => {
                 await deleteCalculator(id);
                 setCalculators(
