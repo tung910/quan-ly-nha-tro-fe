@@ -9,7 +9,7 @@ import {
     Table,
     message,
 } from 'antd';
-import { LockOutlined, KeyOutlined } from '@ant-design/icons';
+import { DeleteOutlined, KeyOutlined } from '@ant-design/icons';
 
 import styles from './TenantAccount.module.scss';
 import classNames from 'classnames/bind';
@@ -65,7 +65,7 @@ const TenantAccount = () => {
                         <Button
                             htmlType='submit'
                             type='primary'
-                            icon={<LockOutlined />}
+                            icon={<DeleteOutlined />}
                             title='Xóa'
                             onClick={() => handleDeleteAccount(id)}
                             danger
