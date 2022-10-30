@@ -11,7 +11,7 @@ interface Props {
 
 const notification = ({
     placement = 'topRight',
-    type = NotificationType.OPEN,
+    type = NotificationType.SUCCESS,
     message,
     description,
 }: Props) => {
