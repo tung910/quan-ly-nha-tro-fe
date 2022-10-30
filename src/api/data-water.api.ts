@@ -1,12 +1,12 @@
 import instance from './instance';
 
-export const listDataWater = () => {
-    return instance.get('/data-water/list');
+export const listDataWater = (month: any) => {
+    return instance.post('/data-water/list', { data: month });
 };
 
 export const editDataWater = (data: any) => {
     return instance.put(`/data-water/edit/${data.data._id}`, data);
 };
-export const getDataWaterByMotelRoomId = (id: string) => {
-    return instance.get(`/data-water/detail/${id}`);
+export const getDataWaterByMotelRoomId = (data: any) => {
+    return instance.post(`/data-water/detail/`, { data });
 };

@@ -247,9 +247,10 @@ const PowerOnly = () => {
     const [dataPower, setDataPower] = useState<IDataPower[]>([]);
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listStatusRoom, setListStatusRoom] = useState([]);
+    const thisMonth = moment(new Date()).format('MM');
     useEffect(() => {
         const listMotelRoom = async () => {
-            const { data } = await listDataPower();
+            const { data } = await listDataPower({ month: thisMonth });
 
             setDataPower(data);
         };

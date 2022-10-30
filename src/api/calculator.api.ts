@@ -16,3 +16,6 @@ export const deleteCalculator = (id: string) => {
 export const sendEmail = (id: string) => {
     return instance.get('/calculator-money/sendMailBill/' + id);
 };
+export const paymentMoney = (data: any, id: string) => {
+    return instance.put(`/calculator-money/payment/${id}`, { data });
+};
