@@ -247,9 +247,10 @@ const PowerOnly = () => {
     const [dataWater, setDataWater] = useState<IDataWater[]>([]);
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listStatusRoom, setListStatusRoom] = useState([]);
+    const thisMonth = moment(new Date()).format('MM');
     useEffect(() => {
         const listMotelRoom = async () => {
-            const { data } = await listDataWater();
+            const { data } = await listDataWater({ month: thisMonth });
 
             setDataWater(data);
         };
