@@ -65,6 +65,14 @@ const UserInformation = () => {
                                         colon={false}
                                         labelAlign='left'
                                         name='phone'
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message:
+                                                    'Vui lòng nhập số điện thoại của bạn!',
+                                            },
+                                        ]}
+                                        validateTrigger={['onBlur', 'onChange']}
                                     >
                                         <Input />
                                     </Form.Item>
@@ -80,6 +88,14 @@ const UserInformation = () => {
                                         colon={false}
                                         labelAlign='left'
                                         name='citizenIdentificationNumber'
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message:
+                                                    'Vui lòng nhập số chứng minh của bạn!',
+                                            },
+                                        ]}
+                                        validateTrigger={['onBlur', 'onChange']}
                                     >
                                         <Input />
                                     </Form.Item>
@@ -90,6 +106,14 @@ const UserInformation = () => {
                                         colon={false}
                                         labelAlign='left'
                                         name='address'
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message:
+                                                    'Vui lòng nhập địa chỉ của bạn!',
+                                            },
+                                        ]}
+                                        validateTrigger={['onBlur', 'onChange']}
                                     >
                                         <Input />
                                     </Form.Item>
