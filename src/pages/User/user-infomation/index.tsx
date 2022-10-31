@@ -2,11 +2,18 @@ import { Button, Col, Form, Image, Input, PageHeader, Row } from 'antd';
 import classNames from 'classnames/bind';
 import styles from './UserInfor.module.scss';
 import { CheckOutlined, UndoOutlined } from '@ant-design/icons';
+import { useAppSelector } from '~/app/hooks';
 
 const cx = classNames.bind(styles);
 
 const UserInformation = () => {
     const [form] = Form.useForm();
+
+    useAppSelector((state: any) => {
+        return form.setFieldsValue({
+            ...state.user.user,
+        });
+    });
     return (
         <div>
             <div>
@@ -25,7 +32,7 @@ const UserInformation = () => {
                             <Image
                                 className={cx('image')}
                                 width={300}
-                                src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+                                src='https://taytou.com/wp-content/uploads/2022/08/Anh-Avatar-dai-dien-mac-dinh-nam-nen-xam.jpeg'
                             />
                             <Input
                                 type='file'
@@ -39,7 +46,7 @@ const UserInformation = () => {
                                         label={<>Họ và tên</>}
                                         colon={false}
                                         labelAlign='left'
-                                        name='customerName'
+                                        name='name'
                                         rules={[
                                             {
                                                 required: true,
@@ -57,7 +64,7 @@ const UserInformation = () => {
                                         label={<>Số điện thoại</>}
                                         colon={false}
                                         labelAlign='left'
-                                        name='phoneNumber'
+                                        name='phone'
                                     >
                                         <Input />
                                     </Form.Item>
@@ -69,70 +76,20 @@ const UserInformation = () => {
                             >
                                 <Col span={12}>
                                     <Form.Item
-                                        label={<>Email</>}
+                                        label={<>Số CMND</>}
                                         colon={false}
                                         labelAlign='left'
-                                        name='email'
+                                        name='citizenIdentificationNumber'
                                     >
                                         <Input />
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
                                     <Form.Item
-                                        label={<>Số điện thoại</>}
+                                        label={<>Địa chỉ</>}
                                         colon={false}
                                         labelAlign='left'
-                                        name='phoneNumber'
-                                    >
-                                        <Input />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Row
-                                gutter={[16, 16]}
-                                className={cx('width-row-bottom')}
-                            >
-                                <Col span={12}>
-                                    <Form.Item
-                                        label={<>Email</>}
-                                        colon={false}
-                                        labelAlign='left'
-                                        name='email'
-                                    >
-                                        <Input />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item
-                                        label={<>Số điện thoại</>}
-                                        colon={false}
-                                        labelAlign='left'
-                                        name='phoneNumber'
-                                    >
-                                        <Input />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Row
-                                gutter={[16, 16]}
-                                className={cx('width-row-bottom')}
-                            >
-                                <Col span={12}>
-                                    <Form.Item
-                                        label={<>Email</>}
-                                        colon={false}
-                                        labelAlign='left'
-                                        name='email'
-                                    >
-                                        <Input />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item
-                                        label={<>Số điện thoại</>}
-                                        colon={false}
-                                        labelAlign='left'
-                                        name='phoneNumber'
+                                        name='address'
                                     >
                                         <Input />
                                     </Form.Item>
@@ -141,11 +98,11 @@ const UserInformation = () => {
                         </Col>
                     </Row>
 
-                    <Row style={{ float: 'right', marginRight: 80 }}>
+                    <Row style={{ marginLeft: '35%' }}>
                         <Button
                             type='default'
                             icon={<UndoOutlined />}
-                            style={{ float: 'right', marginRight: 20 }}
+                            style={{ marginRight: 20 }}
                         >
                             Nhập lại
                         </Button>
