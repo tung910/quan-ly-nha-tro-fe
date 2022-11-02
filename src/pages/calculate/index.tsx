@@ -25,6 +25,7 @@ import {
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { promises } from 'stream';
 import {
     CalculatorMoney,
     deleteCalculator,
@@ -36,13 +37,14 @@ import {
 import { getDataPowerByMotelRoomId } from '~/api/data-power.api';
 import { getDataWaterByMotelRoomId } from '~/api/data-water.api';
 import { getAllMotel } from '~/api/motel.api';
+import { revenueStatistics } from '~/api/revenue-statistics.api';
 import { getRoom, getRooms } from '~/api/room.api';
 import notification from '~/components/notification';
 import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
-import { generatePriceToVND } from '~/utils/helper';
+import { convertDate, generatePriceToVND } from '~/utils/helper';
 import styles from './Calculate.module.scss';
 
 const cx = classNames.bind(styles);
@@ -64,7 +66,7 @@ const Calculate = () => {
     const [isModalReceipt, setIsModalReceipt] = useState(false);
     const [prepayment, setPrepayment] = useState(false);
     const [room, setRoom] = useState<RoomType>();
-    const [bill, setBill] = useState([]);
+    const [bill, setBill] = useState<any>([]);
     const [idCalculator, setIdCalculator] = useState<string>('');
     const thisMonth = moment(new Date()).format('MM');
 
@@ -213,7 +215,7 @@ const Calculate = () => {
         const { data } = await getCalculator(id);
         setBill(data);
     };
-    const handleSendEmail = async (id: string) => {
+    const handleSendEmail = async (id: string | any) => {
         try {
             await sendEmail(id);
             notification({ message: 'Gửi email thành công' });
@@ -246,7 +248,21 @@ const Calculate = () => {
                         paymentStatus: true,
                     };
                 }
-                await paymentMoney(values, idCalculator);
+                await Promise.all([
+                    paymentMoney(values, idCalculator),
+                    revenueStatistics({
+                        month: convertDate(
+                            moment(values.dateOfPayment).format(
+                                DateFormat.DATE_DEFAULT
+                            ),
+                            DateFormat.DATE_M
+                        ),
+                        year: moment(values.dateOfPayment).format(
+                            DateFormat.DATE_Y
+                        ),
+                    }),
+                ]);
+
                 const getList = async () => {
                     const { data } = await listCalculator({
                         month: values.month,
@@ -286,7 +302,6 @@ const Calculate = () => {
             },
         });
     };
-    console.log(bill);
 
     useEffect(() => {
         const handleFetchData = async () => {
