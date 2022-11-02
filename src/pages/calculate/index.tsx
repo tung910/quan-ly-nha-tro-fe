@@ -240,6 +240,12 @@ const Calculate = () => {
                     month: item.month,
                     totalAmount: item.totalAmount,
                 };
+                if (values.remainAmount === 0) {
+                    values = {
+                        ...values,
+                        paymentStatus: true,
+                    };
+                }
                 await paymentMoney(values, idCalculator);
                 const getList = async () => {
                     const { data } = await listCalculator({
@@ -540,17 +546,13 @@ const Calculate = () => {
                         }
                         return (
                             <>
-                                <Table.Summary.Row>
-                                    <Table.Summary.Cell index={0} colSpan={5}>
-                                        Tổng
+                                <Table.Summary.Row
+                                    style={{ fontWeight: 'bold' }}
+                                >
+                                    <Table.Summary.Cell index={0} colSpan={6}>
+                                        <Text>Tổng</Text>
                                     </Table.Summary.Cell>
-                                    <Table.Summary.Cell index={2}>
-                                        <Text type='danger'>
-                                            {generatePriceToVND(
-                                                +totalPaymentAmount
-                                            )}
-                                        </Text>
-                                    </Table.Summary.Cell>
+
                                     <Table.Summary.Cell index={1}>
                                         <Text type='danger'>
                                             {' '}
