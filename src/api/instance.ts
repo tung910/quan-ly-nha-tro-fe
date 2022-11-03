@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 /* eslint-disable camelcase */
 import { notification } from 'antd';
 import axios, { AxiosRequestConfig } from 'axios';
+import { store } from '~/app/store';
 import { STATUS_CODE } from '~/types/Api-Response.type';
 
 const baseURL = import.meta.env.VITE_BASE_URL;
@@ -12,12 +14,9 @@ const instance = axios.create({
     },
 });
 
-const persist = localStorage.getItem('persist:root')
-    ? JSON.parse(localStorage.getItem('persist:root') || '')
-    : '';
-const user = persist ? JSON.parse(persist?.user) : '';
 instance.interceptors.request.use(
     (config: AxiosRequestConfig<any> | any) => {
+        const { user } = store.getState();
         config.headers['Authorization'] = `Bearer ${user?.token || ''}`;
         config.headers['AuthId'] = String(user?.user?._id || '');
         return config;
