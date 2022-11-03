@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { loginApi, logOutApi } from '~/api/auth.api';
 import { IUser } from '~/types/User.type';
@@ -20,7 +21,11 @@ export const logOut = createAsyncThunk('auth/logOut', async () => {
         //
     }
 });
-const initialState = {
+interface initialState {
+    user: IUser | any;
+    token: null | string;
+}
+const initialState: initialState = {
     user: {},
     token: null,
 };

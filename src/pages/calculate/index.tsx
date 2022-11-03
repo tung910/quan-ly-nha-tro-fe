@@ -1,46 +1,55 @@
-import classNames from 'classnames/bind';
-import styles from './Calculate.module.scss';
-import { useEffect, useState } from 'react';
+import {
+    CalculatorOutlined,
+    DeleteOutlined,
+    DollarCircleOutlined,
+    EyeOutlined,
+    PrinterOutlined,
+    SearchOutlined,
+} from '@ant-design/icons';
 import {
     Button,
     Col,
-    PageHeader,
-    Row,
-    Form,
     DatePicker,
-    Select,
-    Space,
+    Form,
+    Input,
+    InputNumber,
     message,
     Modal,
+    PageHeader,
+    Row,
+    Select,
+    Space,
+    Table,
+    Typography,
 } from 'antd';
-import {
-    SearchOutlined,
-    CalculatorOutlined,
-    EyeOutlined,
-    DollarCircleOutlined,
-    PrinterOutlined,
-    DeleteOutlined,
-} from '@ant-design/icons';
-import { getRooms, getRoom } from '~/api/room.api';
-import { MotelType } from '~/types/MotelType';
-import { getAllMotel } from '~/api/motel.api';
+import classNames from 'classnames/bind';
 import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { promises } from 'stream';
 import {
     CalculatorMoney,
     deleteCalculator,
     getCalculator,
     listCalculator,
+    paymentMoney,
+    sendEmail,
 } from '~/api/calculator.api';
-import Table from '~/components/table';
-import { RoomType } from '~/types/RoomType';
-import { getDataWaterByMotelRoomId } from '~/api/data-water.api';
 import { getDataPowerByMotelRoomId } from '~/api/data-power.api';
-import { generatePriceToVND } from '~/utils/helper';
+import { getDataWaterByMotelRoomId } from '~/api/data-water.api';
+import { getAllMotel } from '~/api/motel.api';
+import { revenueStatistics } from '~/api/revenue-statistics.api';
+import { getRoom, getRooms } from '~/api/room.api';
+import notification from '~/components/notification';
 import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
+import { MotelType } from '~/types/MotelType';
+import { RoomType } from '~/types/RoomType';
+import { convertDate, generatePriceToVND } from '~/utils/helper';
+import styles from './Calculate.module.scss';
 
 const cx = classNames.bind(styles);
 const { Option } = Select;
+const { Text } = Typography;
 type EditableTableProps = Parameters<typeof Table>[0];
 
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
@@ -48,14 +57,17 @@ type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 const Calculate = () => {
     const [form] = Form.useForm();
     const [formSearch] = Form.useForm();
+    const [formPayment] = Form.useForm();
 
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listNameRoom, setListNameRoom] = useState<RoomType[]>([]);
     const [calculators, setCalculators] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalReceipt, setIsModalReceipt] = useState(false);
+    const [prepayment, setPrepayment] = useState(false);
     const [room, setRoom] = useState<RoomType>();
-    const [bill, setBill] = useState([]);
+    const [bill, setBill] = useState<any>([]);
+    const [idCalculator, setIdCalculator] = useState<string>('');
     const thisMonth = moment(new Date()).format('MM');
 
     const ColumnsData: ColumnTypes[number][] = [
@@ -77,7 +89,10 @@ const Calculate = () => {
                             htmlType='submit'
                             type='primary'
                             icon={<DollarCircleOutlined />}
-                            onClick={() => setIsModalReceipt(!isModalReceipt)}
+                            onClick={() => {
+                                setPrepayment(true);
+                                setIdCalculator(id);
+                            }}
                             title='Nhập số tiền đã thu'
                         />
                         <Button
@@ -87,6 +102,7 @@ const Calculate = () => {
                             onClick={() => setIsModalReceipt(!isModalReceipt)}
                             title='In hóa đơn'
                         />
+
                         <Button
                             htmlType='submit'
                             icon={<DeleteOutlined />}
@@ -157,10 +173,13 @@ const Calculate = () => {
     };
 
     const onCalculator = async (values: any) => {
-        if (room?._id && room?.roomRentID) {
-            const dataPower = await getDataPowerByMotelRoomId(room?._id);
-            const dataWater = await getDataWaterByMotelRoomId(room?._id);
-
+        if (room?._id && room?.isRent === true) {
+            const dataRoom = {
+                motelRoomID: room._id,
+                month: moment(values.month).format('MM'),
+            };
+            const dataPower = await getDataPowerByMotelRoomId(dataRoom);
+            const dataWater = await getDataWaterByMotelRoomId(dataRoom);
             values = {
                 data: [
                     {
@@ -179,6 +198,7 @@ const Calculate = () => {
             };
 
             await CalculatorMoney(values);
+
             const { data } = await listCalculator({
                 month: thisMonth,
             });
@@ -195,6 +215,68 @@ const Calculate = () => {
         const { data } = await getCalculator(id);
         setBill(data);
     };
+    const handleSendEmail = async (id: string | any) => {
+        try {
+            await sendEmail(id);
+            notification({ message: 'Gửi email thành công' });
+        } catch (error) {
+            //
+        }
+    };
+    const onPayment = async (values: any) => {
+        const { data } = await getCalculator(idCalculator);
+        data.map(async (item: any) => {
+            if (values.payAmount > item.totalAmount) {
+                alert(
+                    'Số tiền bạn trả lớn hơn số tiền phải trả mời bạn nhập lại!'
+                );
+            } else {
+                values = {
+                    ...values,
+                    dateOfPayment: moment(values.dateOfPayment).format(
+                        DateFormat.DATE_DEFAULT
+                    ),
+                    payAmount: item.payAmount + values.payAmount,
+                    remainAmount:
+                        item.totalAmount - (values.payAmount + item.payAmount),
+                    month: item.month,
+                    totalAmount: item.totalAmount,
+                };
+                if (values.remainAmount === 0) {
+                    values = {
+                        ...values,
+                        paymentStatus: true,
+                    };
+                }
+                await Promise.all([
+                    paymentMoney(values, idCalculator),
+                    revenueStatistics({
+                        month: convertDate(
+                            moment(values.dateOfPayment).format(
+                                DateFormat.DATE_DEFAULT
+                            ),
+                            DateFormat.DATE_M
+                        ),
+                        year: moment(values.dateOfPayment).format(
+                            DateFormat.DATE_Y
+                        ),
+                    }),
+                ]);
+
+                const getList = async () => {
+                    const { data } = await listCalculator({
+                        month: values.month,
+                    });
+                    setCalculators(data);
+                };
+                getList();
+            }
+        });
+
+        setPrepayment(false);
+        formPayment.resetFields();
+    };
+
     const onSearch = (values: any) => {
         const calculatorData = async () => {
             const { data } = await listCalculator({
@@ -210,7 +292,7 @@ const Calculate = () => {
             centered: true,
             title: `Bạn có đồng ý xóa không ?`,
             cancelText: 'Cancel',
-            okText: 'Lưu',
+            okText: 'Xóa',
             onOk: async () => {
                 await deleteCalculator(id);
                 setCalculators(
@@ -220,6 +302,7 @@ const Calculate = () => {
             },
         });
     };
+
     useEffect(() => {
         const handleFetchData = async () => {
             try {
@@ -294,7 +377,7 @@ const Calculate = () => {
                                     initialValue={moment()}
                                 >
                                     <DatePicker
-                                        format={'DD/MM/YYYY'}
+                                        format={DateFormat.DATE_DEFAULT}
                                         style={{ width: '375px' }}
                                     />
                                 </Form.Item>
@@ -383,7 +466,7 @@ const Calculate = () => {
                 <Form
                     autoComplete='off'
                     form={formSearch}
-                    labelCol={{ span: 5 }}
+                    labelCol={{ span: 6 }}
                     onFinish={onSearch}
                 >
                     <Row gutter={[8, 8]}>
@@ -459,7 +542,45 @@ const Calculate = () => {
             </div>
 
             <div>
-                <Table columns={ColumnsData} dataSource={calculators} />
+                <Table
+                    columns={ColumnsData}
+                    dataSource={calculators}
+                    summary={(pageData) => {
+                        let totalAmountUnpaid = 0;
+                        let totalPaymentAmount = 0;
+
+                        pageData.forEach(({ remainAmount, payAmount }: any) => {
+                            totalAmountUnpaid += remainAmount;
+                            totalPaymentAmount += payAmount;
+                        });
+                        if (
+                            totalAmountUnpaid === 0 &&
+                            totalPaymentAmount === 0
+                        ) {
+                            return;
+                        }
+                        return (
+                            <>
+                                <Table.Summary.Row
+                                    style={{ fontWeight: 'bold' }}
+                                >
+                                    <Table.Summary.Cell index={0} colSpan={6}>
+                                        <Text>Tổng</Text>
+                                    </Table.Summary.Cell>
+
+                                    <Table.Summary.Cell index={1}>
+                                        <Text type='danger'>
+                                            {' '}
+                                            {generatePriceToVND(
+                                                +totalAmountUnpaid
+                                            )}
+                                        </Text>
+                                    </Table.Summary.Cell>
+                                </Table.Summary.Row>
+                            </>
+                        );
+                    }}
+                />
                 <Modal
                     open={isModalReceipt}
                     title='Hóa đơn'
@@ -469,7 +590,11 @@ const Calculate = () => {
                         <Button type='primary' key='button_1'>
                             Tải file PDF
                         </Button>,
-                        <Button type='ghost' key='button_2'>
+                        <Button
+                            type='ghost'
+                            key='button_2'
+                            onClick={() => handleSendEmail(bill[0]._id)}
+                        >
                             Gửi mail
                         </Button>,
                         <Button
@@ -522,6 +647,99 @@ const Calculate = () => {
                             );
                         })}
                 </Modal>
+                <div>
+                    <Modal
+                        title='Nhập tiền trả'
+                        open={prepayment}
+                        onOk={formPayment.submit}
+                        onCancel={() => {
+                            setPrepayment(false);
+                        }}
+                    >
+                        <>
+                            <Form
+                                autoComplete='off'
+                                form={formPayment}
+                                labelCol={{ span: 5 }}
+                                onFinish={onPayment}
+                            >
+                                <Form.Item
+                                    label={<>Ngày nộp:</>}
+                                    colon={false}
+                                    labelAlign='left'
+                                    name='dateOfPayment'
+                                    initialValue={moment()}
+                                >
+                                    <DatePicker
+                                        format={DateFormat.DATE_DEFAULT}
+                                        style={{ width: '375px' }}
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    label={<>Số tiền</>}
+                                    labelAlign='left'
+                                    name='payAmount'
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Không được để trống',
+                                        },
+                                    ]}
+                                >
+                                    <InputNumber
+                                        style={{ width: '375px' }}
+                                        formatter={(value) =>
+                                            ` ${value}`.replace(
+                                                /\B(?=(\d{3})+(?!\d))/g,
+                                                ','
+                                            )
+                                        }
+                                        parser={(value) =>
+                                            ` ${value}`.replace(
+                                                /\$\s?|(,*)/g,
+                                                ''
+                                            )
+                                        }
+                                        addonAfter='VNĐ'
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    label={<>Người nộp</>}
+                                    labelAlign='left'
+                                    name='payer'
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Không được để trống',
+                                        },
+                                    ]}
+                                >
+                                    <Input style={{ width: '375px' }} />
+                                </Form.Item>
+                                <Form.Item
+                                    label={<>Thanh toán</>}
+                                    labelAlign='left'
+                                    name='paymentMethod'
+                                >
+                                    <Select
+                                        style={{ width: 375 }}
+                                        defaultValue={1}
+                                    >
+                                        <Option value={1}>Tiền mặt</Option>
+                                        <Option value={2}>Chuyển khoản</Option>
+                                    </Select>
+                                </Form.Item>
+                                <Form.Item
+                                    label={<>Ghi chú</>}
+                                    labelAlign='left'
+                                    name='note'
+                                >
+                                    <Input style={{ width: '375px' }} />
+                                </Form.Item>
+                            </Form>
+                        </>
+                    </Modal>
+                </div>
             </div>
         </div>
     );
