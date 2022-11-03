@@ -1,10 +1,10 @@
 import { Layout } from 'antd';
-import { Outlet } from 'react-router-dom';
-import React, { useState } from 'react';
 import classNames from 'classnames/bind';
+import React, { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
-import Navbar from '../navbar';
 import Header from '../header';
+import Navbar from '../navbar';
 import styles from './Dashboard.module.scss';
 
 const cx = classNames.bind(styles);

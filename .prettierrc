@@ -16,5 +16,8 @@
     "trailingComma": "es5",
     "useTabs": false,
     "vueIndentScriptAndStyle": false,
-    "endOfLine": "crlf"
+    "endOfLine": "crlf",
+    "importOrder": ["^[./]"],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true
 }
