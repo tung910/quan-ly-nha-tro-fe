@@ -1,31 +1,50 @@
-import { Card, Button, DatePicker, Space, Row, Col, Form } from 'antd';
+import { Card, Col, DatePicker, Form, Row } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+import moment from 'moment';
 import { useState } from 'react';
 import Table from '~/components/table';
-import moment from 'moment';
 import { DateFormat } from '~/constants/const';
 
-const PaymentTracking = () => {
-    const [dataSource, setdataSource] = useState([]);
-    // const getCloumFilterProps = (dataIndex: any): ColumnsType<any> => ({
+type Props = {
+    newDataPaymentChecking: any;
+    setYear: any;
+    setMonth: any;
+};
+const PaymentTracking = ({
+    newDataPaymentChecking,
+    setYear,
+    setMonth,
+}: Props) => {
+    const array = [];
 
-    // });
+    array.push({
+        title: 'Tổng số hóa đơn đã thanh toán',
+        newTotalBill: newDataPaymentChecking?.totalBillPaid,
+        newTotalAmout: newDataPaymentChecking?.totalPaymentAmount,
+    });
 
+    array.push({
+        title: 'Tổng số hóa đơn chưa thanh toán',
+        newTotalBill: newDataPaymentChecking?.totalBillUnpaid,
+        newTotalAmout: newDataPaymentChecking?.totalPaymentUnpaid,
+    });
+
+    const [dataSource, setdataSource] = useState(array);
     const columnsPaymentTracking: ColumnsType = [
         {
             title: 'Nội dung',
-            key: '',
-            dataIndex: '',
+            key: 'title',
+            dataIndex: 'title',
         },
         {
             title: 'Số hóa đơn',
-            dataIndex: '',
-            key: '',
+            dataIndex: 'newTotalBill',
+            key: 'newTotalBill',
         },
         {
             title: 'Số tiền',
-            dataIndex: '',
-            key: '',
+            dataIndex: 'newTotalAmout',
+            key: 'newTotalAmout',
         },
     ];
     return (
@@ -37,7 +56,9 @@ const PaymentTracking = () => {
                             <DatePicker
                                 picker='month'
                                 onChange={(e: any) =>
-                                    moment(e).format(DateFormat.DATE_M)
+                                    setMonth(
+                                        moment(e).format(DateFormat.DATE_M)
+                                    )
                                 }
                                 defaultValue={moment()}
                                 format={DateFormat.DATE_M}
@@ -50,7 +71,7 @@ const PaymentTracking = () => {
                             <DatePicker
                                 picker='year'
                                 onChange={(e: any) =>
-                                    moment(e).format(DateFormat.DATE_Y)
+                                    setYear(moment(e).format(DateFormat.DATE_Y))
                                 }
                                 defaultValue={moment()}
                                 format={DateFormat.DATE_Y}
