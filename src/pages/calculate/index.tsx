@@ -67,6 +67,7 @@ const Calculate = () => {
     const [prepayment, setPrepayment] = useState(false);
     const [room, setRoom] = useState<RoomType>();
     const [bill, setBill] = useState<any>([]);
+    const [payer, setPayer] = useState<any>();
     const [idCalculator, setIdCalculator] = useState<string>('');
     const thisMonth = moment(new Date()).format('MM');
 
@@ -90,8 +91,9 @@ const Calculate = () => {
                             type='primary'
                             icon={<DollarCircleOutlined />}
                             onClick={() => {
-                                setPrepayment(true);
-                                setIdCalculator(id);
+                                getPayer(id);
+                                // setPrepayment(true);
+                                // setIdCalculator(id);
                             }}
                             title='Nhập số tiền đã thu'
                         />
@@ -210,6 +212,12 @@ const Calculate = () => {
         form.resetFields();
         setIsModalOpen(false);
     };
+    const getPayer = async (id: string) =>{
+        setPrepayment(true);
+        setIdCalculator(id);
+        const { data } = await getCalculator(id);
+        setPayer(data[0].roomRentalDetailID.customerName);
+    }
     const seeTheBill = async (id: string) => {
         setIsModalReceipt(true);
         const { data } = await getCalculator(id);
@@ -641,7 +649,8 @@ const Calculate = () => {
                                     </p>
                                     <hr />
                                     <p>
-                                        <b>Người thanh toán:</b>
+                                        <b>Người thanh toán:{' '}
+                                        {item.roomRentalDetailID.customerName}</b>
                                     </p>
                                 </div>
                             );
@@ -703,10 +712,11 @@ const Calculate = () => {
                                         addonAfter='VNĐ'
                                     />
                                 </Form.Item>
-                                <Form.Item
+                                {payer&&<Form.Item
                                     label={<>Người nộp</>}
                                     labelAlign='left'
                                     name='payer'
+                                    initialValue={payer}
                                     rules={[
                                         {
                                             required: true,
@@ -715,7 +725,8 @@ const Calculate = () => {
                                     ]}
                                 >
                                     <Input style={{ width: '375px' }} />
-                                </Form.Item>
+                                </Form.Item>}
+                                
                                 <Form.Item
                                     label={<>Thanh toán</>}
                                     labelAlign='left'
