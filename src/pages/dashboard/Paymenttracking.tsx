@@ -1,7 +1,7 @@
 import { Card, Col, DatePicker, Form, Row } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Table from '~/components/table';
 import { DateFormat } from '~/constants/const';
 
@@ -15,21 +15,25 @@ const PaymentTracking = ({
     setYear,
     setMonth,
 }: Props) => {
-    const array = [];
+    const [dataSource, setdataSource] = useState([]);
+    useEffect(() => {
+        const array: any = [];
 
-    array.push({
-        title: 'Tổng số hóa đơn đã thanh toán',
-        newTotalBill: newDataPaymentChecking?.totalBillPaid,
-        newTotalAmout: newDataPaymentChecking?.totalPaymentAmount,
-    });
+        array.push({
+            title: 'Tổng số hóa đơn đã thanh toán',
+            newTotalBill: newDataPaymentChecking?.totalBillPaid,
+            newTotalAmout: newDataPaymentChecking?.totalPaymentAmount,
+        });
 
-    array.push({
-        title: 'Tổng số hóa đơn chưa thanh toán',
-        newTotalBill: newDataPaymentChecking?.totalBillUnpaid,
-        newTotalAmout: newDataPaymentChecking?.totalPaymentUnpaid,
-    });
+        array.push({
+            title: 'Tổng số hóa đơn chưa thanh toán',
+            newTotalBill: newDataPaymentChecking?.totalBillUnpaid,
+            newTotalAmout: newDataPaymentChecking?.totalPaymentUnpaid,
+        });
 
-    const [dataSource, setdataSource] = useState(array);
+        setdataSource(array);
+    }, [newDataPaymentChecking]);
+
     const columnsPaymentTracking: ColumnsType = [
         {
             title: 'Nội dung',
@@ -60,7 +64,9 @@ const PaymentTracking = ({
                                         moment(e).format(DateFormat.DATE_M)
                                     )
                                 }
-                                defaultValue={moment()}
+                                defaultValue={moment().month(
+                                    new Date().getMonth()
+                                )}
                                 format={DateFormat.DATE_M}
                                 name='date'
                             />
@@ -73,7 +79,9 @@ const PaymentTracking = ({
                                 onChange={(e: any) =>
                                     setYear(moment(e).format(DateFormat.DATE_Y))
                                 }
-                                defaultValue={moment()}
+                                defaultValue={moment().year(
+                                    new Date().getFullYear()
+                                )}
                                 format={DateFormat.DATE_Y}
                                 name='date'
                             />
