@@ -20,6 +20,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { editDataWater, listDataWater } from '~/api/data-water.api';
 import { getAllMotel } from '~/api/motel.api';
 import { getStatisticalRoomStatus } from '~/api/room.api';
+import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
 import { IDataWater } from '~/types/DataWater.type';
 import { MotelType } from '~/types/MotelType';
@@ -245,6 +246,7 @@ const handleSaveAllData = (datawater: any) => {
     message.success(MESSAGES.EDIT_SUCCESS);
 };
 const PowerOnly = () => {
+    const [formSearch] = Form.useForm();
     const [dataWater, setDataWater] = useState<IDataWater[]>([]);
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listStatusRoom, setListStatusRoom] = useState([]);
@@ -284,7 +286,16 @@ const PowerOnly = () => {
         });
         setDataWater(newData);
     };
-
+    const onSearch = (values: any) => {
+        const calculatorData = async () => {
+            const { data } = await listDataWater({
+                month: moment(values.month).format(DateFormat.DATE_M),
+                motelID: values.motelID,
+            });
+            setDataWater(data);
+        };
+        calculatorData();
+    };
     const components = {
         body: {
             row: EditableRow,
@@ -330,68 +341,89 @@ const PowerOnly = () => {
             </div>
 
             <div className={cx('header-bottom')}>
-                <Row gutter={[8, 8]}>
-                    <Col span={6}>
-                        <Form.Item label={<>Tháng/năm</>} colon={false}>
-                            <DatePicker
-                                defaultValue={moment()}
-                                format={dateFormat}
-                                name='date'
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col span={6}>
-                        <Form.Item label={<>Kỳ</>} colon={false}>
-                            <Select
-                                style={{ width: 150 }}
-                                defaultValue='Tất cả'
-                                showSearch
+                <Form
+                    autoComplete='off'
+                    form={formSearch}
+                    labelCol={{ span: 8 }}
+                    onFinish={onSearch}
+                >
+                    <Row gutter={[8, 8]}>
+                        <Col span={6}>
+                            <Form.Item
+                                label={<>Tháng/năm</>}
+                                name='month'
+                                colon={false}
+                                initialValue={moment()}
                             >
-                                <Option value={2}>Kỳ 30</Option>
-                                <Option value={3}>Kỳ 15</Option>
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col span={6}>
-                        <Form.Item label={<>Nhà</>} colon={false}>
-                            <Select
-                                style={{ width: 150 }}
-                                defaultValue='Tất cả'
-                                showSearch
+                                <DatePicker
+                                    clearIcon={null}
+                                    format={'MM/YYYY'}
+                                    picker='month'
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item
+                                label={<>Trạng thái nhà</>}
+                                colon={false}
                             >
-                                {listNameMotel &&
-                                    listNameMotel.map((item, index) => {
-                                        return (
-                                            <Option
-                                                key={index}
-                                                value={item._id}
-                                            >
-                                                {item.name}
-                                            </Option>
-                                        );
-                                    })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col span={6}>
-                        <Form.Item label={<>Trạng thái nhà</>} colon={false}>
-                            <Select
-                                style={{ width: 150 }}
-                                defaultValue='Tất cả'
-                                showSearch
+                                <Select
+                                    style={{ width: 150 }}
+                                    defaultValue='Tất cả'
+                                    showSearch
+                                >
+                                    {listStatusRoom &&
+                                        listStatusRoom.map(
+                                            (item: any, index) => {
+                                                return (
+                                                    <Option key={index}>
+                                                        {item.statusName}
+                                                    </Option>
+                                                );
+                                            }
+                                        )}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item
+                                label={<>Nhà</>}
+                                name='motelID'
+                                colon={false}
                             >
-                                {listStatusRoom &&
-                                    listStatusRoom.map((item: any, index) => {
-                                        return (
-                                            <Option key={index}>
-                                                {item.statusName}
-                                            </Option>
-                                        );
-                                    })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
+                                <Select
+                                    style={{ width: 150 }}
+                                    defaultValue='Tất cả'
+                                    showSearch
+                                >
+                                    {listNameMotel &&
+                                        listNameMotel.map((item, index) => {
+                                            return (
+                                                <Option
+                                                    key={index}
+                                                    value={item._id}
+                                                >
+                                                    {item.name}
+                                                </Option>
+                                            );
+                                        })}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item colon={false}>
+                                <Button
+                                    type='primary'
+                                    icon={<SearchOutlined />}
+                                    htmlType='submit'
+                                >
+                                    Xem
+                                </Button>
+                                ,
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form>
             </div>
 
             <div>
