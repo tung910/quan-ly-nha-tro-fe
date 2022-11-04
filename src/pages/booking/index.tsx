@@ -1,44 +1,44 @@
 import {
+    CheckOutlined,
+    CloseOutlined,
+    DeleteOutlined,
+    EditOutlined,
+    FileExcelOutlined,
+    PlusOutlined,
+    SearchOutlined,
+} from '@ant-design/icons';
+import {
     Button,
     Col,
     DatePicker,
     Form,
-    message,
+    Modal,
     PageHeader,
     Row,
     Select,
     Space,
     Tooltip,
-    Modal,
+    message,
 } from 'antd';
-import {
-    SearchOutlined,
-    FileExcelOutlined,
-    PlusOutlined,
-    EditOutlined,
-    DeleteOutlined,
-    CheckOutlined,
-    CloseOutlined,
-} from '@ant-design/icons';
+import { ColumnsType } from 'antd/lib/table';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { deleteRoomDeposit, listSearchRoomDeposit } from '~/api/booking.api';
 import { getAllMotel } from '~/api/motel.api';
 import { getListRooms, getRooms } from '~/api/room.api';
+import Table from '~/components/table';
+import { DateFormat } from '~/constants/const';
+import { MESSAGES } from '~/constants/message.const';
+import { IBooking } from '~/types/Booking.type';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
-import styles from './Booking.module.scss';
-import Table from '~/components/table';
-import { ColumnsType } from 'antd/lib/table';
-import { Link } from 'react-router-dom';
-import { IBooking } from '~/types/Booking.type';
-import { deleteRoomDeposit, listSearchRoomDeposit } from '~/api/booking.api';
-import { DateFormat } from '~/constants/const';
 import { convertDate, generatePriceToVND } from '~/utils/helper';
-import { MESSAGES } from '~/constants/message.const';
+
+import styles from './Booking.module.scss';
 
 const cx = classNames.bind(styles);
-const Option = Select;
 const BookingRoomDeposit = () => {
     const [form] = Form.useForm();
     const [listMotels, setListMotels] = useState<MotelType[]>([]);
@@ -350,12 +350,12 @@ const BookingRoomDeposit = () => {
                                     {listMotels &&
                                         listMotels.map((item, index) => {
                                             return (
-                                                <Option
+                                                <Select.Option
                                                     key={index}
                                                     value={item._id}
                                                 >
                                                     {item.name}
-                                                </Option>
+                                                </Select.Option>
                                             );
                                         })}
                                 </Select>
@@ -375,12 +375,12 @@ const BookingRoomDeposit = () => {
                                     {listRooms &&
                                         listRooms.map((item, index) => {
                                             return (
-                                                <Option
+                                                <Select.Option
                                                     key={index}
                                                     value={item._id}
                                                 >
                                                     {item.roomName}
-                                                </Option>
+                                                </Select.Option>
                                             );
                                         })}
                                 </Select>

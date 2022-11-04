@@ -1,11 +1,11 @@
 import { Form, Input, InputRef, Table } from 'antd';
+import { FormInstance } from 'antd/es/form/Form';
+import classNames from 'classnames/bind';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { IService } from '~/types/Service.type';
-import styles from './Service.module.scss';
-import classNames from 'classnames/bind';
-import { getAllService } from '~/api/service.api';
 import { generatePriceToVND } from '~/utils/helper';
-import { FormInstance } from 'antd/es/form/Form';
+
+import styles from './Service.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -139,41 +139,20 @@ type Props = {
     onGetService: (data: IService[]) => void;
     roomRentID: string;
     newdataService: any;
+    services: any;
 };
 
 const ServiceCustomer = ({
     onGetService,
     roomRentID,
     newdataService,
+    services,
 }: Props) => {
-    const [state, setstate] = useState<IService[]>([]);
-    useEffect(() => {
-        const getServices = async () => {
-            const { data } = await getAllService();
-            const dataSelected = data.map((item: IService) => {
-                if (item.isActive) {
-                    const result = { ...item, quantity: 1, isUse: true };
-                    return result;
-                }
-            });
-
-            setstate(roomRentID ? newdataService : dataSelected);
-            if (roomRentID) {
-                setSelectedRowKeys(
-                    newdataService.map((item: Required<IService>) =>
-                        item.isUse ? item._id : { ...item, _id: undefined }
-                    )
-                );
-            } else {
-                setSelectedRowKeys(
-                    dataSelected.map((item: IService) => item._id)
-                );
-            }
-        };
-        getServices();
-    }, []);
+    const [state, setState] = useState<IService[]>([]);
+    const [newData, setNewData] = useState<IService[]>([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [getServices, setGetServices] = useState<IService[]>([]);
+
     const onSelectChange = (newSelectedRowKeys: React.Key[], record: any) => {
         setGetServices(record);
         setSelectedRowKeys(newSelectedRowKeys);
@@ -184,7 +163,6 @@ const ServiceCustomer = ({
         onChange: onSelectChange,
     };
 
-    const [newData, setNewData] = useState<IService[]>([]);
     useEffect(() => {
         const result = state.map((item: IService) =>
             getServices.find((i: IService) => i._id === item._id)
@@ -194,6 +172,25 @@ const ServiceCustomer = ({
 
         setNewData(result);
     }, [getServices]);
+    useEffect(() => {
+        const dataSelected = services.map((item: IService) => {
+            if (item.isActive) {
+                const result = { ...item, quantity: 1, isUse: true };
+                return result;
+            }
+        });
+
+        setState(roomRentID ? newdataService : dataSelected);
+        if (roomRentID) {
+            setSelectedRowKeys(
+                newdataService.map((item: Required<IService>) =>
+                    item.isUse ? item._id : { ...item, _id: undefined }
+                )
+            );
+        } else {
+            setSelectedRowKeys(dataSelected.map((item: IService) => item._id));
+        }
+    }, [services]);
 
     if (getServices.length > 0) {
         onGetService(newData);
@@ -209,7 +206,7 @@ const ServiceCustomer = ({
             ...item,
             ...row,
         });
-        setstate(newData);
+        setState(newData);
     };
 
     const components = {

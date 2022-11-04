@@ -13,7 +13,6 @@ import {
     Form,
     Input,
     InputNumber,
-    message,
     Modal,
     PageHeader,
     Row,
@@ -21,11 +20,11 @@ import {
     Space,
     Table,
     Typography,
+    message,
 } from 'antd';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { promises } from 'stream';
 import {
     CalculatorMoney,
     deleteCalculator,
@@ -45,6 +44,7 @@ import { MESSAGES } from '~/constants/message.const';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { convertDate, generatePriceToVND } from '~/utils/helper';
+
 import styles from './Calculate.module.scss';
 
 const cx = classNames.bind(styles);
@@ -588,6 +588,7 @@ const Calculate = () => {
                             </>
                         );
                     }}
+                    rowKey='_id'
                 />
                 <Modal
                     open={isModalReceipt}

@@ -1,30 +1,31 @@
 /* eslint-disable no-console */
-import classNames from 'classnames/bind';
-import styles from './Water.module.scss';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import { CheckOutlined, SaveOutlined, SearchOutlined } from '@ant-design/icons';
 import {
     Button,
     Col,
-    PageHeader,
-    Row,
-    Form,
     DatePicker,
-    Select,
-    Table,
+    Form,
     InputNumber,
     Modal,
+    PageHeader,
+    Row,
+    Select,
+    Table,
     message,
 } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
-import { SearchOutlined, CheckOutlined, SaveOutlined } from '@ant-design/icons';
+import classNames from 'classnames/bind';
+import moment from 'moment';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { editDataWater, listDataWater } from '~/api/data-water.api';
+import { getAllMotel } from '~/api/motel.api';
 import { getStatisticalRoomStatus } from '~/api/room.api';
+import { DateFormat } from '~/constants/const';
+import { MESSAGES } from '~/constants/message.const';
 import { IDataWater } from '~/types/DataWater.type';
 import { MotelType } from '~/types/MotelType';
-import { getAllMotel } from '~/api/motel.api';
-import { editDataWater, listDataWater } from '~/api/data-water.api';
-import { MESSAGES } from '~/constants/message.const';
-import moment from 'moment';
-import { DateFormat } from '~/constants/const';
+
+import styles from './Water.module.scss';
 
 const cx = classNames.bind(styles);
 const { Option } = Select;
@@ -250,26 +251,31 @@ const PowerOnly = () => {
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listStatusRoom, setListStatusRoom] = useState([]);
     const thisMonth = moment(new Date()).format('MM');
+
+    useEffect(() => {
+        const handleGetData = async () => {
+            try {
+                const data = await Promise.all([
+                    getAllMotel(),
+                    getStatisticalRoomStatus(),
+                ]);
+                const [{ data: motels }, { data: statusRooms }] = data;
+                setListNameMotel(motels);
+                setListStatusRoom(statusRooms);
+            } catch (error) {
+                throw Error(error as any);
+            }
+        };
+        handleGetData();
+    }, []);
     useEffect(() => {
         const listMotelRoom = async () => {
             const { data } = await listDataWater({ month: thisMonth });
-
             setDataWater(data);
         };
-
         listMotelRoom();
-        const getListData = async () => {
-            const { data } = await getAllMotel();
-            setListNameMotel(data);
-        };
-        getListData();
+    }, [thisMonth]);
 
-        const getListDataStatus = async () => {
-            const { data } = await getStatisticalRoomStatus();
-            setListStatusRoom(data);
-        };
-        getListDataStatus();
-    }, []);
     const handleSave = (row: IDataWater) => {
         const newData = [...dataWater];
         const index = newData.findIndex((item) => row._id === item._id);
@@ -425,6 +431,7 @@ const PowerOnly = () => {
                     components={components}
                     dataSource={dataWater}
                     columns={columns as ColumnTypes}
+                    rowKey='_id'
                 />
             </div>
         </div>

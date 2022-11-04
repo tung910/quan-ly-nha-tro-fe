@@ -6,12 +6,12 @@ import {
     DatePicker,
     Form,
     InputNumber,
-    message,
     Modal,
     PageHeader,
     Row,
     Select,
     Table,
+    message,
 } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import classNames from 'classnames/bind';
@@ -24,6 +24,7 @@ import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
 import { IDataPower } from '~/types/DataPower.type';
 import { MotelType } from '~/types/MotelType';
+
 import styles from './DataPower.module.scss';
 
 const cx = classNames.bind(styles);
@@ -251,25 +252,29 @@ const PowerOnly = () => {
     const [listStatusRoom, setListStatusRoom] = useState([]);
     const thisMonth = moment(new Date()).format('MM');
     useEffect(() => {
+        const handleGetData = async () => {
+            try {
+                const data = await Promise.all([
+                    getAllMotel(),
+                    getStatisticalRoomStatus(),
+                ]);
+                const [{ data: motels }, { data: statusRooms }] = data;
+                setListNameMotel(motels);
+                setListStatusRoom(statusRooms);
+            } catch (error) {
+                throw Error(error as any);
+            }
+        };
+        handleGetData();
+    }, []);
+    useEffect(() => {
         const listMotelRoom = async () => {
             const { data } = await listDataPower({ month: thisMonth });
-
             setDataPower(data);
         };
-
         listMotelRoom();
-        const getListData = async () => {
-            const { data } = await getAllMotel();
-            setListNameMotel(data);
-        };
-        getListData();
+    }, [thisMonth]);
 
-        const getListDataStatus = async () => {
-            const { data } = await getStatisticalRoomStatus();
-            setListStatusRoom(data);
-        };
-        getListDataStatus();
-    }, []);
     const handleSave = (row: IDataPower) => {
         const newData = [...dataPower];
         const index = newData.findIndex((item) => row._id === item._id);
@@ -426,6 +431,7 @@ const PowerOnly = () => {
                     components={components}
                     dataSource={dataPower}
                     columns={columns as ColumnTypes}
+                    rowKey='_id'
                 />
             </div>
         </div>

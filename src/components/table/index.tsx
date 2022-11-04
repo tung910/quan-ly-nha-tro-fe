@@ -11,16 +11,19 @@ interface Props {
     rowSelection?: TableRowSelection<object> | any;
     bordered?: boolean;
     pagination?: false | TablePaginationConfig;
+    components?: any;
 }
 
-const Table = ({
-    columns,
-    rowKey = '_id',
-    dataSource,
-    rowSelection,
-    bordered = true,
-    pagination = false,
-}: Props) => {
+const Table = (props: Props) => {
+    const {
+        columns,
+        rowKey = '_id',
+        dataSource,
+        rowSelection,
+        bordered = true,
+        pagination = false,
+        ...passProps
+    } = props;
     return (
         <>
             <TableAntd
@@ -30,6 +33,7 @@ const Table = ({
                 rowSelection={rowSelection}
                 bordered={bordered}
                 pagination={pagination}
+                {...passProps}
             />
         </>
     );

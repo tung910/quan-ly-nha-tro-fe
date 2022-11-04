@@ -1,20 +1,23 @@
-import { useEffect, useState } from 'react';
-import { Tabs, Button } from 'antd';
-import classNames from 'classnames/bind';
 import {
+    DeleteOutlined,
     EditOutlined,
     PlusSquareOutlined,
-    DeleteOutlined,
 } from '@ant-design/icons';
-import { getAllMotel, removeMotel } from '~/api/motel.api';
-import { MotelType } from '~/types/MotelType';
-import styles from './Motel.module.scss';
-import ListRoom from '../room/ListRoom';
+import { Button } from 'antd';
+import classNames from 'classnames/bind';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getAllMotel, removeMotel } from '~/api/motel.api';
+import Tabs from '~/components/tabs';
+import { MotelType } from '~/types/MotelType';
+
+import ListRoom from '../room/ListRoom';
+import styles from './Motel.module.scss';
 
 const cx = classNames.bind(styles);
 
 const Motel = () => {
+    const [tab, setTab] = useState('0');
     const [motels, setMotels] = useState<MotelType[]>([]);
     useEffect(() => {
         const getMotels = async () => {
@@ -32,6 +35,50 @@ const Motel = () => {
             setMotels(motels.filter((item) => item._id !== id));
         }
     };
+    const listMotel = [
+        ...motels.map((item, index) => {
+            return {
+                label: item.name,
+                key: String(index),
+                children: (
+                    <>
+                        <div className={cx('button-motel')}>
+                            <Button
+                                type='primary'
+                                icon={<DeleteOutlined />}
+                                onClick={() => onRemoveMotel(item._id)}
+                                danger
+                            >
+                                Xóa nhà trọ
+                            </Button>
+                            <Button
+                                className={cx('btn-edit-motel')}
+                                type='primary'
+                                icon={<EditOutlined />}
+                                href={`/motel-room/edit-motel/${item._id}`}
+                            >
+                                Sửa nhà trọ
+                            </Button>
+                            <Button
+                                type='primary'
+                                icon={<PlusSquareOutlined />}
+                            >
+                                <Link
+                                    style={{ color: 'white' }}
+                                    to={'/motel-room/add-room'}
+                                >
+                                    Thêm phòng trọ
+                                </Link>
+                            </Button>
+                        </div>
+                        <div>
+                            <ListRoom motelId={item._id} />
+                        </div>
+                    </>
+                ),
+            };
+        }),
+    ];
     return (
         <div>
             <div className={cx('button-motel')}>
@@ -46,47 +93,7 @@ const Motel = () => {
                     <Link to={'/motel-room/add-motel'}>Thêm nhà trọ</Link>
                 </Button>
             </div>
-            <Tabs defaultActiveKey='1'>
-                {motels &&
-                    motels.map((item, index) => {
-                        return (
-                            <Tabs.TabPane tab={item.name} key={index}>
-                                <div className={cx('button-motel')}>
-                                    <Button
-                                        type='primary'
-                                        icon={<DeleteOutlined />}
-                                        onClick={() => onRemoveMotel(item._id)}
-                                        danger
-                                    >
-                                        Xóa nhà trọ
-                                    </Button>
-                                    <Button
-                                        className={cx('btn-edit-motel')}
-                                        type='primary'
-                                        icon={<EditOutlined />}
-                                        href={`/motel-room/edit-motel/${item._id}`}
-                                    >
-                                        Sửa nhà trọ
-                                    </Button>
-                                    <Button
-                                        type='primary'
-                                        icon={<PlusSquareOutlined />}
-                                    >
-                                        <Link
-                                            style={{ color: 'white' }}
-                                            to={'/motel-room/add-room'}
-                                        >
-                                            Thêm phòng trọ
-                                        </Link>
-                                    </Button>
-                                </div>
-                                <div>
-                                    <ListRoom motelId={item._id} />
-                                </div>
-                            </Tabs.TabPane>
-                        );
-                    })}
-            </Tabs>
+            <Tabs activeKey={tab} onChange={setTab} items={listMotel}></Tabs>
         </div>
     );
 };
