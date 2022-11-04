@@ -19,6 +19,15 @@ export interface StateRoomStatus {
     areRenting: IStatistical | null;
     emptyRooms: IStatistical | null;
 }
+
+const initialSate = {
+    totalBill: 0,
+    totalBillPaid: 0,
+    totalBillUnpaid: 0,
+    totalPaymentAmount: 0,
+    totalPaymentUnpaid: 0,
+};
+
 const Dashboard = () => {
     const [state, setState] = useState<StateRoomStatus>({
         areRenting: null,
@@ -27,10 +36,11 @@ const Dashboard = () => {
 
     const [payment, setPayment] = useState<any>({});
     const [month, setMonth] = useState(
-        moment(new Date()).format(DateFormat.DATE_M)
+        moment().month(new Date().getMonth()).format(DateFormat.DATE_M)
     );
+
     const [year, setYear] = useState(
-        moment(new Date()).format(DateFormat.DATE_Y)
+        moment().year(new Date().getFullYear()).format(DateFormat.DATE_Y)
     );
 
     useEffect(() => {
@@ -48,10 +58,14 @@ const Dashboard = () => {
     useEffect(() => {
         const getDataPaymentChecking = async () => {
             const { data } = await getPaymentChecking({ month, year });
-            setPayment(data);
+            if (data) {
+                setPayment(data);
+            } else {
+                setPayment(initialSate);
+            }
         };
         getDataPaymentChecking();
-    }, [month || year]);
+    }, [month]);
 
     return (
         <div>
@@ -82,7 +96,7 @@ const Dashboard = () => {
                         <ExpiresContract />
                     </Col>
                     <Col span={12}>
-                        {Object.keys(payment).length > 0 && (
+                        {payment && Object.keys(payment).length > 0 && (
                             <PaymentTracking
                                 setMonth={setMonth}
                                 setYear={setYear}
