@@ -1,44 +1,53 @@
 /* eslint-disable indent */
-import { Button, Tabs, Form, PageHeader, message } from 'antd';
-import moment from 'moment';
-import ContractCustomer from '~/modules/contract-customer/ContractCustomer';
-import MemberCustomer from '~/modules/member-customer/MemberCustomer';
-import ServiceCustomer from '~/modules/service-customer/ServiceCustomer';
-import FormCreate from '~/modules/tenant-infor/FormCreate';
-import { useState, useEffect } from 'react';
-import styles from './Create.module.scss';
-import classNames from 'classnames/bind';
-const cx = classNames.bind(styles);
 import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
+import { Button, Form, PageHeader, message } from 'antd';
+import classNames from 'classnames/bind';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getProvinces } from '~/api/addressCheckout';
 import {
     addCustomerToRoom,
     editCustomerToRoom,
     getDetailCustomerToRoom,
 } from '~/api/customer.api';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { MESSAGES } from '~/constants/message.const';
-import { IService } from '~/types/Service.type';
-import { TypeCustomer } from '~/types/Customer';
-import { getProvinces } from '~/api/addressCheckout';
-import { DateFormat } from '~/constants/const';
+import { getAllService } from '~/api/service.api';
 import uploadImg from '~/api/upload-images.api';
 import { useAppDispatch } from '~/app/hooks';
+import Tabs from '~/components/tabs';
+import { DateFormat } from '~/constants/const';
+import { MESSAGES } from '~/constants/message.const';
 import { setIsLoading } from '~/feature/service/appSlice';
-const { TabPane } = Tabs;
+import ContractCustomer from '~/modules/contract-customer/ContractCustomer';
+import MemberCustomer from '~/modules/member-customer/MemberCustomer';
+import ServiceCustomer from '~/modules/service-customer/ServiceCustomer';
+import FormCreate from '~/modules/tenant-infor/FormCreate';
+import { TypeCustomer } from '~/types/Customer';
+import { IService } from '~/types/Service.type';
+import { TypeTabs } from '~/types/Setting.type';
+
+import styles from './Create.module.scss';
+
+const cx = classNames.bind(styles);
 
 const CustomerRedirect = () => {
+    const [tab, setTab] = useState('info');
+    const [img, setImg] = useState<string | ArrayBuffer | any>('');
+    const [provinces, setProvinces] = useState([]);
+    const [newdataService, setNewdataService] = useState([]);
+    const [newdataMember, setNewdataMember] = useState([]);
+    const [newMotelRoomID, setNewMotelRoomID] = useState([]);
+    const [service, setService] = useState<IService[]>([]);
+    const [services, setServices] = useState<IService[]>([]);
+    const [member, setMember] = useState([]);
     const { search } = useLocation();
     const dispatch = useAppDispatch();
     const roomName = new URLSearchParams(search).get('roomName') || '';
     const roomId = new URLSearchParams(search).get('roomId') || '';
     const motelID = new URLSearchParams(search).get('motelId') || '';
-    const [img, setImg] = useState<string | ArrayBuffer | any>('');
     const [form]: any = Form.useForm();
     const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
-    const [provinces, setProvinces] = useState([]);
-    const [newdataService, setNewdataService] = useState([]);
-    const [newdataMember, setNewdataMember] = useState([]);
-    const [newMotelRoomID, setNewMotelRoomID] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (roomRentID) {
@@ -50,21 +59,19 @@ const CustomerRedirect = () => {
             };
             dataRoom();
         }
-        const getDataProvince = async () => {
-            const { data } = await getProvinces();
-            setProvinces(data);
-        };
-        getDataProvince();
+        Promise.all([getProvinces(), getAllService()])
+            .then(([{ data: dataProvider }, { data: services }]) => {
+                setProvinces(dataProvider);
+                setServices(services);
+            })
+            .catch((err) => {
+                throw Error(err);
+            });
     }, []);
 
-    const [service, setService] = useState<IService[]>([]);
     const onGetService = (data: IService[]) => {
         setService(data);
     };
-
-    const navigate = useNavigate();
-
-    const [member, setMember] = useState([]);
 
     const onGetMember = (dataSource: any) => {
         setMember(dataSource);
@@ -127,6 +134,57 @@ const CustomerRedirect = () => {
             //
         }
     };
+    const items: TypeTabs[] = [
+        {
+            label: 'Thông tin khách thuê',
+            key: 'info',
+            children: (
+                <FormCreate
+                    provinces={provinces}
+                    onSave={onSave}
+                    roomRentID={roomRentID}
+                    form={form}
+                    roomName={roomName}
+                    roomId={roomId}
+                    setImg={setImg}
+                />
+            ),
+        },
+        {
+            label: 'Dịch vụ',
+            key: 'services',
+            children: (
+                <ServiceCustomer
+                    roomRentID={roomRentID}
+                    newdataService={newdataService}
+                    onGetService={onGetService}
+                    services={services}
+                />
+            ),
+        },
+        {
+            label: 'Thành viên',
+            key: 'member',
+            children: (
+                <MemberCustomer
+                    roomRentID={roomRentID}
+                    newdataMember={newdataMember}
+                    onGetMember={onGetMember}
+                />
+            ),
+        },
+        {
+            label: 'Hợp đồng',
+            key: 'contract',
+            children: (
+                <ContractCustomer
+                    roomRentID={roomRentID}
+                    form={form}
+                    onSave={onSave}
+                />
+            ),
+        },
+    ];
 
     return (
         <div>
@@ -170,40 +228,7 @@ const CustomerRedirect = () => {
                 ></PageHeader>
             </div>
             <div>
-                <Tabs>
-                    <TabPane tab='Thông tin khách thuê' key='tab-a'>
-                        <FormCreate
-                            provinces={provinces}
-                            onSave={onSave}
-                            roomRentID={roomRentID}
-                            form={form}
-                            roomName={roomName}
-                            roomId={roomId}
-                            setImg={setImg}
-                        />
-                    </TabPane>
-                    <TabPane tab='Dịch vụ' key='tab-b'>
-                        <ServiceCustomer
-                            roomRentID={roomRentID}
-                            newdataService={newdataService}
-                            onGetService={onGetService}
-                        />
-                    </TabPane>
-                    <TabPane tab='Thành viên' key='tab-c'>
-                        <MemberCustomer
-                            roomRentID={roomRentID}
-                            newdataMember={newdataMember}
-                            onGetMember={onGetMember}
-                        />
-                    </TabPane>
-                    <TabPane tab='Hợp đồng' key='tab-d'>
-                        <ContractCustomer
-                            roomRentID={roomRentID}
-                            form={form}
-                            onSave={onSave}
-                        />
-                    </TabPane>
-                </Tabs>
+                <Tabs activeKey={tab} onChange={setTab} items={items}></Tabs>
             </div>
         </div>
     );

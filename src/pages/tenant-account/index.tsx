@@ -1,20 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import {
-    Button,
-    Form,
-    Input,
-    Modal,
-    PageHeader,
-    Space,
-    Table,
-    message,
-} from 'antd';
 import { DeleteOutlined, KeyOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Modal, PageHeader, Space, message } from 'antd';
+import classNames from 'classnames/bind';
+import { useEffect, useState } from 'react';
+import { changePassword, deleteAccount, getAllAccount } from '~/api/auth.api';
+import Table from '~/components/table';
+import { MESSAGES } from '~/constants/message.const';
 
 import styles from './TenantAccount.module.scss';
-import classNames from 'classnames/bind';
-import { changePassword, deleteAccount, getAllAccount } from '~/api/auth.api';
-import { MESSAGES } from '~/constants/message.const';
+
 const cx = classNames.bind(styles);
 type EditableTableProps = Parameters<typeof Table>[0];
 
