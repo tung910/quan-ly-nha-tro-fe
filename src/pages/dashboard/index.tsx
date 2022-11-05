@@ -2,10 +2,14 @@ import { Col, Form, Row } from 'antd';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { getPaymentChecking } from '~/api/revenue-statistics.api';
+import {
+    getMonthlyRevenue,
+    getPaymentChecking,
+} from '~/api/revenue-statistics.api';
 import { getStatisticalRoomStatus } from '~/api/room.api';
 import { DateFormat } from '~/constants/const';
-import { IStatistical } from '~/types/Statistical.type';
+import { IMonthlyRevenue, IStatistical } from '~/types/Statistical.type';
+
 import AvailableRooms from './AvailableRooms';
 import styles from './Dasboard.module.scss';
 import ExpiresContract from './ExpiresContract';
@@ -33,28 +37,46 @@ const Dashboard = () => {
         areRenting: null,
         emptyRooms: null,
     });
+    const [monthlyRevenue, setMonthlyRevenue] = useState<IMonthlyRevenue[]>([]);
+    const [monthYearMonthlyRevenue, setYearMonthlyRevenue] = useState(
+        moment(Date()).format(DateFormat.DATE_Y)
+    );
 
     const [payment, setPayment] = useState<any>({});
     const [month, setMonth] = useState(
         moment().month(new Date().getMonth()).format(DateFormat.DATE_M)
     );
-
     const [year, setYear] = useState(
         moment().year(new Date().getFullYear()).format(DateFormat.DATE_Y)
     );
 
+    const onChangeYearMonthlyRevenue = (date: any, year: string) => {
+        setYearMonthlyRevenue(year);
+    };
+
     useEffect(() => {
-        const fetchStatisticalRoom = async () => {
-            const { data } = await getStatisticalRoomStatus();
-            const [areRenting, emptyRooms] = data;
+        const handleGetData = async () => {
+            const res = await Promise.all([getStatisticalRoomStatus()]);
+            const [statisticalRoomStatus] = res;
+            const { data: statisticalRoomStatusValue } = statisticalRoomStatus;
+            const [areRenting, emptyRooms] = statisticalRoomStatusValue;
+
             setState({
                 areRenting,
                 emptyRooms,
             });
         };
-        fetchStatisticalRoom();
+        handleGetData();
     }, []);
-
+    useEffect(() => {
+        const handleGetMonthlyRevenue = async () => {
+            const { data: monthlyRevenueValue } = await getMonthlyRevenue({
+                data: { year: monthYearMonthlyRevenue },
+            });
+            setMonthlyRevenue(monthlyRevenueValue);
+        };
+        handleGetMonthlyRevenue();
+    }, [monthYearMonthlyRevenue]);
     useEffect(() => {
         const getDataPaymentChecking = async () => {
             const { data } = await getPaymentChecking({ month, year });
@@ -64,6 +86,7 @@ const Dashboard = () => {
                 setPayment(initialSate);
             }
         };
+
         getDataPaymentChecking();
     }, [month]);
 
@@ -72,13 +95,19 @@ const Dashboard = () => {
             <Form autoComplete='off' style={{ marginTop: 20, padding: 20 }}>
                 {/* Row 1 */}
                 <Row gutter={[16, 16]}>
-                    <Col span={12}>
+                    <Col span={8}>
                         {state.areRenting && state.emptyRooms && (
                             <RoomStatus roomStatus={state} />
                         )}
                     </Col>
-                    <Col span={12}>
-                        <Revenue />
+                    <Col span={16}>
+                        <Revenue
+                            monthlyRevenue={monthlyRevenue}
+                            monthYearMonthlyRevenue={monthYearMonthlyRevenue}
+                            onChangeYearMonthlyRevenue={
+                                onChangeYearMonthlyRevenue
+                            }
+                        />
                     </Col>
                 </Row>
                 {/* Row 2 */}

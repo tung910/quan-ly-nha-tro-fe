@@ -9,8 +9,11 @@ import {
     Title,
     Tooltip,
 } from 'chart.js';
+import { memo } from 'react';
 import { Pie } from 'react-chartjs-2';
+
 import { StateRoomStatus } from '.';
+
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -37,15 +40,14 @@ const RoomStatus = ({ roomStatus }: Props) => {
             },
         ],
     };
+
     return (
         <div>
             <Card title='Trạng thái phòng' bordered={true}>
-                <div style={{ width: 270, marginLeft: 130 }}>
-                    <Pie data={pie}></Pie>
-                </div>
+                <Pie data={pie}></Pie>
             </Card>
         </div>
     );
 };
 
-export default RoomStatus;
+export default memo(RoomStatus);
