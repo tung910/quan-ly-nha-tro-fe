@@ -13,6 +13,7 @@ import {
     Form,
     Input,
     InputNumber,
+    message,
     Modal,
     PageHeader,
     Row,
@@ -20,7 +21,6 @@ import {
     Space,
     Table,
     Typography,
-    message,
 } from 'antd';
 import classNames from 'classnames/bind';
 import moment from 'moment';
@@ -212,12 +212,12 @@ const Calculate = () => {
         form.resetFields();
         setIsModalOpen(false);
     };
-    const getPayer = async (id: string) =>{
+    const getPayer = async (id: string) => {
         setPrepayment(true);
         setIdCalculator(id);
         const { data } = await getCalculator(id);
         setPayer(data[0].roomRentalDetailID.customerName);
-    }
+    };
     const seeTheBill = async (id: string) => {
         setIsModalReceipt(true);
         const { data } = await getCalculator(id);
@@ -234,10 +234,13 @@ const Calculate = () => {
     const onPayment = async (values: any) => {
         const { data } = await getCalculator(idCalculator);
         data.map(async (item: any) => {
-            if (values.payAmount > item.totalAmount) {
-                alert(
-                    'Số tiền bạn trả lớn hơn số tiền phải trả mời bạn nhập lại!'
-                );
+            if (values.payAmount > item.remainAmount) {
+                Modal.error({
+                    title: 'Thông báo',
+                    content:
+                        'Số tiền trả lớn hơn số tiền phải trả. Mời nhập lại!',
+                });
+                formPayment.resetFields();
             } else {
                 values = {
                     ...values,
@@ -278,11 +281,10 @@ const Calculate = () => {
                     setCalculators(data);
                 };
                 getList();
+                setPrepayment(false);
+                formPayment.resetFields();
             }
         });
-
-        setPrepayment(false);
-        formPayment.resetFields();
     };
 
     const onSearch = (values: any) => {
@@ -650,8 +652,13 @@ const Calculate = () => {
                                     </p>
                                     <hr />
                                     <p>
-                                        <b>Người thanh toán:{' '}
-                                        {item.roomRentalDetailID.customerName}</b>
+                                        <b>
+                                            Người thanh toán:{' '}
+                                            {
+                                                item.roomRentalDetailID
+                                                    .customerName
+                                            }
+                                        </b>
                                     </p>
                                 </div>
                             );
@@ -713,21 +720,23 @@ const Calculate = () => {
                                         addonAfter='VNĐ'
                                     />
                                 </Form.Item>
-                                {payer&&<Form.Item
-                                    label={<>Người nộp</>}
-                                    labelAlign='left'
-                                    name='payer'
-                                    initialValue={payer}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Không được để trống',
-                                        },
-                                    ]}
-                                >
-                                    <Input style={{ width: '375px' }} />
-                                </Form.Item>}
-                                
+                                {payer && (
+                                    <Form.Item
+                                        label={<>Người nộp</>}
+                                        labelAlign='left'
+                                        name='payer'
+                                        initialValue={payer}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Không được để trống',
+                                            },
+                                        ]}
+                                    >
+                                        <Input style={{ width: '375px' }} />
+                                    </Form.Item>
+                                )}
+
                                 <Form.Item
                                     label={<>Thanh toán</>}
                                     labelAlign='left'

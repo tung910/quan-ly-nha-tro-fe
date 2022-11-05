@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { notification } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
-import styles from './signUp.module.scss';
+import { notification } from 'antd';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { IUser } from '~/types/User.type';
+import { Link, useNavigate } from 'react-router-dom';
 import { signUp, verifyOtp } from '~/api/auth.api';
-import { useNavigate } from 'react-router-dom';
+import { IUser } from '~/types/User.type';
+import styles from './signUp.module.scss';
 
 const SignUpPage = () => {
     const {
@@ -102,7 +102,12 @@ const SignUpPage = () => {
                     <button className={styles['btn_login']} type='submit'>
                         Đăng Ký
                     </button>
-                    <div className={styles['signup_link']}></div>
+                    <div className={styles['signup_link']}>
+                        Bạn đã có tài khoản?{' '}
+                        <Link to='/login' className={styles['signup_link-btn']}>
+                            Đăng nhập
+                        </Link>
+                    </div>
                 </form>
             </div>
         </div>

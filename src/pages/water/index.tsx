@@ -6,12 +6,12 @@ import {
     DatePicker,
     Form,
     InputNumber,
+    message,
     Modal,
     PageHeader,
     Row,
     Select,
     Table,
-    message,
 } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import classNames from 'classnames/bind';
@@ -203,7 +203,7 @@ function handleSubmitData(record: any) {
     if (record.useValue < 0) {
         Modal.error({
             title: 'Thông báo',
-            content: 'Chỉ số nước mới phải lớn hơn chỉ số nước mới',
+            content: 'Chỉ số nước mới phải lớn hơn chỉ số nước cũ',
         });
     } else {
         Modal.confirm({
