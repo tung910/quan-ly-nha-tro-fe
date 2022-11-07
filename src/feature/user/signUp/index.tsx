@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { signUp, verifyOtp } from '~/api/auth.api';
 import { IUser } from '~/types/User.type';
+
 import styles from './signUp.module.scss';
 
 const SignUpPage = () => {
@@ -31,7 +32,7 @@ const SignUpPage = () => {
             navigate('/login');
         } catch (error: any) {
             return notification.error({
-                message: error.messages,
+                message: error.messages || 'Some error',
                 icon: <CheckCircleOutlined style={{ color: '#fe0000' }} />,
             });
         }

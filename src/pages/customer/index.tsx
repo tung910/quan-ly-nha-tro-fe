@@ -62,7 +62,11 @@ const CustomerRedirect = () => {
         Promise.all([getProvinces(), getAllService()])
             .then(([{ data: dataProvider }, { data: services }]) => {
                 setProvinces(dataProvider);
-                setServices(services);
+                const serviceList = services.map((item: IService) => ({
+                    ...item,
+                    quantity: '1',
+                }));
+                setServices(serviceList);
             })
             .catch((err) => {
                 throw Error(err);
@@ -96,7 +100,7 @@ const CustomerRedirect = () => {
                         motelRoomID: newMotelRoomID,
                         motelID,
                     },
-                    Service: service,
+                    Service: service.length <= 0 ? services : service,
                     Member: member,
                 };
                 await editCustomerToRoom(data);
@@ -122,7 +126,7 @@ const CustomerRedirect = () => {
                         roomName,
                         image: resImg,
                     },
-                    Service: service,
+                    Service: service.length <= 0 ? services : service,
                     Member: member,
                 };
                 await addCustomerToRoom(data);

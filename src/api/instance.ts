@@ -35,7 +35,7 @@ instance.interceptors.response.use(
     },
     (error) => {
         const { data } = error.response;
-        notification.error({ message: data?.messages });
+        notification.error({ message: data?.messages || 'Some error' });
         return Promise.reject(data);
     }
 );

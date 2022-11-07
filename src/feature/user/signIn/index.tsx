@@ -1,9 +1,9 @@
-import { CheckCircleOutlined } from '@ant-design/icons';
 import { notification } from 'antd';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '~/app/hooks';
 import { IUser } from '~/types/User.type';
+
 import { signIn } from '../userSlice';
 import styles from './signin.module.scss';
 
@@ -30,8 +30,7 @@ const LoginPage = () => {
             return navidate('/');
         } catch (error: any) {
             return notification.error({
-                message: error.messages,
-                icon: <CheckCircleOutlined style={{ color: '#fe0000' }} />,
+                message: error.messages || 'Some error',
             });
         }
     };
