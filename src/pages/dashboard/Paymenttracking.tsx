@@ -1,20 +1,16 @@
-import { Card, Col, DatePicker, Form, Row } from 'antd';
+import { Card, DatePicker, Form, Row } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import Table from '~/components/table';
 import { DateFormat } from '~/constants/const';
+import { generatePriceToVND } from '~/utils/helper';
 
 type Props = {
     newDataPaymentChecking: any;
-    setYear: any;
-    setMonth: any;
+    setDate: any;
 };
-const PaymentTracking = ({
-    newDataPaymentChecking,
-    setYear,
-    setMonth,
-}: Props) => {
+const PaymentTracking = ({ newDataPaymentChecking, setDate }: Props) => {
     const [dataSource, setdataSource] = useState([]);
     useEffect(() => {
         const array: any = [];
@@ -49,44 +45,30 @@ const PaymentTracking = ({
             title: 'Số tiền',
             dataIndex: 'newTotalAmout',
             key: 'newTotalAmout',
+            render: (newTotalAmout) => {
+                return <>{generatePriceToVND(+newTotalAmout)}</>;
+            },
         },
     ];
     return (
         <div>
             <Card title='Theo dõi thanh toán' bordered={true}>
                 <Row gutter={[8, 8]}>
-                    <Col span={6}>
-                        <Form.Item label={<>Tháng</>} colon={false}>
-                            <DatePicker
-                                picker='month'
-                                onChange={(e: any) =>
-                                    setMonth(
-                                        moment(e).format(DateFormat.DATE_M)
-                                    )
-                                }
-                                defaultValue={moment().month(
-                                    new Date().getMonth()
-                                )}
-                                format={DateFormat.DATE_M}
-                                name='date'
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col span={6}>
-                        <Form.Item label={<>Năm</>} colon={false}>
-                            <DatePicker
-                                picker='year'
-                                onChange={(e: any) =>
-                                    setYear(moment(e).format(DateFormat.DATE_Y))
-                                }
-                                defaultValue={moment().year(
-                                    new Date().getFullYear()
-                                )}
-                                format={DateFormat.DATE_Y}
-                                name='date'
-                            />
-                        </Form.Item>
-                    </Col>
+                    <Form.Item
+                        label={<>Tháng/Năm</>}
+                        initialValue={moment()}
+                        colon={false}
+                        name='date'
+                    >
+                        <DatePicker
+                            picker='month'
+                            onChange={(e: any) =>
+                                setDate(moment(e).format(DateFormat.DATE_M_Y))
+                            }
+                            clearIcon={null}
+                            format={DateFormat.DATE_M_Y}
+                        />
+                    </Form.Item>
                 </Row>
                 <Table
                     dataSource={dataSource}
