@@ -9,7 +9,6 @@ import {
 import { getStatisticalRoomStatus } from '~/api/room.api';
 import { DateFormat } from '~/constants/const';
 import { IMonthlyRevenue, IStatistical } from '~/types/Statistical.type';
-
 import AvailableRooms from './AvailableRooms';
 import styles from './Dasboard.module.scss';
 import ExpiresContract from './ExpiresContract';
@@ -43,11 +42,8 @@ const Dashboard = () => {
     );
 
     const [payment, setPayment] = useState<any>({});
-    const [month, setMonth] = useState(
-        moment().month(new Date().getMonth()).format(DateFormat.DATE_M)
-    );
-    const [year, setYear] = useState(
-        moment().year(new Date().getFullYear()).format(DateFormat.DATE_Y)
+    const [date, setDate] = useState(
+        moment(Date()).format(DateFormat.DATE_M_Y)
     );
 
     const onChangeYearMonthlyRevenue = (date: any, year: string) => {
@@ -79,16 +75,15 @@ const Dashboard = () => {
     }, [monthYearMonthlyRevenue]);
     useEffect(() => {
         const getDataPaymentChecking = async () => {
-            const { data } = await getPaymentChecking({ month, year });
+            const { data } = await getPaymentChecking({ date });
             if (data) {
                 setPayment(data);
             } else {
                 setPayment(initialSate);
             }
         };
-
         getDataPaymentChecking();
-    }, [month]);
+    }, [date]);
 
     return (
         <div>
@@ -113,7 +108,12 @@ const Dashboard = () => {
                 {/* Row 2 */}
                 <Row gutter={[16, 16]} className={cx('row')}>
                     <Col span={12}>
-                        <AvailableRooms />
+                        {payment && Object.keys(payment).length > 0 && (
+                            <PaymentTracking
+                                setDate={setDate}
+                                newDataPaymentChecking={payment}
+                            />
+                        )}
                     </Col>
                     <Col span={12}>
                         <OweRoomFees />
@@ -125,13 +125,7 @@ const Dashboard = () => {
                         <ExpiresContract />
                     </Col>
                     <Col span={12}>
-                        {payment && Object.keys(payment).length > 0 && (
-                            <PaymentTracking
-                                setMonth={setMonth}
-                                setYear={setYear}
-                                newDataPaymentChecking={payment}
-                            />
-                        )}
+                        <AvailableRooms />
                     </Col>
                 </Row>
             </Form>
