@@ -1,44 +1,32 @@
 import { Card } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+import { useEffect, useState } from 'react';
 import Table from '~/components/table';
 
 const columnsAvailableRooms: ColumnsType = [
     {
         title: 'Nhà',
-        dataIndex: 'idhouse',
-        key: 'idhouse',
+        dataIndex: ['motelID', 'name'],
+        key: 'motelID',
     },
     {
         title: 'Phòng',
-        dataIndex: 'idroom',
-        key: 'idroom',
+        dataIndex: 'roomName',
+        key: 'roomName',
     },
 ];
 
-const dataSource = [
-    {
-        key: '1',
-        idhouse: 'Tầng 1',
-        idroom: 2,
-    },
-    {
-        key: '2',
-        idhouse: 'Tầng 1',
-        idroom: 3,
-    },
-    {
-        key: '3',
-        idhouse: 'Tầng 1',
-        idroom: 4,
-    },
-    {
-        key: '4',
-        idhouse: 'Tầng 1',
-        idroom: 5,
-    },
-];
+type Props = {
+    roomStatus: any;
+};
+const AvailableRooms = ({ roomStatus }: Props) => {
+    const [dataSource, setDataSource] = useState([]);
 
-const AvailableRooms = () => {
+    useEffect(() => {
+        const result = roomStatus.emptyRooms;
+        setDataSource(result);
+    }, [roomStatus]);
+
     return (
         <div>
             <Card title='Danh sách phòng trống' bordered={true}>
