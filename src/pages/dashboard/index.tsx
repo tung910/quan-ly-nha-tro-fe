@@ -64,6 +64,7 @@ const Dashboard = () => {
         };
         handleGetData();
     }, []);
+
     useEffect(() => {
         const handleGetMonthlyRevenue = async () => {
             const { data: monthlyRevenueValue } = await getMonthlyRevenue({
@@ -122,10 +123,12 @@ const Dashboard = () => {
                 {/* Row 3 */}
                 <Row gutter={[16, 16]} className={cx('row')}>
                     <Col span={12}>
-                        <ExpiresContract />
+                        {state.emptyRooms && (
+                            <AvailableRooms roomStatus={state.emptyRooms} />
+                        )}
                     </Col>
                     <Col span={12}>
-                        <AvailableRooms />
+                        <ExpiresContract />
                     </Col>
                 </Row>
             </Form>
