@@ -42,8 +42,8 @@ const OweRoomFees = ({ dataOwe }: Props) => {
     const [dataSource, setDataSource] = useState([]);
 
     useEffect(() => {
-        const result = dataOwe;
-        setDataSource(result);
+        const data = dataOwe.filter((item: any) => item.remainAmount !== 0);
+        setDataSource(data);
     }, [dataOwe]);
 
     return (
