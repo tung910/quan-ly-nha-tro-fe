@@ -1,8 +1,8 @@
-import { DeleteOutlined, KeyOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Modal, PageHeader, Space, message } from 'antd';
+import { KeyOutlined, LockOutlined } from '@ant-design/icons';
+import { Button, Form, Input, message, Modal, PageHeader, Space } from 'antd';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
-import { changePassword, deleteAccount, getAllAccount } from '~/api/auth.api';
+import { changePassword, getAllAccount } from '~/api/auth.api';
 import Table from '~/components/table';
 import { MESSAGES } from '~/constants/message.const';
 
@@ -30,8 +30,8 @@ const TenantAccount = () => {
         },
         {
             title: 'Khách thuê',
-            dataIndex: ['customerName'],
-            key: 'customerName',
+            dataIndex: ['name'],
+            key: 'name',
         },
         {
             title: 'Email',
@@ -49,7 +49,7 @@ const TenantAccount = () => {
                             htmlType='submit'
                             type='primary'
                             icon={<KeyOutlined />}
-                            title='Reset'
+                            title='Đổi mật khẩu'
                             onClick={() => {
                                 setIsModalOpen(true);
                                 setIdAccount(id);
@@ -58,9 +58,9 @@ const TenantAccount = () => {
                         <Button
                             htmlType='submit'
                             type='primary'
-                            icon={<DeleteOutlined />}
-                            title='Xóa'
-                            onClick={() => handleDeleteAccount(id)}
+                            icon={<LockOutlined />}
+                            title='Khóa'
+                            onClick={() => handleLockAccount(id)}
                             danger
                         />
                     </Space>
@@ -74,19 +74,19 @@ const TenantAccount = () => {
         setIsModalOpen(false);
         message.success(MESSAGES.CHANGE_PASSWORD);
     };
-    const handleDeleteAccount = async (id: string) => {
+    const handleLockAccount = async (id: string) => {
         Modal.confirm({
             centered: true,
-            title: `Bạn có muốn xóa tài khoản không ?`,
-            cancelText: 'Cancel',
-            okText: 'Lưu',
-            onOk: async () => {
-                await deleteAccount(id);
-                setListAccount(
-                    listAccount.filter((item: any) => item._id !== id)
-                );
-                message.success(MESSAGES.DEL_SUCCESS);
-            },
+            title: `Khi khóa tài khoản thì tài khoản này không thể đăng nhập được nữa. Bạn có muốn khóa không?`,
+            cancelText: 'Hủy',
+            okText: 'Khóa',
+            // onOk: async () => {
+            //     await deleteAccount(id);
+            //     setListAccount(
+            //         listAccount.filter((item: any) => item._id !== id)
+            //     );
+            //     message.success(MESSAGES.DEL_SUCCESS);
+            // },
         });
     };
     useEffect(() => {
@@ -105,7 +105,7 @@ const TenantAccount = () => {
             />
             <Table columns={ColumnsData} dataSource={listAccount} />
             <Modal
-                title='Nhập mật khẩu mời'
+                title='Nhập mật khẩu mới'
                 open={isModalOpen}
                 onOk={form.submit}
                 onCancel={() => setIsModalOpen(false)}

@@ -12,13 +12,13 @@ import {
     Col,
     DatePicker,
     Form,
+    message,
     Modal,
     PageHeader,
     Row,
     Select,
     Space,
     Tooltip,
-    message,
 } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import classNames from 'classnames/bind';
@@ -327,7 +327,15 @@ const BookingRoomDeposit = () => {
                                 type='primary'
                                 icon={<PlusOutlined />}
                             >
-                                <Link to='/booking/create'>Thêm mới</Link>
+                                <Link
+                                    to='/booking/create'
+                                    style={{
+                                        color: 'white',
+                                        textDecoration: 'none',
+                                    }}
+                                >
+                                    Thêm mới
+                                </Link>
                             </Button>
                             <Button type='primary' icon={<FileExcelOutlined />}>
                                 Xuất file excel
