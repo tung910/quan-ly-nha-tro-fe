@@ -3,14 +3,14 @@ import {
     EditOutlined,
     PlusSquareOutlined,
 } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Button, message, Modal } from 'antd';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllMotel, removeMotel } from '~/api/motel.api';
 import Tabs from '~/components/tabs';
+import { MESSAGES } from '~/constants/message.const';
 import { MotelType } from '~/types/MotelType';
-
 import ListRoom from '../room/ListRoom';
 import styles from './Motel.module.scss';
 
@@ -19,6 +19,7 @@ const cx = classNames.bind(styles);
 const Motel = () => {
     const [tab, setTab] = useState('0');
     const [motels, setMotels] = useState<MotelType[]>([]);
+
     useEffect(() => {
         const getMotels = async () => {
             const { data } = await getAllMotel();
@@ -29,11 +30,18 @@ const Motel = () => {
     }, []);
 
     const onRemoveMotel = async (id: string) => {
-        const confirm = window.confirm('Bạn muốn xóa không?');
-        if (confirm) {
-            await removeMotel(id);
-            setMotels(motels.filter((item) => item._id !== id));
-        }
+        Modal.confirm({
+            centered: true,
+            title: `Bạn có muốn xóa nhà trọ không!`,
+            cancelText: 'Hủy',
+            okText: 'Xóa',
+            onOk: async () => {
+                await removeMotel(id);
+                setMotels(motels.filter((item) => item._id !== id));
+                message.success(MESSAGES.DEL_SUCCESS);
+                setTab('0');
+            },
+        });
     };
     const listMotel = [
         ...motels.map((item, index) => {
