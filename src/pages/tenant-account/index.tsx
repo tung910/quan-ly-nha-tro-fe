@@ -20,12 +20,12 @@ const TenantAccount = () => {
     const ColumnsData: ColumnTypes[number][] = [
         {
             title: 'Nhà',
-            dataIndex: ['motelID', 'name'],
+            dataIndex: ['motelRoomID', 'motelID', 'name'],
             key: 'name',
         },
         {
             title: 'Phòng',
-            dataIndex: ['roomName'],
+            dataIndex: ['motelRoomID', 'roomName'],
             key: 'roomName',
         },
         {
@@ -91,8 +91,14 @@ const TenantAccount = () => {
     };
     useEffect(() => {
         const getAccount = async () => {
+            const acc: any = [];
             const { data } = await getAllAccount();
-            setListAccount(data);
+            data.map((item: any) => {
+                if (item.role === 0) {
+                    acc.push(item);
+                }
+            });
+            setListAccount(acc);
         };
         getAccount();
     }, []);
