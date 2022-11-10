@@ -9,14 +9,14 @@ import {
 } from '@ant-design/icons';
 import {
     Button,
+    DatePicker,
+    Form,
     Image,
+    message,
+    Modal,
+    Select,
     Space,
     Tooltip,
-    Modal,
-    Form,
-    DatePicker,
-    Select,
-    message,
 } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import classNames from 'classnames/bind';
@@ -92,11 +92,17 @@ const ListRoom = ({ motelId }: Props) => {
         message.success(MESSAGES.CHANGE_ROOM);
     };
     const onRemove = async (id: string) => {
-        const confirm = window.confirm('Bạn muốn xóa không?');
-        if (confirm) {
-            await removeRoom(id);
-            setRooms(rooms.filter((item) => item._id !== id));
-        }
+        Modal.confirm({
+            centered: true,
+            title: `Bạn có muốn xóa phòng không!`,
+            cancelText: 'Hủy',
+            okText: 'Xóa',
+            onOk: async () => {
+                await removeRoom(id);
+                setRooms(rooms.filter((item) => item._id !== id));
+                message.success(MESSAGES.DEL_SUCCESS);
+            },
+        });
     };
 
     const defaultColumns: ColumnsType<object> | undefined = [

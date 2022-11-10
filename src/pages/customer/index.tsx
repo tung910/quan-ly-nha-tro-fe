@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
-import { Button, Form, PageHeader, message } from 'antd';
+import { Button, Form, message, PageHeader } from 'antd';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -104,6 +104,9 @@ const CustomerRedirect = () => {
                     Member: member,
                 };
                 await editCustomerToRoom(data);
+                dispatch(setIsLoading(false));
+                message.success(MESSAGES.EDIT_SUCCESS);
+                navigate('/motel-room');
             } else {
                 const resImg = await uploadImg(img);
 
@@ -130,10 +133,10 @@ const CustomerRedirect = () => {
                     Member: member,
                 };
                 await addCustomerToRoom(data);
+                dispatch(setIsLoading(false));
+                message.success(MESSAGES.ADD_SUCCESS);
+                navigate('/motel-room');
             }
-            dispatch(setIsLoading(false));
-            message.success(MESSAGES.ADD_SUCCESS);
-            navigate('/motel-room');
         } catch (error) {
             //
         }

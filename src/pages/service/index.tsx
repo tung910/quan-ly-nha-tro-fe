@@ -1,14 +1,14 @@
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Checkbox, message, PageHeader, Space, Tooltip } from 'antd';
-import { Link } from 'react-router-dom';
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import Table from '~/components/table';
 import { ColumnsType } from 'antd/lib/table';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '~/app/hooks';
+import { RootState } from '~/app/store';
+import Table from '~/components/table';
+import { MESSAGES } from '~/constants/message.const';
 import { deleteService, fetchService } from '~/feature/service/serviceSlice';
 import { generatePriceToVND } from '~/utils/helper';
-import { RootState } from '~/app/store';
-import { MESSAGES } from '~/constants/message.const';
 
 const ServicePage = () => {
     const dispatch = useAppDispatch();
@@ -99,7 +99,15 @@ const ServicePage = () => {
                     title='Danh sách dịch vụ'
                     extra={[
                         <Button type='primary' key={1} icon={<PlusOutlined />}>
-                            <Link to='add-service'>Thêm dịch vụ</Link>
+                            <Link
+                                to='add-service'
+                                style={{
+                                    color: 'white',
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                Thêm dịch vụ
+                            </Link>
                         </Button>,
 
                         selectedRowKeys.length > 0 && (

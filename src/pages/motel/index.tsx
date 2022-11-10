@@ -55,16 +55,26 @@ const Motel = () => {
                                 className={cx('btn-edit-motel')}
                                 type='primary'
                                 icon={<EditOutlined />}
-                                href={`/motel-room/edit-motel/${item._id}`}
                             >
-                                Sửa nhà trọ
+                                <Link
+                                    style={{
+                                        color: 'white',
+                                        textDecoration: 'none',
+                                    }}
+                                    to={`/motel-room/edit-motel/${item._id}`}
+                                >
+                                    Sửa nhà trọ
+                                </Link>
                             </Button>
                             <Button
                                 type='primary'
                                 icon={<PlusSquareOutlined />}
                             >
                                 <Link
-                                    style={{ color: 'white' }}
+                                    style={{
+                                        color: 'white',
+                                        textDecoration: 'none',
+                                    }}
                                     to={'/motel-room/add-room'}
                                 >
                                     Thêm phòng trọ
@@ -90,7 +100,15 @@ const Motel = () => {
                     Khách thuê
                 </Button>
                 <Button type='primary' icon={<PlusSquareOutlined />}>
-                    <Link to={'/motel-room/add-motel'}>Thêm nhà trọ</Link>
+                    <Link
+                        to={'/motel-room/add-motel'}
+                        style={{
+                            color: 'white',
+                            textDecoration: 'none',
+                        }}
+                    >
+                        Thêm nhà trọ
+                    </Link>
                 </Button>
             </div>
             <Tabs activeKey={tab} onChange={setTab} items={listMotel}></Tabs>
