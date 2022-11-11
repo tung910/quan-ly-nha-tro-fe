@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { CheckOutlined, SaveOutlined, SearchOutlined } from '@ant-design/icons';
 import {
     Button,
@@ -24,7 +23,6 @@ import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
 import { IDataPower } from '~/types/DataPower.type';
 import { MotelType } from '~/types/MotelType';
-
 import styles from './DataPower.module.scss';
 
 const cx = classNames.bind(styles);
@@ -91,7 +89,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
                     : record.newValue - values.oldValue,
             });
         } catch (errInfo) {
-            console.log('Save failed:', errInfo);
+            // console.warn('Save failed:', errInfo);
         }
     };
 
@@ -207,7 +205,11 @@ function handleSubmitData(record: any) {
     } else {
         Modal.confirm({
             centered: true,
-            title: `Bạn có đồng ý lưu chỉ số điện ${record.roomName} trong tháng 09/2022 không ?`,
+            title: `Bạn có đồng ý lưu chỉ số điện ${
+                record.roomName
+            } trong tháng ${moment(new Date()).format(
+                DateFormat.DATE_M_Y
+            )} không ?`,
             cancelText: 'Cancel',
             okText: 'Lưu',
             onOk: () => handSubmitData(record),
@@ -229,13 +231,28 @@ const handSubmitData = async (record: any) => {
 };
 
 function handleSaveAll(dataPower: any) {
-    Modal.confirm({
-        centered: true,
-        title: `Bạn có đồng ý lưu chỉ số điện của tháng 09/2022 cho toàn bộ các phòng của nhà đang chọn không ?`,
-        cancelText: 'Cancel',
-        okText: 'Lưu',
-        onOk: () => handleSaveAllData(dataPower),
-    });
+    const result = dataPower.map((item: any) => item.useValue);
+
+    const newData = result.find((item: any) => item! < 0);
+
+    if (newData) {
+        return Modal.error({
+            title: 'Thông báo',
+            content: 'Chỉ số điện mới phải lớn hơn chỉ số điện cũ',
+        });
+    } else {
+        return Modal.confirm({
+            centered: true,
+            title: `Bạn có đồng ý lưu chỉ số điện của tháng ${moment(
+                new Date()
+            ).format(
+                DateFormat.DATE_M_Y
+            )} cho toàn bộ các phòng của nhà đang chọn không ?`,
+            cancelText: 'Cancel',
+            okText: 'Lưu',
+            onOk: () => handleSaveAllData(dataPower),
+        });
+    }
 }
 
 const handleSaveAllData = (dataPower: any) => {
