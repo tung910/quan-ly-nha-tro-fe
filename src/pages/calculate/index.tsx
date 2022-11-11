@@ -92,8 +92,6 @@ const Calculate = () => {
                             icon={<DollarCircleOutlined />}
                             onClick={() => {
                                 getPayer(id);
-                                // setPrepayment(true);
-                                // setIdCalculator(id);
                             }}
                             title='Nhập số tiền đã thu'
                         />
@@ -655,8 +653,7 @@ const Calculate = () => {
                                         <b>
                                             Người thanh toán:{' '}
                                             {
-                                                item.roomRentalDetailID
-                                                    .customerName
+                                                item.payer
                                             }
                                         </b>
                                     </p>
