@@ -1,25 +1,25 @@
+import { RollbackOutlined, SaveOutlined } from '@ant-design/icons';
 import {
     Button,
+    Checkbox,
     Col,
-    PageHeader,
-    Row,
     Form,
     Input,
-    Select,
-    Checkbox,
     InputNumber,
     message,
+    PageHeader,
+    Row,
+    Select,
 } from 'antd';
 import { useEffect } from 'react';
-import { RollbackOutlined, SaveOutlined } from '@ant-design/icons';
 
-import { serviceTypeOptions } from '~/constants/service.const';
-import { IService } from '~/types/Service.type';
-import { createService, updateService } from '~/feature/service/serviceSlice';
-import { useAppDispatch } from '~/app/hooks';
-import { useGetParam } from '~/utils/helper';
 import { getServiceAPI } from '~/api/service.api';
+import { useAppDispatch } from '~/app/hooks';
 import { MESSAGES } from '~/constants/message.const';
+import { serviceTypeOptions } from '~/constants/service.const';
+import { createService, updateService } from '~/feature/service/serviceSlice';
+import { IService } from '~/types/Service.type';
+import { useGetParam } from '~/utils/helper';
 const { Option } = Select;
 
 const AddEditService = () => {
@@ -67,7 +67,6 @@ const AddEditService = () => {
                 const { data } = await getServiceAPI(param);
                 form.setFieldsValue({
                     serviceName: data.serviceName,
-                    serviceTypeId: data.serviceTypeName,
                     unitPrice: +data.unitPrice,
                     isActive: data.isActive,
                     note: data.note,
@@ -128,29 +127,6 @@ const AddEditService = () => {
                             <Input autoFocus />
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
-                        <Form.Item
-                            label={<>Loại dịch vụ</>}
-                            labelAlign='left'
-                            name='serviceTypeId'
-                            rules={[
-                                {
-                                    required: true,
-                                    message:
-                                        'Vui lòng nhập tên người dùng của bạn!',
-                                },
-                            ]}
-                            validateTrigger={['onBlur', 'onChange']}
-                        >
-                            <Select>
-                                {serviceTypeOptions.map((serviceType) => (
-                                    <Option key={serviceType.serviceTypeId}>
-                                        {serviceType.serviceTypeName}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
                 </Row>
                 <Row gutter={20}>
                     <Col span={12}>
@@ -178,6 +154,7 @@ const AddEditService = () => {
                                     ` ${value}`.replace(/\$\s?|(,*)/g, '')
                                 }
                                 addonAfter='VNĐ'
+                                style={{ width: 380 }}
                             />
                         </Form.Item>
                     </Col>
@@ -188,13 +165,13 @@ const AddEditService = () => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={24}>
+                    <Col span={12}>
                         <Form.Item
                             name='note'
                             label='Ghi chú'
                             labelAlign='left'
                         >
-                            <Input.TextArea allowClear />
+                            <Input.TextArea allowClear style={{ width: 960 }} />
                         </Form.Item>
                     </Col>
                 </Row>
