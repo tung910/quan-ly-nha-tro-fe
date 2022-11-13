@@ -24,7 +24,6 @@ import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
 import { IDataWater } from '~/types/DataWater.type';
 import { MotelType } from '~/types/MotelType';
-
 import styles from './Water.module.scss';
 
 const cx = classNames.bind(styles);
@@ -88,8 +87,8 @@ const EditableCell: React.FC<EditableCellProps> = ({
                 ...record,
                 ...values,
                 useValue: values.newValue
-                    ? values.newValue - record.oldValue
-                    : record.newValue - values.oldValue,
+                    ? values.newValue - values.oldValue || 0
+                    : record.newValue - values.oldValue || 0,
             });
         } catch (errInfo) {
             console.log('Save failed:', errInfo);
@@ -110,7 +109,13 @@ const EditableCell: React.FC<EditableCellProps> = ({
                     },
                 ]}
             >
-                <InputNumber ref={inputRef} onPressEnter={save} onBlur={save} />
+                <InputNumber
+                    min={0}
+                    max={999}
+                    ref={inputRef}
+                    onPressEnter={save}
+                    onBlur={save}
+                />
             </Form.Item>
         ) : (
             <div
