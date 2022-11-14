@@ -2,18 +2,30 @@ import {
     BellOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
-    QuestionCircleOutlined,
     SearchOutlined,
 } from '@ant-design/icons';
-import { Badge, Button, Dropdown, Layout, Menu } from 'antd';
+import {
+    Avatar,
+    Badge,
+    Button,
+    Dropdown,
+    Layout,
+    Menu,
+    Typography,
+} from 'antd';
 import classNames from 'classnames/bind';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getNotifications } from '~/api/notification.api';
 import { useAppDispatch, useAppSelector } from '~/app/hooks';
 import { logOut } from '~/feature/user/userSlice';
+import { IUser } from '~/types/User.type';
+
 import styles from './Header.module.scss';
+
 const cx = classNames.bind(styles);
 
+const { Text } = Typography;
 const { Header: HeaderAntd } = Layout;
 
 interface HeaderProps {
@@ -21,15 +33,22 @@ interface HeaderProps {
     setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
-    const { user }: any = useAppSelector((state) => {
-        return state.user;
-    });
+    const { user }: any = useAppSelector((state) => state.user);
+    const [notifications, setNotifications] = useState<IUser[]>([]);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    useEffect(() => {
+        const handleGetNotifications = async () => {
+            const { data } = await getNotifications();
+            setNotifications(data);
+        };
+        handleGetNotifications();
+    }, []);
 
     const handleLogOut = async () => {
         try {
             dispatch(logOut());
+            localStorage.clear();
             navigate('/login');
         } catch (error) {
             //
@@ -58,6 +77,26 @@ const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
             ]}
         />
     );
+    const notificationList = (
+        <Menu>
+            {notifications.map((item: any, index) => (
+                <Menu.Item
+                    key={index}
+                    icon={<Avatar src='https://joeschmoe.io/api/v1/random' />}
+                >
+                    <div className={cx('noti')}>
+                        <Text strong>{item.userId.email}</Text>
+                        <div
+                            className={cx('description')}
+                        >{`Muốn đổi phòng từ phòng ${item.detail?.currentRoom?.roomName} sang phòng ${item.detail?.newRoom?.roomName}`}</div>
+                        {!item.isSeen && (
+                            <Button type='primary'>Chấp nhận</Button>
+                        )}
+                    </div>
+                </Menu.Item>
+            ))}
+        </Menu>
+    );
 
     return (
         <HeaderAntd className={cx('header')}>
@@ -70,12 +109,16 @@ const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
             )}
             <div>
                 <SearchOutlined style={{ fontSize: 18, marginRight: 20 }} />
-                <QuestionCircleOutlined
-                    style={{ fontSize: 18, marginRight: 20 }}
-                />
-                <Badge count={99} style={{ marginRight: 20 }}>
-                    <BellOutlined style={{ fontSize: 18, marginRight: 20 }} />
-                </Badge>
+                <Dropdown overlay={notificationList} placement={'bottomRight'}>
+                    <Badge
+                        count={notifications.length}
+                        style={{ marginRight: 20 }}
+                    >
+                        <BellOutlined
+                            style={{ fontSize: 18, marginRight: 20 }}
+                        />
+                    </Badge>
+                </Dropdown>
                 <Dropdown overlay={menu}>
                     <span style={{ marginRight: 20, textAlign: 'center' }}>
                         {user.name}

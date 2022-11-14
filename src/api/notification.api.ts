@@ -11,4 +11,8 @@ const addOrUpdateNotification = (data: AddOrUpdate) => {
     return instance.post('/notifications/add-or-update', { data });
 };
 
-export { addOrUpdateNotification };
+const getNotifications = () => {
+    return instance.get('/notifications/list');
+};
+
+export { addOrUpdateNotification, getNotifications };

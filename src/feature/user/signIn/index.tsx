@@ -22,7 +22,7 @@ const LoginPage = () => {
                 await notification.success({
                     message: 'Đăng nhập thành công',
                 });
-                return navidate('/user');
+                return navidate('/user/motel-room');
             }
             await notification.success({
                 message: 'Đăng nhập thành công',
