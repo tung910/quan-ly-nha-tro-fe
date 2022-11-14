@@ -175,14 +175,6 @@ const ListRoom = ({ motelId }: Props) => {
             },
         },
         {
-            title: 'Số tiền đã trả',
-            dataIndex: 'unitPrice',
-            key: 'unitPrice',
-            render: (unitPrice) => {
-                return <>{generatePriceToVND(unitPrice)}</>;
-            },
-        },
-        {
             title: 'Hợp đồng',
             dataIndex: 'roomRentID',
             key: 'roomRentID',
