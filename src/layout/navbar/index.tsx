@@ -1,22 +1,23 @@
-import { memo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Menu, MenuProps } from 'antd';
 import {
-    PieChartOutlined,
+    AlertOutlined,
     CalculatorOutlined,
     HomeOutlined,
-    SolutionOutlined,
-    ThunderboltOutlined,
-    SwapOutlined,
-    AlertOutlined,
-    ScheduleOutlined,
-    UserOutlined,
     IdcardOutlined,
+    PieChartOutlined,
+    ScheduleOutlined,
+    SolutionOutlined,
+    SwapOutlined,
+    ThunderboltOutlined,
+    UserOutlined,
 } from '@ant-design/icons';
+import { Menu, MenuProps } from 'antd';
 import classNames from 'classnames/bind';
-import styles from './Navbar.module.scss';
+import { memo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '~/app/hooks';
 import { Role } from '~/constants/const';
+
+import styles from './Navbar.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -50,6 +51,7 @@ const itemsMenu: MenuItem[] = [
 
 const itemsMenuUser: MenuItem[] = [
     getItem('Thông tin khách thuê', '/user', <IdcardOutlined />),
+    getItem('Nhà trọ', '/user/motel', <HomeOutlined />),
     getItem('Nhà trọ đang ở', '/user/motel-room', <HomeOutlined />),
 ];
 
