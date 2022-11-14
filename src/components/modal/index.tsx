@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Modal as ModalAntd, ModalProps } from 'antd';
 import { ReactElement } from 'react';
 
 interface Props {
-    title: string;
+    title?: string;
     open: boolean;
     setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-    children: ReactElement;
+    children: ReactElement | any;
     onOk?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     onCancel?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
 }

@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReactNode } from 'react';
+import MotelCustomer from '~/pages/User/motel';
+import UserMotelRoom from '~/pages/User/motelroom-user';
+import UserInformation from '~/pages/User/user-infomation';
 import BookingRoomDeposit from '~/pages/booking';
 import AddEditBooking from '~/pages/booking/AddorEditBooking';
 import Calculate from '~/pages/calculate';
@@ -15,8 +18,6 @@ import EditRoom from '~/pages/room/edit-room';
 import ServicePage from '~/pages/service';
 import AddEditService from '~/pages/service/AddEditService';
 import TenantAccount from '~/pages/tenant-account';
-import UserMotelRoom from '~/pages/User/motelroom-user';
-import UserInformation from '~/pages/User/user-infomation';
 import WaterPage from '~/pages/water';
 
 export interface Route {
@@ -49,6 +50,7 @@ const routes: Route[] = [
 export const routesUser: Route[] = [
     { path: '/user', component: UserInformation },
     { path: '/user/motel-room', component: UserMotelRoom },
+    { path: '/user/motel', component: MotelCustomer },
 ];
 
 export default routes;
