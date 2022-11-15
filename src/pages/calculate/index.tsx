@@ -650,12 +650,7 @@ const Calculate = () => {
                                     </p>
                                     <hr />
                                     <p>
-                                        <b>
-                                            Người thanh toán:{' '}
-                                            {
-                                                item.payer
-                                            }
-                                        </b>
+                                        <b>Người thanh toán: {item.payer}</b>
                                     </p>
                                 </div>
                             );
