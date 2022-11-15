@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons';
 import {
     Button,
+    Checkbox,
     DatePicker,
     Form,
     Image,
@@ -25,7 +26,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { changeRoom } from '~/api/customer.api';
 import { getAllMotel } from '~/api/motel.api';
-import { getRooms, removeRoom } from '~/api/room.api';
+import { getRooms, payHostel, removeRoom } from '~/api/room.api';
 import { useAppDispatch } from '~/app/hooks';
 import Table from '~/components/table';
 import { BASE_IMG, DateFormat } from '~/constants/const';
@@ -45,9 +46,12 @@ const ListRoom = ({ motelId }: Props) => {
     const dispatch = useAppDispatch();
     const [rooms, setRooms] = useState<RoomType[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isCheck, setIsCheck] = useState(true);
+    const [isModalPayHostelOpen, setIsModalPayHostelOpen] = useState(false);
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listNameRoom, setListNameRoom] = useState<RoomType[]>([]);
     const [roomRentId, setRoomRentId] = useState<string>('');
+    const [motelRoomID, setmotelRoomID] = useState<string>('');
 
     useEffect(() => {
         const handleFetchData = async () => {
@@ -90,6 +94,25 @@ const ListRoom = ({ motelId }: Props) => {
         setIsModalOpen(false);
         form.resetFields();
         message.success(MESSAGES.CHANGE_ROOM);
+    };
+    const onPayHostel = async (values: any) => {
+        const data = {
+            month: moment(values.date).format(DateFormat.DATE_M),
+            year: moment(values.date).format(DateFormat.DATE_Y),
+            roomRentID: roomRentId,
+            _id: motelRoomID,
+        };
+
+        await payHostel(data);
+
+        const listRooms = async () => {
+            const { data } = await getRooms(motelId);
+            setRooms(data);
+        };
+        listRooms();
+        setIsModalPayHostelOpen(false);
+        form.resetFields();
+        message.success(MESSAGES.PAY_HOSTEL);
     };
     const onRemove = async (id: string) => {
         Modal.confirm({
@@ -216,6 +239,11 @@ const ListRoom = ({ motelId }: Props) => {
                                             border: 'none',
                                         }}
                                         icon={<UndoOutlined />}
+                                        onClick={() => {
+                                            setRoomRentId(record.roomRentID);
+                                            setmotelRoomID(record._id);
+                                            setIsModalPayHostelOpen(true);
+                                        }}
                                     ></Button>
                                 </Tooltip>
                                 <Tooltip title='Đổi phòng'>
@@ -369,6 +397,48 @@ const ListRoom = ({ motelId }: Props) => {
                                         })}
                                 </Select>
                             </Form.Item>
+                            <p>
+                                Bạn nhập chỉ số điện và nước của phòng này trước
+                                khi đổi để tính luôn tiền điện và nước.
+                            </p>
+                        </Form>
+                    </>
+                </Modal>
+            </div>
+
+            <div>
+                <Modal
+                    title='Trả Phòng'
+                    open={isModalPayHostelOpen}
+                    onOk={form.submit}
+                    onCancel={() => setIsModalPayHostelOpen(false)}
+                >
+                    <>
+                        <Form
+                            autoComplete='off'
+                            form={form}
+                            labelCol={{ span: 5 }}
+                            onFinish={onPayHostel}
+                        >
+                            <Form.Item
+                                label={<>Ngày trả</>}
+                                colon={false}
+                                labelAlign='left'
+                                name='date'
+                                initialValue={moment()}
+                            >
+                                <DatePicker
+                                    format={DateFormat.DATE_DEFAULT}
+                                    style={{ width: '375px' }}
+                                />
+                            </Form.Item>
+
+                            <p style={{ marginBottom: '20px' }}>
+                                <Checkbox checked={isCheck}>
+                                    Tính tiền phòng cuối tháng
+                                </Checkbox>
+                            </p>
+
                             <p>
                                 Bạn nhập chỉ số điện và nước của phòng này trước
                                 khi đổi để tính luôn tiền điện và nước.
