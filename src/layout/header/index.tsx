@@ -16,7 +16,10 @@ import {
 import classNames from 'classnames/bind';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getNotifications } from '~/api/notification.api';
+import {
+    addOrUpdateNotification,
+    getNotifications,
+} from '~/api/notification.api';
 import { useAppDispatch, useAppSelector } from '~/app/hooks';
 import { logOut } from '~/feature/user/userSlice';
 import { IUser } from '~/types/User.type';
@@ -37,13 +40,19 @@ const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
     const [notifications, setNotifications] = useState<IUser[]>([]);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const userId = user?.role === 1 ? '' : user._id;
+
     useEffect(() => {
         const handleGetNotifications = async () => {
-            const { data } = await getNotifications();
+            let url = '';
+            if (userId) {
+                url = 'category=ChangeRoom&userId=' + userId;
+            }
+            const { data } = await getNotifications(url);
             setNotifications(data);
         };
         handleGetNotifications();
-    }, []);
+    }, [userId]);
 
     const handleLogOut = async () => {
         try {
@@ -53,6 +62,19 @@ const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
         } catch (error) {
             //
         }
+    };
+    const handleAccess = async (value: any) => {
+        const data = {
+            isUpdate: true,
+            notificationId: value._id,
+            detail: {
+                ...value.detail,
+                access: true,
+                currentRoom: value.detail.currentRoom,
+                newRoom: value.detail.newRoom,
+            },
+        };
+        await addOrUpdateNotification(data);
     };
 
     const menu = (
@@ -90,7 +112,12 @@ const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
                             className={cx('description')}
                         >{`Muốn đổi phòng từ phòng ${item.detail?.currentRoom?.roomName} sang phòng ${item.detail?.newRoom?.roomName}`}</div>
                         {!item.isSeen && (
-                            <Button type='primary'>Chấp nhận</Button>
+                            <Button
+                                type='primary'
+                                onClick={() => handleAccess(item)}
+                            >
+                                Chấp nhận
+                            </Button>
                         )}
                     </div>
                 </Menu.Item>

@@ -1,7 +1,7 @@
 import instance from './instance';
 
 interface AddOrUpdate {
-    userId: string;
+    userId?: string;
     detail: { access: boolean } & any;
     isUpdate?: boolean;
     notificationId?: string;
@@ -11,8 +11,8 @@ const addOrUpdateNotification = (data: AddOrUpdate) => {
     return instance.post('/notifications/add-or-update', { data });
 };
 
-const getNotifications = () => {
-    return instance.get('/notifications/list');
+const getNotifications = (query: string) => {
+    return instance.get('/notifications/list?' + query);
 };
 
 export { addOrUpdateNotification, getNotifications };
