@@ -3,14 +3,15 @@ import {
     EditOutlined,
     PlusSquareOutlined,
 } from '@ant-design/icons';
-import { Button, message, Modal } from 'antd';
+import { Button, Modal, message } from 'antd';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getAllMotel, removeMotel } from '~/api/motel.api';
 import Tabs from '~/components/tabs';
 import { MESSAGES } from '~/constants/message.const';
 import { MotelType } from '~/types/MotelType';
+
 import ListRoom from '../room/ListRoom';
 import styles from './Motel.module.scss';
 
@@ -18,6 +19,7 @@ const cx = classNames.bind(styles);
 
 const Motel = () => {
     const [tab, setTab] = useState('0');
+    const navigate = useNavigate();
     const [motels, setMotels] = useState<MotelType[]>([]);
 
     useEffect(() => {
