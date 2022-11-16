@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { CheckOutlined, SaveOutlined, SearchOutlined } from '@ant-design/icons';
 import {
     Button,
@@ -24,7 +23,6 @@ import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
 import { IDataWater } from '~/types/DataWater.type';
 import { MotelType } from '~/types/MotelType';
-
 import styles from './Water.module.scss';
 
 const cx = classNames.bind(styles);
@@ -88,11 +86,11 @@ const EditableCell: React.FC<EditableCellProps> = ({
                 ...record,
                 ...values,
                 useValue: values.newValue
-                    ? values.newValue - record.oldValue
-                    : record.newValue - values.oldValue,
+                    ? values.newValue - record.oldValue || 0
+                    : record.newValue - values.oldValue || 0,
             });
         } catch (errInfo) {
-            console.log('Save failed:', errInfo);
+            // console.log('Save failed:', errInfo);
         }
     };
 
@@ -110,7 +108,13 @@ const EditableCell: React.FC<EditableCellProps> = ({
                     },
                 ]}
             >
-                <InputNumber ref={inputRef} onPressEnter={save} onBlur={save} />
+                <InputNumber
+                    min={0}
+                    max={999}
+                    ref={inputRef}
+                    onPressEnter={save}
+                    onBlur={save}
+                />
             </Form.Item>
         ) : (
             <div
@@ -208,7 +212,11 @@ function handleSubmitData(record: any) {
     } else {
         Modal.confirm({
             centered: true,
-            title: `Bạn có đồng ý lưu chỉ số nước ${record.roomName} trong tháng 09/2022 không ?`,
+            title: `Bạn có đồng ý lưu chỉ số nước ${
+                record.roomName
+            } trong tháng ${moment(new Date()).format(
+                DateFormat.DATE_M_Y
+            )} không ?`,
             cancelText: 'Cancel',
             okText: 'Lưu',
             onOk: () => handSubmitData(record),
@@ -230,13 +238,28 @@ const handSubmitData = async (record: any) => {
 };
 
 function handleSaveAll(datawater: any) {
-    Modal.confirm({
-        centered: true,
-        title: `Bạn có đồng ý lưu chỉ số nước của tháng 09/2022 cho toàn bộ các phòng của nhà đang chọn không ?`,
-        cancelText: 'Cancel',
-        okText: 'Lưu',
-        onOk: () => handleSaveAllData(datawater),
-    });
+    const result = datawater.map((item: any) => item.useValue);
+
+    const newData = result.find((item: any) => item! < 0);
+
+    if (newData) {
+        return Modal.error({
+            title: 'Thông báo',
+            content: 'Chỉ số điện mới phải lớn hơn chỉ số điện cũ',
+        });
+    } else {
+        return Modal.confirm({
+            centered: true,
+            title: `Bạn có đồng ý lưu chỉ số nước của tháng ${moment(
+                new Date()
+            ).format(
+                DateFormat.DATE_M_Y
+            )} cho toàn bộ các phòng của nhà đang chọn không ?`,
+            cancelText: 'Cancel',
+            okText: 'Lưu',
+            onOk: () => handleSaveAllData(datawater),
+        });
+    }
 }
 
 const handleSaveAllData = (datawater: any) => {

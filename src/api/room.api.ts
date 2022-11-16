@@ -1,10 +1,15 @@
 import { RoomType } from '~/types/RoomType';
 import instance from './instance';
+
 export const getRooms = (id: string) => {
     return instance.get(`/motel-room/list?roomId=${id}`);
 };
-export const getListRooms = () => {
-    return instance.get(`/motel-room/list`);
+export const getListRooms = (query?: string) => {
+    let url = '';
+    if (query) {
+        url = '?isRent=' + query;
+    }
+    return instance.get(`/motel-room/list` + url);
 };
 export const addRoom = (room: RoomType) => {
     return instance.post(`/motel-room/create`, { data: room });
@@ -20,4 +25,7 @@ export const editRoom = (room: RoomType) => {
 };
 export const getStatisticalRoomStatus = () => {
     return instance.get('/motel-room/statistical/room-status');
+};
+export const payHostel = (data: any) => {
+    return instance.put(`/motel-room/pay-hostel`, { data: data });
 };

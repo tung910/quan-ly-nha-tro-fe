@@ -2,6 +2,7 @@ import { Col, Form, Row } from 'antd';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { listCalculator } from '~/api/calculator.api';
 import {
     getMonthlyRevenue,
     getPaymentChecking,
@@ -42,8 +43,13 @@ const Dashboard = () => {
     );
 
     const [payment, setPayment] = useState<any>({});
+    const [dataOwe, setDataOwe] = useState<any>({});
     const [date, setDate] = useState(
         moment(Date()).format(DateFormat.DATE_M_Y)
+    );
+
+    const [month, setMonth] = useState(
+        moment().month(new Date().getMonth()).format(DateFormat.DATE_M)
     );
 
     const onChangeYearMonthlyRevenue = (date: any, year: string) => {
@@ -64,6 +70,7 @@ const Dashboard = () => {
         };
         handleGetData();
     }, []);
+
     useEffect(() => {
         const handleGetMonthlyRevenue = async () => {
             const { data: monthlyRevenueValue } = await getMonthlyRevenue({
@@ -73,6 +80,7 @@ const Dashboard = () => {
         };
         handleGetMonthlyRevenue();
     }, [monthYearMonthlyRevenue]);
+
     useEffect(() => {
         const getDataPaymentChecking = async () => {
             const { data } = await getPaymentChecking({ date });
@@ -84,6 +92,15 @@ const Dashboard = () => {
         };
         getDataPaymentChecking();
     }, [date]);
+
+    useEffect(() => {
+        const getDataListOweRoomFees = async () => {
+            const { data } = await listCalculator({ month });
+            setDataOwe(data);
+        };
+
+        getDataListOweRoomFees();
+    }, [month]);
 
     return (
         <div>
@@ -116,16 +133,18 @@ const Dashboard = () => {
                         )}
                     </Col>
                     <Col span={12}>
-                        <OweRoomFees />
+                        {dataOwe && <OweRoomFees dataOwe={dataOwe} />}
                     </Col>
                 </Row>
                 {/* Row 3 */}
                 <Row gutter={[16, 16]} className={cx('row')}>
                     <Col span={12}>
-                        <ExpiresContract />
+                        {state.emptyRooms && (
+                            <AvailableRooms roomStatus={state.emptyRooms} />
+                        )}
                     </Col>
                     <Col span={12}>
-                        <AvailableRooms />
+                        <ExpiresContract />
                     </Col>
                 </Row>
             </Form>

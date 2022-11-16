@@ -3,7 +3,7 @@ import {
     EditOutlined,
     PlusSquareOutlined,
 } from '@ant-design/icons';
-import { Button, message } from 'antd';
+import { Button, Modal, message } from 'antd';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -21,6 +21,7 @@ const Motel = () => {
     const [tab, setTab] = useState('0');
     const navigate = useNavigate();
     const [motels, setMotels] = useState<MotelType[]>([]);
+
     useEffect(() => {
         const getMotels = async () => {
             const { data } = await getAllMotel();
@@ -31,13 +32,18 @@ const Motel = () => {
     }, []);
 
     const onRemoveMotel = async (id: string) => {
-        const confirm = window.confirm('Bạn muốn xóa không?');
-        if (confirm) {
-            await removeMotel(id);
-            setMotels(motels.filter((item) => item._id !== id));
-            message.success(MESSAGES.DEL_SUCCESS);
-            navigate('/motel-room');
-        }
+        Modal.confirm({
+            centered: true,
+            title: `Bạn có muốn xóa nhà trọ không!`,
+            cancelText: 'Hủy',
+            okText: 'Xóa',
+            onOk: async () => {
+                await removeMotel(id);
+                setMotels(motels.filter((item) => item._id !== id));
+                message.success(MESSAGES.DEL_SUCCESS);
+                setTab('0');
+            },
+        });
     };
     const listMotel = [
         ...motels.map((item, index) => {
@@ -59,16 +65,26 @@ const Motel = () => {
                                 className={cx('btn-edit-motel')}
                                 type='primary'
                                 icon={<EditOutlined />}
-                                href={`/motel-room/edit-motel/${item._id}`}
                             >
-                                Sửa nhà trọ
+                                <Link
+                                    style={{
+                                        color: 'white',
+                                        textDecoration: 'none',
+                                    }}
+                                    to={`/motel-room/edit-motel/${item._id}`}
+                                >
+                                    Sửa nhà trọ
+                                </Link>
                             </Button>
                             <Button
                                 type='primary'
                                 icon={<PlusSquareOutlined />}
                             >
                                 <Link
-                                    style={{ color: 'white' }}
+                                    style={{
+                                        color: 'white',
+                                        textDecoration: 'none',
+                                    }}
                                     to={'/motel-room/add-room'}
                                 >
                                     Thêm phòng trọ
@@ -94,7 +110,15 @@ const Motel = () => {
                     Khách thuê
                 </Button>
                 <Button type='primary' icon={<PlusSquareOutlined />}>
-                    <Link to={'/motel-room/add-motel'}>Thêm nhà trọ</Link>
+                    <Link
+                        to={'/motel-room/add-motel'}
+                        style={{
+                            color: 'white',
+                            textDecoration: 'none',
+                        }}
+                    >
+                        Thêm nhà trọ
+                    </Link>
                 </Button>
             </div>
             <Tabs activeKey={tab} onChange={setTab} items={listMotel}></Tabs>
