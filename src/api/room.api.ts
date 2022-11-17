@@ -1,5 +1,4 @@
 import { RoomType } from '~/types/RoomType';
-
 import instance from './instance';
 
 export const getRooms = (id: string) => {
@@ -26,4 +25,7 @@ export const editRoom = (room: RoomType) => {
 };
 export const getStatisticalRoomStatus = () => {
     return instance.get('/motel-room/statistical/room-status');
+};
+export const payHostel = (data: any) => {
+    return instance.put(`/motel-room/pay-hostel`, { data: data });
 };
