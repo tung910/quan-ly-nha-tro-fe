@@ -133,9 +133,7 @@ const Dashboard = () => {
                         )}
                     </Col>
                     <Col span={12}>
-                        {dataOwe && Object.keys(dataOwe).length > 0 && (
-                            <OweRoomFees dataOwe={dataOwe} />
-                        )}
+                        {dataOwe && <OweRoomFees dataOwe={dataOwe} />}
                     </Col>
                 </Row>
                 {/* Row 3 */}

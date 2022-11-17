@@ -43,8 +43,7 @@ import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
-import { convertDate, generatePriceToVND } from '~/utils/helper';
-
+import { generatePriceToVND } from '~/utils/helper';
 import styles from './Calculate.module.scss';
 
 const cx = classNames.bind(styles);
@@ -230,6 +229,9 @@ const Calculate = () => {
         }
     };
     const onPayment = async (values: any) => {
+        const month = moment(values.dateOfPayment).format(DateFormat.DATE_M);
+        const year = moment(values.dateOfPayment).format(DateFormat.DATE_Y);
+
         const { data } = await getCalculator(idCalculator);
         data.map(async (item: any) => {
             if (values.payAmount > item.remainAmount) {
@@ -260,15 +262,8 @@ const Calculate = () => {
                 await Promise.all([
                     paymentMoney(values, idCalculator),
                     revenueStatistics({
-                        month: convertDate(
-                            moment(values.dateOfPayment).format(
-                                DateFormat.DATE_DEFAULT
-                            ),
-                            DateFormat.DATE_M
-                        ),
-                        year: moment(values.dateOfPayment).format(
-                            DateFormat.DATE_Y
-                        ),
+                        month,
+                        year,
                     }),
                 ]);
 
@@ -650,12 +645,7 @@ const Calculate = () => {
                                     </p>
                                     <hr />
                                     <p>
-                                        <b>
-                                            Người thanh toán:{' '}
-                                            {
-                                                item.payer
-                                            }
-                                        </b>
+                                        <b>Người thanh toán: {item.payer}</b>
                                     </p>
                                 </div>
                             );

@@ -17,8 +17,8 @@ const columnsOweRoomFees: ColumnsType = [
     },
     {
         title: 'Khách',
-        dataIndex: 'payer',
-        key: 'payer',
+        dataIndex: ['roomRentalDetailID', 'customerName'],
+        key: 'customerName',
     },
     {
         title: 'Tháng',
@@ -42,15 +42,24 @@ const OweRoomFees = ({ dataOwe }: Props) => {
     const [dataSource, setDataSource] = useState([]);
 
     useEffect(() => {
-        const data = dataOwe.filter((item: any) => item.remainAmount !== 0);
-        setDataSource(data);
+        if (dataOwe.length > 0) {
+            const data = dataOwe?.filter(
+                (item: any) => item.remainAmount !== 0
+            );
+            setDataSource(data);
+        } else {
+            setDataSource([]);
+        }
+        //
     }, [dataOwe]);
 
     return (
         <div>
             <Card title='Danh sách khách nợ tiền phòng' bordered={true}>
                 <Table
-                    dataSource={dataSource}
+                    dataSource={
+                        dataSource && dataSource.map((item: any) => item)
+                    }
                     columns={columnsOweRoomFees}
                     rowKey='key'
                 />

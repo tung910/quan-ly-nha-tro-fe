@@ -86,7 +86,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
                 ...record,
                 ...values,
                 useValue: values.newValue
-                    ? values.newValue - values.oldValue || 0
+                    ? values.newValue - record.oldValue || 0
                     : record.newValue - values.oldValue || 0,
             });
         } catch (errInfo) {

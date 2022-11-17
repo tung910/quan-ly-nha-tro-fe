@@ -7,5 +7,6 @@ enum MESSAGES {
     CHANGE_PASSWORD = 'Đổi mật khẩu thành công ',
     CHECK_ADMIN = 'Bạn không có quyền truy cập!',
     CHANGE_ROOM = 'Bạn đổi phòng thành công!',
+    PAY_HOSTEL = 'Trả phòng thành công!',
 }
 export { MESSAGES };
