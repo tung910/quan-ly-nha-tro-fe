@@ -8,6 +8,7 @@ import {
     SolutionOutlined,
     SwapOutlined,
     ThunderboltOutlined,
+    TransactionOutlined,
     UserOutlined,
 } from '@ant-design/icons';
 import { Menu, MenuProps } from 'antd';
@@ -16,7 +17,6 @@ import { memo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '~/app/hooks';
 import { Role } from '~/constants/const';
-
 import styles from './Navbar.module.scss';
 
 const cx = classNames.bind(styles);
@@ -47,6 +47,7 @@ const itemsMenu: MenuItem[] = [
     getItem('Tính tiền', '/calculator-money', <CalculatorOutlined />),
     getItem('Cọc giữ phòng', '/booking', <ScheduleOutlined />),
     getItem('Tài khoản', '/tenant-account', <UserOutlined />),
+    getItem('Lịch sử thanh toán', '/payment-history', <TransactionOutlined />),
 ];
 
 const itemsMenuUser: MenuItem[] = [

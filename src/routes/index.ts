@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReactNode } from 'react';
-import MotelCustomer from '~/pages/User/motel';
-import UserMotelRoom from '~/pages/User/motelroom-user';
-import UserInformation from '~/pages/User/user-infomation';
 import BookingRoomDeposit from '~/pages/booking';
 import AddEditBooking from '~/pages/booking/AddorEditBooking';
 import Calculate from '~/pages/calculate';
@@ -13,11 +10,15 @@ import Motel from '~/pages/motel';
 import AddMotel from '~/pages/motel/add-motel/AddMotel';
 import EditMotel from '~/pages/motel/edit-motel/EditMotel';
 import ListCustomer from '~/pages/motel/list-customer';
+import PaymentHistory from '~/pages/payment-history';
 import AddRoom from '~/pages/room/add-room/AddRoom';
 import EditRoom from '~/pages/room/edit-room';
 import ServicePage from '~/pages/service';
 import AddEditService from '~/pages/service/AddEditService';
 import TenantAccount from '~/pages/tenant-account';
+import MotelCustomer from '~/pages/User/motel';
+import UserMotelRoom from '~/pages/User/motelroom-user';
+import UserInformation from '~/pages/User/user-infomation';
 import WaterPage from '~/pages/water';
 
 export interface Route {
@@ -46,6 +47,7 @@ const routes: Route[] = [
     { path: '/booking/create', component: AddEditBooking },
     { path: '/booking/edit-booking', component: AddEditBooking },
     { path: '/tenant-account', component: TenantAccount },
+    { path: '/payment-history', component: PaymentHistory },
 ];
 export const routesUser: Route[] = [
     { path: '/user', component: UserInformation },
