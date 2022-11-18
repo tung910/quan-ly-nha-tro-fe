@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
-import { Button, Form, message, PageHeader } from 'antd';
+import { Button, Form, PageHeader, message } from 'antd';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -10,6 +10,7 @@ import {
     addCustomerToRoom,
     editCustomerToRoom,
     getDetailCustomerToRoom,
+    sendEmailAccount,
 } from '~/api/customer.api';
 import { getAllService } from '~/api/service.api';
 import uploadImg from '~/api/upload-images.api';
@@ -109,7 +110,6 @@ const CustomerRedirect = () => {
                 navigate('/motel-room');
             } else {
                 const resImg = await uploadImg(img);
-
                 const data = {
                     CustomerInfo: {
                         ...values,
@@ -132,7 +132,12 @@ const CustomerRedirect = () => {
                     Service: service.length <= 0 ? services : service,
                     Member: member,
                 };
+                const sendEmail = {
+                    email: [data?.CustomerInfo.email],
+                };
+
                 await addCustomerToRoom(data);
+                await sendEmailAccount(sendEmail);
                 dispatch(setIsLoading(false));
                 message.success(MESSAGES.ADD_SUCCESS);
                 navigate('/motel-room');
