@@ -22,3 +22,6 @@ export const getDetailCustomerToRoom = (id: string) => {
 export const changeRoom = (data: any, id: string) => {
     return instance.post(`/room-rental-detail/change-room/${id}`, data);
 };
+export const sendEmailAccount = (data: { email: string[] }) => {
+    return instance.post(`/customer/send-email`, { data });
+};

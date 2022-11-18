@@ -15,3 +15,15 @@
 .trigger:hover {
     color: #1890ff;
 }
+
+.noti {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    .description {
+        color: #00000073;
+        font-size: 14px;
+        line-height: 1.5715;
+        display: inline;
+    }
+}
