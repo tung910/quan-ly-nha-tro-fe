@@ -38,6 +38,9 @@ interface HeaderProps {
 const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
     const { user }: any = useAppSelector((state) => state.user);
     const [notifications, setNotifications] = useState<IUser[]>([]);
+    const [notificationLength, setNotificationLength] = useState<number | null>(
+        null
+    );
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const userId = user?.role === 1 ? '' : user._id;
@@ -53,6 +56,12 @@ const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
         };
         handleGetNotifications();
     }, [userId]);
+
+    useEffect(() => {
+        setNotificationLength(
+            notifications.filter((noti: any) => !noti.isSeen && noti).length
+        );
+    }, [notifications]);
 
     const handleLogOut = async () => {
         try {
@@ -138,7 +147,7 @@ const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
                 <SearchOutlined style={{ fontSize: 18, marginRight: 20 }} />
                 <Dropdown overlay={notificationList} placement={'bottomRight'}>
                     <Badge
-                        count={notifications.length}
+                        count={notificationLength}
                         style={{ marginRight: 20 }}
                     >
                         <BellOutlined
