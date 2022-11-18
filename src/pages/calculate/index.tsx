@@ -75,7 +75,7 @@ const Calculate = () => {
             title: '',
             dataIndex: '_id',
             key: '_id',
-            render: (id: string) => {
+            render: (id: string, item: any) => {
                 return (
                     <Space>
                         <Button
@@ -92,6 +92,7 @@ const Calculate = () => {
                             onClick={() => {
                                 getPayer(id);
                             }}
+                            disabled={+item?.remainAmount === 0 ? true : false}
                             title='Nhập số tiền đã thu'
                         />
                         <Button
@@ -107,6 +108,7 @@ const Calculate = () => {
                             icon={<DeleteOutlined />}
                             onClick={() => handleDelete(id)}
                             title='Xóa'
+                            disabled={+item?.remainAmount === 0 ? true : false}
                             danger
                         />
                     </Space>
@@ -201,6 +203,7 @@ const Calculate = () => {
             const { data } = await listCalculator({
                 month: thisMonth,
             });
+
             setCalculators(data);
         } else {
             alert('Mời bạn chọn lại!');
@@ -233,6 +236,7 @@ const Calculate = () => {
         const year = moment(values.dateOfPayment).format(DateFormat.DATE_Y);
 
         const { data } = await getCalculator(idCalculator);
+
         data.map(async (item: any) => {
             if (values.payAmount > item.remainAmount) {
                 Modal.error({
@@ -271,6 +275,7 @@ const Calculate = () => {
                     const { data } = await listCalculator({
                         month: values.month,
                     });
+
                     setCalculators(data);
                 };
                 getList();
@@ -286,6 +291,7 @@ const Calculate = () => {
                 month: moment(values.month).format('MM'),
                 motelID: values.motelID,
             });
+
             setCalculators(data);
         };
         calculatorData();
