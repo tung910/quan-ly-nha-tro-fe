@@ -14,3 +14,106 @@
     width: 800px;
     margin-top: 20px;
 }
+
+.cart-left {
+    position: relative;
+    width: 750px;
+    margin-bottom: 40px;
+    margin-top: 40px;
+    border-radius: 10px;
+    background-color: #fff;
+    border: 2px solid #ddd;
+    font-size: 18px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 4px 21px -12px rgba(0, 0, 0, 0.66);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    padding: 20px;
+}
+.cart-left:hover {
+    box-shadow: 0 34px 32px -33px rgba(0, 0, 0, 0.18);
+    transform: translate(0px, -3px);
+}
+.cart-right {
+    position: relative;
+    width: 400px;
+    min-height: 250px;
+    margin-bottom: 40px;
+    margin-left: 40px;
+    margin-top: 40px;
+    border-radius: 10px;
+    background-color: #fff;
+    border: 2px solid #ddd;
+    font-size: 18px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 4px 21px -12px rgba(0, 0, 0, 0.66);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    padding: 20px;
+}
+.cart-right:hover {
+    box-shadow: 0 34px 32px -33px rgba(0, 0, 0, 0.18);
+    transform: translate(0px, -3px);
+}
+.cart-right Button {
+    width: 250px;
+    margin: 5px;
+    padding: 5px;
+}
+.sticker {
+    text-align: right;
+    width: 100%;
+}
+.image-right {
+    margin-left: 25px;
+}
+.btn-grad {
+    background-image: linear-gradient(
+        to right,
+        #003973 0%,
+        #e5e5be 51%,
+        #003973 100%
+    );
+    margin: 10px;
+    padding: 5px 20px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+}
+
+.btn-grad:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+//
+
+.btn-facebook {
+    background-image: linear-gradient(
+        to right,
+        #e55d87 0%,
+        #5fc3e4 51%,
+        #e55d87 100%
+    );
+    margin: 10px;
+    padding: 5px 20px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+}
+
+.btn-facebook:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
