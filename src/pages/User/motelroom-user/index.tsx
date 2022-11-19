@@ -16,7 +16,7 @@ const UserMotelRoom = () => {
                 email: user.email,
             };
             const { data } = await getRoomDetailByEmail(payload);
-            const currentRoom = JSON.stringify(data._id);
+            const currentRoom = JSON.stringify(data.motelRoomID);
             localStorage.setItem('currentRoom', currentRoom);
 
             const getUser = async () => {
