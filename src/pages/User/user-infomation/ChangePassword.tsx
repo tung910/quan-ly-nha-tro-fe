@@ -6,7 +6,14 @@ type Props = {
 const ChangeInformation = ({ user }: Props) => {
     return (
         <div>
-            <Row gutter={[16, 16]} style={{ padding: 40 }}>
+            <Row
+                gutter={[16, 16]}
+                style={{
+                    marginTop: 20,
+                    padding: 20,
+                    border: '1px solid rgb(205, 205, 205)',
+                }}
+            >
                 <Col span={8}>
                     <Card
                         title={
