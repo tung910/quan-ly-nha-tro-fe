@@ -8,6 +8,7 @@ import Modal from '~/components/modal';
 import notification from '~/components/notification';
 import { setIsLoading } from '~/feature/service/appSlice';
 import { RoomType } from '~/types/RoomType';
+import { generatePriceToVND } from '~/utils/helper';
 
 const Motel = () => {
     const [rooms, setRooms] = useState<RoomType[]>([]);
@@ -66,7 +67,6 @@ const Motel = () => {
                         </Col>
                     ))}
             </Row>
-
             <Modal
                 visible={modal}
                 open={modal}
@@ -92,13 +92,23 @@ const Motel = () => {
                             />
                             <div>
                                 <ul>
-                                    <li>Tên phòng: {dataModal.roomName}</li>
-                                    <li>
-                                        Diện tích: {dataModal.width} x{' '}
-                                        {dataModal.height}
+                                    <li style={{ margin: 20 }}>
+                                        Tên phòng: {dataModal.roomName}
                                     </li>
-                                    <li>Số lượng: {dataModal.maxPerson}</li>
-                                    <li>Giá phòng: {dataModal.unitPrice}</li>
+                                    <li style={{ margin: 20 }}>
+                                        Diện tích: {dataModal.width} x{' '}
+                                        {dataModal.height} m2
+                                    </li>
+                                    <li style={{ margin: 20 }}>
+                                        Số lượng: {dataModal.maxPerson} người
+                                    </li>
+                                    <li style={{ margin: 20 }}>
+                                        Giá phòng:{' '}
+                                        {generatePriceToVND(
+                                            dataModal.unitPrice
+                                        )}{' '}
+                                        đ/Tháng
+                                    </li>
                                 </ul>
                             </div>
                         </Row>
