@@ -4,6 +4,7 @@ import {
     Col,
     DatePicker,
     Form,
+    Input,
     InputNumber,
     message,
     Modal,
@@ -23,6 +24,7 @@ import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
 import { IDataPower } from '~/types/DataPower.type';
 import { MotelType } from '~/types/MotelType';
+import { generatePriceToVND } from '~/utils/helper';
 import styles from './DataPower.module.scss';
 
 const cx = classNames.bind(styles);
@@ -184,6 +186,21 @@ const ColumnsDataPower: (ColumnTypes[number] & {
         key: 'useValue',
     },
     {
+        title: 'Giá tiền',
+        dataIndex: 'price',
+        key: 'price',
+        render: (price) => {
+            return (
+                <>
+                    <Input
+                        style={{ width: 100 }}
+                        value={generatePriceToVND(price)}
+                    />
+                </>
+            );
+        },
+    },
+    {
         title: '',
         dataIndex: 'recond',
         render: (text, record) => {
@@ -231,6 +248,7 @@ const handSubmitData = async (record: any) => {
         oldValue: record.oldValue,
         newValue: record.newValue,
         useValue: record.useValue,
+        price: record.price,
     };
     await editDataPower({ data: tempData });
     message.success(MESSAGES.EDIT_SUCCESS);
@@ -274,6 +292,7 @@ const PowerOnly = () => {
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listStatusRoom, setListStatusRoom] = useState([]);
     const thisMonth = moment(new Date()).format('MM');
+
     useEffect(() => {
         const handleGetData = async () => {
             try {

@@ -4,6 +4,7 @@ import {
     Col,
     DatePicker,
     Form,
+    Input,
     InputNumber,
     message,
     Modal,
@@ -23,6 +24,7 @@ import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
 import { IDataWater } from '~/types/DataWater.type';
 import { MotelType } from '~/types/MotelType';
+import { generatePriceToVND } from '~/utils/helper';
 import styles from './Water.module.scss';
 
 const cx = classNames.bind(styles);
@@ -183,6 +185,21 @@ const ColumnsDataWater: (ColumnTypes[number] & {
         title: 'Sử dụng',
         dataIndex: 'useValue',
         key: 'useValue',
+    },
+    {
+        title: 'Giá tiền',
+        dataIndex: 'price',
+        key: 'price',
+        render: (price) => {
+            return (
+                <>
+                    <Input
+                        style={{ width: 100 }}
+                        value={generatePriceToVND(price)}
+                    />
+                </>
+            );
+        },
     },
     {
         title: '',
