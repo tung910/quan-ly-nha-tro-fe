@@ -12,13 +12,13 @@ import {
     Col,
     DatePicker,
     Form,
-    message,
     Modal,
     PageHeader,
     Row,
     Select,
     Space,
     Tooltip,
+    message,
 } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import classNames from 'classnames/bind';
@@ -399,6 +399,10 @@ const BookingRoomDeposit = () => {
             </div>
 
             <div>
+                <i>
+                    (*) Cọc giữ phòng chỉ có hiệu lực trong vòng 1 tháng kể từ
+                    khi bắt đầu
+                </i>
                 <Table
                     dataSource={
                         dataSource && dataSource.map((item: IBooking) => item)

@@ -13,17 +13,18 @@ import {
     DatePicker,
     Form,
     Image,
-    message,
     Modal,
     Select,
     Space,
     Tooltip,
+    message,
 } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { listSearchRoomDeposit } from '~/api/booking.api';
 import { changeRoom } from '~/api/customer.api';
 import { getAllMotel } from '~/api/motel.api';
 import { getRooms, payHostel, removeRoom } from '~/api/room.api';
@@ -34,8 +35,10 @@ import { MESSAGES } from '~/constants/message.const';
 import { setIsLoading } from '~/feature/service/appSlice';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
-import { generatePriceToVND } from '~/utils/helper';
+import { convertDate, generatePriceToVND } from '~/utils/helper';
+
 import styles from './ListRoom.module.scss';
+
 export interface Props {
     motelId: string;
 }
@@ -45,6 +48,8 @@ const ListRoom = ({ motelId }: Props) => {
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
     const [rooms, setRooms] = useState<RoomType[]>([]);
+    const [roomDeposit, setRoomDeposit] = useState<any>([]);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCheck, setIsCheck] = useState(true);
     const [isModalPayHostelOpen, setIsModalPayHostelOpen] = useState(false);
@@ -69,7 +74,34 @@ const ListRoom = ({ motelId }: Props) => {
             }
         };
         handleFetchData();
+    }, [motelId]);
+    useEffect(() => {
+        const handleFetchData = async () => {
+            try {
+                dispatch(setIsLoading(true));
+                const result = {
+                    data: {
+                        fromDate: convertDate(
+                            moment(new Date()).startOf('month'),
+                            DateFormat.DATE_M_D_Y
+                        ),
+                        toDate: convertDate(
+                            moment(new Date()).endOf('month'),
+                            DateFormat.DATE_M_D_Y
+                        ),
+                    },
+                };
+
+                const { data } = await listSearchRoomDeposit(result);
+                setRoomDeposit(data);
+                dispatch(setIsLoading(false));
+            } catch (error) {
+                // message.error(error);
+            }
+        };
+        handleFetchData();
     }, []);
+
     const onClickMotel = async (value: string) => {
         const { data } = await getRooms(value);
         const room: any = [];
@@ -127,8 +159,18 @@ const ListRoom = ({ motelId }: Props) => {
             },
         });
     };
+    const handleCheckRoomDeposit = (roomId: string) => {
+        let result = {};
+        if (roomDeposit.length > 0) {
+            result = roomDeposit.find((item: any) => {
+                return item.motelRoomId?._id === roomId && item;
+            });
+        }
 
-    const defaultColumns: ColumnsType<object> | undefined = [
+        return result ?? {};
+    };
+
+    const columns: ColumnsType<object> | undefined = [
         {
             title: '',
             dataIndex: '_id',
@@ -173,6 +215,7 @@ const ListRoom = ({ motelId }: Props) => {
                                 loading='lazy'
                                 width={'60px'}
                                 style={{ marginLeft: 20 }}
+                                preview={false}
                             />
                         }
                     </>
@@ -183,6 +226,9 @@ const ListRoom = ({ motelId }: Props) => {
             title: 'Khách thuê',
             dataIndex: 'customerName',
             key: 'customerName',
+            render: (value) => {
+                return value || <i>N/A</i>;
+            },
         },
         {
             title: 'Số lượng khách',
@@ -204,7 +250,7 @@ const ListRoom = ({ motelId }: Props) => {
             render: (roomRentID) => {
                 return (
                     <>
-                        {roomRentID && (
+                        {roomRentID ? (
                             <Tooltip title='Tải xuống'>
                                 <Button
                                     type='primary'
@@ -218,6 +264,8 @@ const ListRoom = ({ motelId }: Props) => {
                                     }
                                 ></Button>
                             </Tooltip>
+                        ) : (
+                            <i>N/A</i>
                         )}
                     </>
                 );
@@ -227,82 +275,99 @@ const ListRoom = ({ motelId }: Props) => {
             title: '',
             dataIndex: '_id',
             render: (text, record: any) => {
+                const roomDeposit: any = handleCheckRoomDeposit(record._id);
                 return (
-                    <Space>
-                        {record.isRent ? (
-                            <>
-                                <Tooltip title='Trả phòng'>
-                                    <Button
-                                        type='primary'
-                                        style={{
-                                            background: 'orange',
-                                            border: 'none',
-                                        }}
-                                        icon={<UndoOutlined />}
-                                        onClick={() => {
-                                            setRoomRentId(record.roomRentID);
-                                            setmotelRoomID(record._id);
-                                            setIsModalPayHostelOpen(true);
-                                        }}
-                                    ></Button>
-                                </Tooltip>
-                                <Tooltip title='Đổi phòng'>
-                                    <Button
-                                        type='primary'
-                                        icon={<RetweetOutlined />}
-                                        style={{
-                                            background: 'green',
-                                            border: 'none',
-                                        }}
-                                        onClick={() => {
-                                            setRoomRentId(record.roomRentID);
-                                            setIsModalOpen(true);
-                                        }}
-                                    ></Button>
-                                </Tooltip>
-                                <Tooltip title='Xem chi tiết'>
-                                    <Link
-                                        to={`/customer/view?roomRentID=${record.roomRentID}&&roomName=${record.roomName}`}
-                                    >
-                                        <Button
-                                            type='primary'
-                                            style={{
-                                                background: 'black',
-                                                border: 'none',
-                                            }}
-                                            icon={<EyeOutlined />}
-                                        ></Button>
-                                    </Link>
-                                </Tooltip>
-                                <Tooltip title='Sửa thông tin'>
-                                    <Link
-                                        to={`/customer/edit?roomRentID=${record.roomRentID}&&roomName=${record.roomName}`}
-                                    >
-                                        <Button
-                                            type='primary'
-                                            icon={<EditOutlined />}
-                                        ></Button>
-                                    </Link>
-                                </Tooltip>
-                            </>
+                    <>
+                        {Object.keys(roomDeposit).length <= 0 ? (
+                            <Space>
+                                {record.isRent ? (
+                                    <>
+                                        <Tooltip title='Trả phòng'>
+                                            <Button
+                                                type='primary'
+                                                style={{
+                                                    background: 'orange',
+                                                    border: 'none',
+                                                }}
+                                                icon={<UndoOutlined />}
+                                                onClick={() => {
+                                                    setRoomRentId(
+                                                        record.roomRentID
+                                                    );
+                                                    setmotelRoomID(record._id);
+                                                    setIsModalPayHostelOpen(
+                                                        true
+                                                    );
+                                                }}
+                                            ></Button>
+                                        </Tooltip>
+                                        <Tooltip title='Đổi phòng'>
+                                            <Button
+                                                type='primary'
+                                                icon={<RetweetOutlined />}
+                                                style={{
+                                                    background: 'green',
+                                                    border: 'none',
+                                                }}
+                                                onClick={() => {
+                                                    setRoomRentId(
+                                                        record.roomRentID
+                                                    );
+                                                    setIsModalOpen(true);
+                                                }}
+                                            ></Button>
+                                        </Tooltip>
+                                        <Tooltip title='Xem chi tiết'>
+                                            <Link
+                                                to={`/customer/view?roomRentID=${record.roomRentID}&&roomName=${record.roomName}`}
+                                            >
+                                                <Button
+                                                    type='primary'
+                                                    style={{
+                                                        background: 'black',
+                                                        border: 'none',
+                                                    }}
+                                                    icon={<EyeOutlined />}
+                                                ></Button>
+                                            </Link>
+                                        </Tooltip>
+                                        <Tooltip title='Sửa thông tin'>
+                                            <Link
+                                                to={`/customer/edit?roomRentID=${record.roomRentID}&&roomName=${record.roomName}`}
+                                            >
+                                                <Button
+                                                    type='primary'
+                                                    icon={<EditOutlined />}
+                                                ></Button>
+                                            </Link>
+                                        </Tooltip>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Tooltip title='Thêm khách thuê'>
+                                            <Link
+                                                to={`/customer/create?roomId=${record._id}&&roomName=${record.roomName}&&motelId=${record.motelID}`}
+                                            >
+                                                <Button
+                                                    style={{
+                                                        margin: 'auto',
+                                                    }}
+                                                    type='primary'
+                                                    icon={<UserAddOutlined />}
+                                                ></Button>
+                                            </Link>
+                                        </Tooltip>
+                                    </>
+                                )}
+                            </Space>
                         ) : (
-                            <>
-                                <Tooltip title='Thêm khách thuê'>
-                                    <Link
-                                        to={`/customer/create?roomId=${record._id}&&roomName=${record.roomName}&&motelId=${record.motelID}`}
-                                    >
-                                        <Button
-                                            style={{
-                                                margin: 'auto',
-                                            }}
-                                            type='primary'
-                                            icon={<UserAddOutlined />}
-                                        ></Button>
-                                    </Link>
-                                </Tooltip>
-                            </>
+                            <Button type='text'>
+                                Phòng đã được anh/chị {roomDeposit?.fullName}{' '}
+                                cọc tới ngày{' '}
+                                {convertDate(roomDeposit?.dateOfArrival)}
+                            </Button>
                         )}
-                    </Space>
+                    </>
                 );
             },
         },
@@ -310,7 +375,7 @@ const ListRoom = ({ motelId }: Props) => {
 
     return (
         <div className={cx('table')}>
-            <Table dataSource={rooms} columns={defaultColumns} />
+            <Table dataSource={rooms} columns={columns} />
             <div>
                 <Modal
                     title='Đổi phòng'
