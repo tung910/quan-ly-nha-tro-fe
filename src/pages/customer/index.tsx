@@ -142,8 +142,10 @@ const CustomerRedirect = () => {
                 message.success(MESSAGES.ADD_SUCCESS);
                 navigate('/motel-room');
             }
-        } catch (error) {
-            //
+        } catch (error: any) {
+            dispatch(setIsLoading(false));
+            const msgKey: string | any = Object.keys(error.messages[0]);
+            message.error(error.messages[0][msgKey]);
         }
     };
     const items: TypeTabs[] = [
