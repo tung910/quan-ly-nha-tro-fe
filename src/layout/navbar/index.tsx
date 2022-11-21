@@ -51,7 +51,7 @@ const itemsMenu: MenuItem[] = [
 ];
 
 const itemsMenuUser: MenuItem[] = [
-    getItem('Thông tin khách thuê', '/user', <IdcardOutlined />),
+    getItem('Cài đặt tài khoản', '/user', <IdcardOutlined />),
     getItem('Nhà trọ', '/user/motel', <HomeOutlined />),
     getItem('Nhà trọ đang ở', '/user/motel-room', <HomeOutlined />),
 ];

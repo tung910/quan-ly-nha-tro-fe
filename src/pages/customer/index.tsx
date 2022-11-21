@@ -33,7 +33,8 @@ const cx = classNames.bind(styles);
 
 const CustomerRedirect = () => {
     const [tab, setTab] = useState('info');
-    const [img, setImg] = useState<string | ArrayBuffer | any>('');
+    const [images, setImages] = useState<string | ArrayBuffer | any>([]);
+    const [imageUrl, setImageUrl] = useState('');
     const [provinces, setProvinces] = useState([]);
     const [newdataService, setNewdataService] = useState([]);
     const [newdataMember, setNewdataMember] = useState([]);
@@ -109,7 +110,6 @@ const CustomerRedirect = () => {
                 message.success(MESSAGES.EDIT_SUCCESS);
                 navigate('/motel-room');
             } else {
-                const resImg = await uploadImg(img);
                 const data = {
                     CustomerInfo: {
                         ...values,
@@ -127,7 +127,7 @@ const CustomerRedirect = () => {
                         motelRoomID: roomId,
                         motelID,
                         roomName,
-                        image: resImg,
+                        image: imageUrl,
                     },
                     Service: service.length <= 0 ? services : service,
                     Member: member,
@@ -160,7 +160,10 @@ const CustomerRedirect = () => {
                     form={form}
                     roomName={roomName}
                     roomId={roomId}
-                    setImg={setImg}
+                    setImg={setImages}
+                    images={images}
+                    imageUrl={imageUrl}
+                    setImageUrl={setImageUrl}
                 />
             ),
         },

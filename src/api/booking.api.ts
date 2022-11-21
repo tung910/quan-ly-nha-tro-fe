@@ -12,8 +12,15 @@ export const deleteRoomDeposit = (id: string) => {
     return instance.delete(`/room-deposit/delete/${id}`);
 };
 
-export const getlistSearchRoomDeposit = (id: string) => {
-    return instance.get(`/room-deposit/detail/${id}`);
+export const getRoomDeposit = (roomDepositId: string, roomId = '') => {
+    let url = '';
+    if (roomDepositId) {
+        url = `?roomDepositId=${roomDepositId}`;
+    }
+    if (roomId) {
+        url = `?roomId=${roomId}`;
+    }
+    return instance.get(`/room-deposit/detail${url}`);
 };
 
 export const updateRoomDeposit = (data: any) => {

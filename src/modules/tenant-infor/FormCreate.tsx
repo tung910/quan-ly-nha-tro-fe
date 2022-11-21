@@ -1,19 +1,47 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from 'antd';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+    Col,
+    DatePicker,
+    Form,
+    Input,
+    InputNumber,
+    Row,
+    Select,
+    Upload,
+    UploadProps,
+    message,
+} from 'antd';
+import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload';
 import classNames from 'classnames/bind';
 import moment from 'moment';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
 import { getRoom } from '~/api/room.api';
 import { DateFormat } from '~/constants/const';
-import { generateFileToBase64 } from '~/utils/helper';
 
 import styles from './FormCreate.module.scss';
 
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result as string));
+    reader.readAsDataURL(img);
+};
 
+const beforeUpload = (file: RcFile) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+        message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+        message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+};
 type Props = {
     onSave: (values: any) => void;
     roomRentID: string;
@@ -22,6 +50,9 @@ type Props = {
     roomId: string;
     provinces: any;
     setImg: React.Dispatch<any>;
+    images: any;
+    imageUrl: any;
+    setImageUrl: any;
 };
 
 const FormCreate = ({
@@ -32,7 +63,39 @@ const FormCreate = ({
     provinces,
     roomId,
     setImg,
+    images: fileList,
+    imageUrl,
+    setImageUrl,
 }: Props) => {
+    const [loading, setLoading] = useState(false);
+
+    const handleChange: UploadProps['onChange'] = (
+        info: UploadChangeParam<UploadFile>
+    ) => {
+        getBase64(info.file.originFileObj as RcFile, (url) => {
+            setLoading(false);
+            setImageUrl(url);
+        });
+
+        if (info.file.status === 'uploading') {
+            setLoading(true);
+            return;
+        }
+        if (info.file.status === 'done') {
+            // Get this url from response in real world.
+            getBase64(info.file.originFileObj as RcFile, (url) => {
+                setLoading(false);
+                setImageUrl(url);
+            });
+        }
+    };
+
+    const uploadButton = (
+        <div>
+            {loading ? <LoadingOutlined /> : <PlusOutlined />}
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </div>
+    );
     useEffect(() => {
         if (roomId) {
             const readRoom = async () => {
@@ -72,7 +135,6 @@ const FormCreate = ({
             style={{ marginTop: 20, padding: 20 }}
             onFinish={onSave}
         >
-            {/* Row 1 */}
             <Row>
                 <Col span={8}>
                     <Form.Item
@@ -110,7 +172,6 @@ const FormCreate = ({
                     </Form.Item>
                 </Col>
             </Row>
-            {/* Row 2 */}
             <Row>
                 <Col span={8}>
                     <Form.Item
@@ -153,7 +214,6 @@ const FormCreate = ({
                     </Form.Item>
                 </Col>
             </Row>
-            {/* Row 3 */}
             <Row>
                 <Col span={8}>
                     <Form.Item
@@ -211,7 +271,6 @@ const FormCreate = ({
                     </Form.Item>
                 </Col>
             </Row>
-            {/* Row 4 */}
             <Row>
                 <Col span={8}>
                     <Form.Item
@@ -248,7 +307,6 @@ const FormCreate = ({
                     </Form.Item>
                 </Col>
             </Row>
-            {/* Row 5 */}
             <Row>
                 <Col span={8}>
                     <Form.Item
@@ -309,7 +367,6 @@ const FormCreate = ({
                     </Form.Item>
                 </Col>
             </Row>
-            {/* Row 6 */}
             <Row>
                 <Col span={8}>
                     <Form.Item
@@ -345,7 +402,6 @@ const FormCreate = ({
                     </Form.Item>
                 </Col>
             </Row>
-            {/* Row 7 */}
             <Row>
                 <Col span={8}>
                     <Form.Item
@@ -385,7 +441,6 @@ const FormCreate = ({
                     </Form.Item>
                 </Col>
             </Row>
-            {/* Row 8 */}
             <Row>
                 <Col span={8}>
                     <Form.Item
@@ -456,7 +511,6 @@ const FormCreate = ({
                     </Form.Item>
                 </Col>
             </Row>
-            {/* Row 9 */}
             <Row>
                 <Col span={8}>
                     <Form.Item
@@ -474,17 +528,43 @@ const FormCreate = ({
                         name='image'
                         labelAlign='left'
                     >
-                        <Input
-                            type='file'
-                            onChange={(
-                                event: React.ChangeEvent<HTMLInputElement> | any
-                            ) =>
-                                generateFileToBase64(
-                                    event?.target.files[0],
-                                    setImg
-                                )
-                            }
-                        />
+                        <Upload
+                            name='avatar'
+                            listType='picture-card'
+                            className='avatar-uploader'
+                            showUploadList={false}
+                            beforeUpload={beforeUpload}
+                            onChange={handleChange}
+                        >
+                            {imageUrl ? (
+                                <img
+                                    src={imageUrl}
+                                    alt='avatar'
+                                    style={{ width: '100%' }}
+                                />
+                            ) : (
+                                uploadButton
+                            )}
+                        </Upload>
+                        {/*   <Dragger
+                            {...{
+                                fileList,
+                                defaultFileList: fileList,
+                                onRemove: handleRemove,
+                                beforeUpload: handleBeforeUpload,
+                                multiple: false,
+                                onChange: handleChangeFiles,
+                                listType: 'picture',
+                            }}
+                            style={{ width: '100%' }}
+                        >
+                            <p className='ant-upload-drag-icon'>
+                                <InboxOutlined />
+                            </p>
+                            <p className='ant-upload-text'>
+                                Click or drag file to this area to upload
+                            </p>
+                        </Dragger> */}
                     </Form.Item>
                 </Col>
             </Row>
