@@ -124,20 +124,7 @@ const FormCreate = ({
             dataRoom();
         }
     }, []);
-    const handleBeforeUpload = (file: any) => {
-        setImg([...fileList, file]);
-        return false;
-    };
 
-    const handleChangeFiles = ({ fileList, file }: any) => {
-        setImg([...fileList]);
-    };
-
-    const handleRemove = (selectedFile: any) => {
-        return fileList.filter((file: any) => {
-            return selectedFile.uid !== file.uid;
-        });
-    };
     return (
         <Form
             className={cx('form-create')}
