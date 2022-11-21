@@ -13,14 +13,12 @@ import {
     message,
 } from 'antd';
 import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload';
-import Dragger from 'antd/lib/upload/Dragger';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
 import { getRoom } from '~/api/room.api';
 import { DateFormat } from '~/constants/const';
-import { generateFileToBase64 } from '~/utils/helper';
 
 import styles from './FormCreate.module.scss';
 
