@@ -160,6 +160,13 @@ const FormCreate = ({
                         colon={false}
                         labelAlign='left'
                         name='citizenIdentification'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập!',
+                            },
+                        ]}
+                        validateTrigger={['onBlur', 'onChange']}
                     >
                         <Input style={{ width: 400 }} />
                     </Form.Item>
@@ -196,6 +203,12 @@ const FormCreate = ({
                         colon={false}
                         labelAlign='left'
                         name='dateRange'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập!',
+                            },
+                        ]}
                     >
                         <Input style={{ width: 400 }} />
                     </Form.Item>
@@ -208,6 +221,13 @@ const FormCreate = ({
                         colon={false}
                         labelAlign='left'
                         name='phone'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập!',
+                            },
+                        ]}
+                        validateTrigger={['onBlur', 'onChange']}
                     >
                         <Input style={{ width: 400 }} />
                     </Form.Item>
@@ -258,6 +278,13 @@ const FormCreate = ({
                         colon={false}
                         labelAlign='left'
                         name='address'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập!',
+                            },
+                        ]}
+                        validateTrigger={['onBlur', 'onChange']}
                     >
                         <Input style={{ width: 400 }} />
                     </Form.Item>
@@ -268,6 +295,13 @@ const FormCreate = ({
                         colon={false}
                         labelAlign='left'
                         name='email'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập!',
+                            },
+                        ]}
+                        validateTrigger={['onBlur', 'onChange']}
                     >
                         <Input style={{ width: 400 }} />
                     </Form.Item>
@@ -280,6 +314,13 @@ const FormCreate = ({
                         colon={false}
                         labelAlign='left'
                         name='dateOfBirth'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập!',
+                            },
+                        ]}
+                        validateTrigger={['onBlur', 'onChange']}
                     >
                         <DatePicker
                             format={DateFormat.DATE_DEFAULT}
