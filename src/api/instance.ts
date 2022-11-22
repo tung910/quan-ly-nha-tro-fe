@@ -36,6 +36,7 @@ instance.interceptors.response.use(
     (error) => {
         const { data } = error.response;
         notification.error({ message: data?.messages || 'Some error' });
+        window.location.pathname = '/login';
         return Promise.reject(data);
     }
 );
