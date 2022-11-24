@@ -29,19 +29,19 @@ const Invoice = () => {
                 <div className='container'>
                     <h1>Hoá Đơn</h1>
                                     <p>
-                                        1.Khách hàng:{' '}
+                                        - Khách hàng:{' '}
                                         {dataInvoicePrint[0].roomRentalDetailID.customerName}
                                     </p>
                                     <p>
-                                        2.Phòng:{' '}
+                                        - Phòng:{' '}
                                         {dataInvoicePrint[0].roomRentalDetailID.roomName}
                                     </p>
                                     <p>
-                                        3.Sử dụng điện:{' '}
+                                        - Sử dụng điện:{' '}
                                         {dataInvoicePrint[0].dataPowerID.useValue} số
                                     </p>
                                     <p>
-                                        4.sử dụng nước:{' '}
+                                        - sử dụng nước:{' '}
                                         {dataInvoicePrint[0].dataWaterID.useValue} khối
                                     </p>
                                     <hr />
