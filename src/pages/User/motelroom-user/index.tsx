@@ -18,6 +18,7 @@ import { getUserById } from '~/api/user.api';
 import { useAppSelector } from '~/app/hooks';
 import { TypeTabs } from '~/types/Setting.type';
 import { generatePriceToVND } from '~/utils/helper';
+
 import styles from './MotelRoomUser.module.scss';
 
 const cx = classNames.bind(styles);
@@ -109,7 +110,6 @@ const UserMotelRoom = () => {
             ),
         },
     ];
-
     return (
         <div>
             <div>
@@ -127,76 +127,27 @@ const UserMotelRoom = () => {
             <div className={cx('content')}>
                 <Row>
                     <Col>
-                        <div className={cx('image-left')}>
-                            <Image
-                                width={600}
-                                height={380}
-                                src={
-                                    dataRoom?.user?.motelRoomID.images[0]
-                                        .thumbUrl
-                                }
-                                alt='Ảnh'
-                                style={{ objectFit: 'cover' }}
-                            />
-                        </div>
-                    </Col>
-                    <Col>
                         <div className={cx('image-right')}>
                             <Row>
-                                <Col
-                                    style={{
-                                        marginRight: 10,
-                                        marginBottom: 10,
-                                    }}
-                                >
-                                    <Image
-                                        width={280}
-                                        height={180}
-                                        src='https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png'
-                                        alt='Ảnh'
-                                    />
-                                </Col>
-                                <Col
-                                    style={{
-                                        marginLeft: 10,
-                                        marginBottom: 10,
-                                    }}
-                                >
-                                    <Image
-                                        width={280}
-                                        height={180}
-                                        src='https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png'
-                                        alt='Ảnh'
-                                    />
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col
-                                    style={{
-                                        marginRight: 10,
-                                        marginTop: 10,
-                                    }}
-                                >
-                                    <Image
-                                        width={280}
-                                        height={180}
-                                        src='https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png'
-                                        alt='Ảnh'
-                                    />
-                                </Col>
-                                <Col
-                                    style={{
-                                        marginLeft: 10,
-                                        marginTop: 10,
-                                    }}
-                                >
-                                    <Image
-                                        width={280}
-                                        height={180}
-                                        src='https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png'
-                                        alt='Ảnh'
-                                    />
-                                </Col>
+                                {dataRoom?.user?.motelRoomID.images.map(
+                                    (img: any) => (
+                                        <Col
+                                            style={{
+                                                marginRight: 10,
+                                                marginBottom: 10,
+                                                width: 300,
+                                            }}
+                                            key={img.uuid}
+                                        >
+                                            <Image
+                                                width={'100%'}
+                                                height={'100%'}
+                                                src={img.thumbUrl}
+                                                alt='Ảnh'
+                                            />
+                                        </Col>
+                                    )
+                                )}
                             </Row>
                         </div>
                     </Col>

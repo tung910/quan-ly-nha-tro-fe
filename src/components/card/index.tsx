@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 import { useState } from 'react';
 import { RoomType } from '~/types/RoomType';
 import { generatePriceToVND } from '~/utils/helper';
+
 import styles from './Card.module.scss';
 
 export interface Props {
@@ -13,15 +14,20 @@ export interface Props {
 const cx = classNames.bind(styles);
 const CardItem = ({ onClick, room }: Props) => {
     const desc = ['1', '2', '3', '4', '5'];
-    const { unitPrice, maxPerson, roomName, isRent, images } = room;
+    const { unitPrice, maxPerson, roomName, isRent, images, width, height } =
+        room;
     const [value, setValue] = useState(3);
     return (
         <Card
             className={cx(`card-item`)}
             cover={
                 <Image
-                    style={{ width: '100%' }}
-                    src={images?.map((item: any) => item.thumbUrl)}
+                    loading='lazy'
+                    width={'100%'}
+                    height={'300px'}
+                    style={{ objectFit: 'cover' }}
+                    src={images[0]?.thumbUrl}
+                    preview={false}
                 />
             }
             hoverable
@@ -35,18 +41,11 @@ const CardItem = ({ onClick, room }: Props) => {
                 </Col>
 
                 <Col span={12}>
-                    <span>
-                        <Rate
-                            tooltips={desc}
-                            onChange={setValue}
-                            value={value}
-                            style={{ fontSize: 17 }}
-                        />
-                        <>
-                            Đánh giá :{' '}
-                            {value ? <span>{desc[value - 1]} sao</span> : ''}{' '}
-                        </>
-                    </span>
+                    <span style={{ fontWeight: 'bold' }}>Chiều dài: </span>{' '}
+                    {width}m<sup>2</sup>
+                    <br />
+                    <span style={{ fontWeight: 'bold' }}>Chiều rộng:</span>{' '}
+                    {height}m<sup>2</sup>
                 </Col>
             </Row>
             <p

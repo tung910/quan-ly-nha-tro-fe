@@ -1,4 +1,5 @@
 /* eslint-disable indent */
+import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
 import {
     Button,
     Col,
@@ -6,29 +7,29 @@ import {
     Form,
     Input,
     InputNumber,
-    message,
     PageHeader,
     Row,
     Select,
+    message,
 } from 'antd';
-import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
+import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { MotelType } from '~/types/MotelType';
-import { RoomType } from '~/types/RoomType';
-import classNames from 'classnames/bind';
-import styles from './Booking.module.scss';
-import { getAllMotel } from '~/api/motel.api';
-import { getListRooms, getRooms } from '~/api/room.api';
-import { convertDate, generatePriceToVND, useGetParam } from '~/utils/helper';
-import { IBooking } from '~/types/Booking.type';
 import {
     createRoomDeposit,
-    getlistSearchRoomDeposit,
+    getRoomDeposit,
     updateRoomDeposit,
 } from '~/api/booking.api';
+import { getAllMotel } from '~/api/motel.api';
+import { getListRooms, getRooms } from '~/api/room.api';
 import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
+import { IBooking } from '~/types/Booking.type';
+import { MotelType } from '~/types/MotelType';
+import { RoomType } from '~/types/RoomType';
+import { convertDate, generatePriceToVND, useGetParam } from '~/utils/helper';
+
+import styles from './Booking.module.scss';
 
 const Option = Select;
 const cx = classNames.bind(styles);
@@ -114,7 +115,7 @@ const AddEditBooking = () => {
     useEffect(() => {
         if (param) {
             const fetchData = async () => {
-                const { data } = await getlistSearchRoomDeposit(param);
+                const { data } = await getRoomDeposit(param);
 
                 const resposive = await getRooms(data.motelId);
                 setListRooms(resposive.data);
