@@ -17,6 +17,7 @@ import { memo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '~/app/hooks';
 import { Role } from '~/constants/const';
+
 import styles from './Navbar.module.scss';
 
 const cx = classNames.bind(styles);
@@ -54,6 +55,11 @@ const itemsMenuUser: MenuItem[] = [
     getItem('Cài đặt tài khoản', '/user', <IdcardOutlined />),
     getItem('Nhà trọ', '/user/motel', <HomeOutlined />),
     getItem('Nhà trọ đang ở', '/user/motel-room', <HomeOutlined />),
+    getItem(
+        'Lịch sử thanh toán',
+        '/user/payment-history',
+        <TransactionOutlined />
+    ),
 ];
 
 const Navbar = () => {

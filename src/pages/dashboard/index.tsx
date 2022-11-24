@@ -10,6 +10,7 @@ import {
 import { getStatisticalRoomStatus } from '~/api/room.api';
 import { DateFormat } from '~/constants/const';
 import { IMonthlyRevenue, IStatistical } from '~/types/Statistical.type';
+
 import AvailableRooms from './AvailableRooms';
 import styles from './Dasboard.module.scss';
 import ExpiresContract from './ExpiresContract';
@@ -104,50 +105,43 @@ const Dashboard = () => {
 
     return (
         <div>
-            <Form autoComplete='off' style={{ marginTop: 20, padding: 20 }}>
-                {/* Row 1 */}
-                <Row gutter={[16, 16]}>
-                    <Col span={8}>
-                        {state.areRenting && state.emptyRooms && (
-                            <RoomStatus roomStatus={state} />
-                        )}
-                    </Col>
-                    <Col span={16}>
-                        <Revenue
-                            monthlyRevenue={monthlyRevenue}
-                            monthYearMonthlyRevenue={monthYearMonthlyRevenue}
-                            onChangeYearMonthlyRevenue={
-                                onChangeYearMonthlyRevenue
-                            }
+            <Row gutter={[16, 16]}>
+                <Col span={8}>
+                    {state.areRenting && state.emptyRooms && (
+                        <RoomStatus roomStatus={state} />
+                    )}
+                </Col>
+                <Col span={16}>
+                    <Revenue
+                        monthlyRevenue={monthlyRevenue}
+                        monthYearMonthlyRevenue={monthYearMonthlyRevenue}
+                        onChangeYearMonthlyRevenue={onChangeYearMonthlyRevenue}
+                    />
+                </Col>
+            </Row>
+            <Row gutter={[16, 16]} className={cx('row')}>
+                <Col span={12}>
+                    {Object.keys(payment).length > 0 && (
+                        <PaymentTracking
+                            setDate={setDate}
+                            newDataPaymentChecking={payment}
                         />
-                    </Col>
-                </Row>
-                {/* Row 2 */}
-                <Row gutter={[16, 16]} className={cx('row')}>
-                    <Col span={12}>
-                        {payment && Object.keys(payment).length > 0 && (
-                            <PaymentTracking
-                                setDate={setDate}
-                                newDataPaymentChecking={payment}
-                            />
-                        )}
-                    </Col>
-                    <Col span={12}>
-                        {dataOwe && <OweRoomFees dataOwe={dataOwe} />}
-                    </Col>
-                </Row>
-                {/* Row 3 */}
-                <Row gutter={[16, 16]} className={cx('row')}>
-                    <Col span={12}>
-                        {state.emptyRooms && (
-                            <AvailableRooms roomStatus={state.emptyRooms} />
-                        )}
-                    </Col>
-                    <Col span={12}>
-                        <ExpiresContract />
-                    </Col>
-                </Row>
-            </Form>
+                    )}
+                </Col>
+                <Col span={12}>
+                    {dataOwe && <OweRoomFees dataOwe={dataOwe} />}
+                </Col>
+            </Row>
+            <Row gutter={[16, 16]} className={cx('row')}>
+                <Col span={12}>
+                    {state.emptyRooms && (
+                        <AvailableRooms roomStatus={state.emptyRooms} />
+                    )}
+                </Col>
+                <Col span={12}>
+                    <ExpiresContract />
+                </Col>
+            </Row>
         </div>
     );
 };
