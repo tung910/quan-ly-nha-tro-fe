@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from 'react'
 import { getCalculator } from '~/api/calculator.api';
 import { generatePriceToVND, useGetParam } from '~/utils/helper';
+import './Invoice.scss';
 
 const Invoice = () => {
     
@@ -25,7 +26,8 @@ const Invoice = () => {
   return (
     <>
             {dataInvoicePrintLength > 0 && (
-                <div>
+                <div className='container'>
+                    <h1>Hoá Đơn</h1>
                                     <p>
                                         1.Khách hàng:{' '}
                                         {dataInvoicePrint[0].roomRentalDetailID.customerName}
