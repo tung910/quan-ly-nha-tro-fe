@@ -20,11 +20,13 @@ import {
     Select,
     Space,
     Table,
+    Tooltip,
     Typography,
 } from 'antd';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
     CalculatorMoney,
     deleteCalculator,
@@ -95,14 +97,14 @@ const Calculate = () => {
                             disabled={+item?.remainAmount === 0 ? true : false}
                             title='Nhập số tiền đã thu'
                         />
+                         
                         <Button
                             htmlType='submit'
                             type='primary'
                             icon={<PrinterOutlined />}
-                            onClick={() => setIsModalReceipt(!isModalReceipt)}
+                            onClick={() => seeTheBill(id)}
                             title='In hóa đơn'
                         />
-
                         <Button
                             htmlType='submit'
                             icon={<DeleteOutlined />}
@@ -112,6 +114,32 @@ const Calculate = () => {
                             danger
                         />
                     </Space>
+                );
+            },
+        },
+        {
+            title: 'In hoá đơn',
+            dataIndex: 'roomRentalDetailID',
+            key: 'roomRentalDetailID',
+            render: (roomRentalDetailID) => {
+                return (
+                    <>
+                        {roomRentalDetailID && (
+                            <Tooltip title='In hoá đơn'>
+                                <Button
+                                    type='primary'
+                                    icon={
+                                        <Link
+                                            to={`/invoice-print?idCalculator=${calculators[0]?._id}`}
+                                            target='_blank'
+                                        >
+                                            <PrinterOutlined />
+                                        </Link>
+                                    }
+                                ></Button>
+                            </Tooltip>
+                        )}
+                    </>
                 );
             },
         },
@@ -311,6 +339,8 @@ const Calculate = () => {
             },
         });
     };
+
+    console.log(idCalculator,calculators)
 
     useEffect(() => {
         const handleFetchData = async () => {
@@ -597,7 +627,8 @@ const Calculate = () => {
                     onOk={() => setIsModalReceipt(false)}
                     onCancel={() => setIsModalReceipt(false)}
                     footer={[
-                        <Button type='primary' key='button_1'>
+                        <Button type='primary' key='button_1'
+                        >
                             Tải file PDF
                         </Button>,
                         <Button
