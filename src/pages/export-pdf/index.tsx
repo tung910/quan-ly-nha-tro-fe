@@ -2,6 +2,7 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { exportWordContract } from '~/api/export.api';
 import { generatePriceToVND, useGetParam } from '~/utils/helper';
+
 import './Export.scss';
 
 const ExportPdf = () => {
@@ -18,6 +19,7 @@ const ExportPdf = () => {
     useLayoutEffect(() => {
         if (dataExportLength > 0) {
             window.print();
+            window.close();
         }
     }, [dataExportLength]);
 
