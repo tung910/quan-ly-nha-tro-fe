@@ -197,11 +197,12 @@ const Calculate = () => {
                         ),
                         month: moment(values.month).format('MM'),
                         year: moment(values.month).format('YYYY'),
+                        motelRoomId: values.roomID,
                     },
                 ],
             };
 
-            await CalculatorMoney(values);
+            await calculatorMoney(values);
 
             const { data } = await listCalculator({
                 month: thisMonth,

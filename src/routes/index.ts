@@ -2,6 +2,7 @@
 import { ReactNode } from 'react';
 import MotelCustomer from '~/pages/User/motel';
 import UserMotelRoom from '~/pages/User/motelroom-user';
+import History from '~/pages/User/payment/History';
 import UserInformation from '~/pages/User/user-infomation';
 import BookingRoomDeposit from '~/pages/booking';
 import AddEditBooking from '~/pages/booking/AddorEditBooking';
@@ -53,6 +54,7 @@ export const routesUser: Route[] = [
     { path: '/user', component: UserInformation },
     { path: '/user/motel-room', component: UserMotelRoom },
     { path: '/user/motel', component: MotelCustomer },
+    { path: '/user/payment-history', component: History },
 ];
 
 export default routes;
