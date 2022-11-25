@@ -1,4 +1,5 @@
 import { RoomType } from '~/types/RoomType';
+
 import instance from './instance';
 
 export const getRooms = (id: string) => {

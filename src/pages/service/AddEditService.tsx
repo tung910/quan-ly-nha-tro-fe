@@ -6,13 +6,12 @@ import {
     Form,
     Input,
     InputNumber,
-    message,
     PageHeader,
     Row,
     Select,
+    message,
 } from 'antd';
 import { useEffect } from 'react';
-
 import { getServiceAPI } from '~/api/service.api';
 import { useAppDispatch } from '~/app/hooks';
 import { MESSAGES } from '~/constants/message.const';
@@ -20,6 +19,7 @@ import { serviceTypeOptions } from '~/constants/service.const';
 import { createService, updateService } from '~/feature/service/serviceSlice';
 import { IService } from '~/types/Service.type';
 import { useGetParam } from '~/utils/helper';
+
 const { Option } = Select;
 
 const AddEditService = () => {

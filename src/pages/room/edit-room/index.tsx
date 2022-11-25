@@ -1,28 +1,30 @@
+import { InboxOutlined, RollbackOutlined } from '@ant-design/icons';
 import {
+    Col,
     Form,
     Input,
-    Row,
-    Col,
-    Upload,
-    Select,
     InputNumber,
+    Row,
+    Select,
+    Upload,
     message,
 } from 'antd';
-import { RollbackOutlined, InboxOutlined } from '@ant-design/icons';
 import { Content } from 'antd/lib/layout/layout';
-import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-//
-import { MotelType } from '~/types/MotelType';
-import styles from './EditRoom.module.scss';
-import HeaderPage from '~/components/page-header';
 import { getAllMotel } from '~/api/motel.api';
 import { editRoom, getRoom } from '~/api/room.api';
-import { RoomType } from '~/types/RoomType';
 import { useAppDispatch } from '~/app/hooks';
-import { setIsLoading } from '~/feature/service/appSlice';
+import HeaderPage from '~/components/page-header';
 import { MESSAGES } from '~/constants/message.const';
+import { setIsLoading } from '~/feature/service/appSlice';
+//
+import { MotelType } from '~/types/MotelType';
+import { RoomType } from '~/types/RoomType';
+
+import styles from './EditRoom.module.scss';
+
 const { Option } = Select;
 const { Dragger } = Upload;
 const cx = classNames.bind(styles);
