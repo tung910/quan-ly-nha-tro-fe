@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, message, Modal, PageHeader, Space, Tooltip } from 'antd';
+import { Button, Modal, PageHeader, Space, Tooltip, message } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';

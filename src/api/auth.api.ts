@@ -1,4 +1,5 @@
 import { IUser } from '~/types/User.type';
+
 import instance from './instance';
 
 const loginApi = (user: IUser) => {

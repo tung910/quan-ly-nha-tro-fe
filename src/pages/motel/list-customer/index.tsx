@@ -1,4 +1,9 @@
 import {
+    CheckOutlined,
+    DeleteOutlined,
+    RollbackOutlined,
+} from '@ant-design/icons';
+import {
     Button,
     DatePicker,
     Input,
@@ -7,16 +12,14 @@ import {
     Space,
     Tooltip,
 } from 'antd';
-import {
-    CheckOutlined,
-    DeleteOutlined,
-    RollbackOutlined,
-} from '@ant-design/icons';
-const { Option } = Select;
-import styles from './ListCustomer.module.scss';
 import classNames from 'classnames/bind';
-import { generatePriceToVND } from '~/utils/helper';
 import Table from '~/components/table';
+import { generatePriceToVND } from '~/utils/helper';
+
+import styles from './ListCustomer.module.scss';
+
+const { Option } = Select;
+
 const cx = classNames.bind(styles);
 
 const ColumnsListCustomer: any = [

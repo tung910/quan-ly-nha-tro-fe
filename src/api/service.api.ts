@@ -1,5 +1,6 @@
 import React from 'react';
 import { IService } from '~/types/Service.type';
+
 import instance from './instance';
 
 const getAllService = () => {

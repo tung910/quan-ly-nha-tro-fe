@@ -19,6 +19,7 @@ import { getListRooms, getRooms } from '~/api/room.api';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { generatePriceToVND } from '~/utils/helper';
+
 import styles from './PaymentHistory.module.scss';
 
 const cx = classNames.bind(styles);

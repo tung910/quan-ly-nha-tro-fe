@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useAppSelector } from '~/app/hooks';
 import Tabs from '~/components/tabs';
 import { TypeTabs } from '~/types/Setting.type';
+
 import ChangeInformation from './ChangeInformation';
 import ChangePassword from './ChangePassword';
 

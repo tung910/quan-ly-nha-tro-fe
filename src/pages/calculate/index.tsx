@@ -13,7 +13,6 @@ import {
     Form,
     Input,
     InputNumber,
-    message,
     Modal,
     PageHeader,
     Row,
@@ -21,12 +20,14 @@ import {
     Space,
     Table,
     Typography,
+    message,
 } from 'antd';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import {
     CalculatorMoney,
+    CalculatorMoneyAll,
     deleteCalculator,
     getCalculator,
     listCalculator,
@@ -44,6 +45,7 @@ import { MESSAGES } from '~/constants/message.const';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { generatePriceToVND } from '~/utils/helper';
+
 import styles from './Calculate.module.scss';
 
 const cx = classNames.bind(styles);
@@ -212,6 +214,16 @@ const Calculate = () => {
         form.resetFields();
         setIsModalOpen(false);
     };
+    const onCalculatorAll = async () => {
+        await CalculatorMoneyAll({
+            date: moment(new Date()).format(DateFormat.DATE_DEFAULT),
+        });
+        const { data } = await listCalculator({
+            month: thisMonth,
+        });
+        setCalculators(data);
+        setIsModalOpen(false);
+    };
     const getPayer = async (id: string) => {
         setPrepayment(true);
         setIdCalculator(id);
@@ -337,9 +349,6 @@ const Calculate = () => {
                     className={cx('header-top')}
                     title='Tính Tiền'
                     extra={[
-                        <Button icon={<SearchOutlined />} key={1}>
-                            Xem
-                        </Button>,
                         <Button
                             type='primary'
                             icon={<CalculatorOutlined />}
@@ -355,6 +364,25 @@ const Calculate = () => {
                         open={isModalOpen}
                         onOk={form.submit}
                         onCancel={handleCancel}
+                        footer={[
+                            <Button key='back' onClick={handleCancel}>
+                                Hủy
+                            </Button>,
+                            <Button
+                                key='link'
+                                type='primary'
+                                onClick={onCalculatorAll}
+                            >
+                                Tính tất cả
+                            </Button>,
+                            <Button
+                                key='submit'
+                                type='primary'
+                                onClick={form.submit}
+                            >
+                                Tính
+                            </Button>,
+                        ]}
                     >
                         <>
                             <Form
