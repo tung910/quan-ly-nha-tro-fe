@@ -8,7 +8,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { listCalculator } from '~/api/calculator.api';
+import { listCalculator, paymentMoneyVNPay } from '~/api/calculator.api';
 import { generatePriceToVND } from '~/utils/helper';
 
 const { Title } = Typography;
@@ -31,6 +31,16 @@ const History = () => {
         };
         handleFetchData();
     }, []);
+    const handlePayment = async (payment: any) => {
+        const value = {
+            amount: +payment.totalAmount,
+            bankCode: '',
+            orderInfo: 'Thanh toan nha tro 01',
+            orderType: 'billpayment',
+        };
+        const { data } = await paymentMoneyVNPay(value);
+        window.location = data;
+    };
 
     return (
         <div>
@@ -109,7 +119,12 @@ const History = () => {
                                     {generatePriceToVND(item.remainAmount)}
                                 </h3>
                                 {!item.paymentStatus && (
-                                    <Button type='primary'>Thanh toán</Button>
+                                    <Button
+                                        type='primary'
+                                        onClick={() => handlePayment(item)}
+                                    >
+                                        Thanh toán
+                                    </Button>
                                 )}
                             </Panel>
                         </Collapse>
