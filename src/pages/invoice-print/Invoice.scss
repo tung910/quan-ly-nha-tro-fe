@@ -1,3 +1,21 @@
 .container{
     margin-left: 30px
 }
+.section1{
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.section1, .col2, .col1{
+    border: 1px solid black;
+}
+.col2, .col1 {
+    padding: 5px 8px;
+}
+.total{
+    color: red;
+    font-weight: bold;
+}
+.title{
+    text-align: center;
+}

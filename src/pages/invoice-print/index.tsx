@@ -21,44 +21,63 @@ const Invoice = () => {
         }
     }, [dataInvoicePrintLength]);
 
- console.log('123',dataInvoicePrint)
-
   return (
     <>
             {dataInvoicePrintLength > 0 && (
                 <div className='container'>
-                    <h1>Hoá Đơn</h1>
-                                    <p>
-                                        - Khách hàng:{' '}
-                                        {dataInvoicePrint[0].roomRentalDetailID.customerName}
-                                    </p>
-                                    <p>
-                                        - Phòng:{' '}
-                                        {dataInvoicePrint[0].roomRentalDetailID.roomName}
-                                    </p>
-                                    <p>
-                                        - Sử dụng điện:{' '}
-                                        {dataInvoicePrint[0].dataPowerID.useValue} số
-                                    </p>
-                                    <p>
-                                        - sử dụng nước:{' '}
-                                        {dataInvoicePrint[0].dataWaterID.useValue} khối
-                                    </p>
-                                    <hr />
-                                    <p>
-                                        <b>
-                                            Tổng tiền:{' '}
-                                            {generatePriceToVND(
-                                                dataInvoicePrint[0].totalAmount
-                                            )}{' '}
-                                            VND
-                                        </b>
-                                    </p>
-                                    <hr />
-                                    <p>
-                                        <b>Người thanh toán: {dataInvoicePrint[0].payer}</b>
-                                    </p>
-                                </div>
+                    <h1 className='title'>Hoá Đơn Tiền Nhà</h1>         
+                    <p>
+                        Khách hàng:{' '}
+                        {dataInvoicePrint[0].roomRentalDetailID.customerName}
+                    </p>
+                    <p>
+                        Phòng:{' '}
+                        {dataInvoicePrint[0].roomRentalDetailID.roomName}
+                    </p>
+                    <table border={1} className="section1">
+                        <thead>
+                            <tr>
+                                <th className='col1'>Khoản thu</th>
+                                <th className='col1'>Chỉ số điện (số)</th>
+                                <th className='col1'>Chỉ số nước (Khối)</th>
+                                <th className='col1'>Giá phòng</th>
+                                <th className='col1'>Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className='col2'></td>
+                                <td className='col2'>{dataInvoicePrint[0].dataPowerID.useValue}</td>
+                                <td className='col2'>{dataInvoicePrint[0].dataWaterID.useValue}</td>
+                                <td className='col2'>{generatePriceToVND(dataInvoicePrint[0].totalAmount)} VNĐ</td>
+                                <td className='col2'>{generatePriceToVND(dataInvoicePrint[0].totalAmount)} VNĐ</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colSpan={4} className='col2'>Đã trả</td>
+                                <td className='col2'>{generatePriceToVND(
+                                dataInvoicePrint[0].payAmount)} VNĐ</td>
+                            </tr>
+                            <tr>
+                                <td colSpan={4} className='col2'>Còn lại</td>
+                                <td className='col2'>{generatePriceToVND(
+                                dataInvoicePrint[0].remainAmount)} VNĐ</td>
+                            </tr>
+                            <tr>
+                                <td colSpan={4} className='col2'>Tổng tiền</td>
+                                <td className='col2'><span className='total'>{generatePriceToVND(
+                                dataInvoicePrint[0].remainAmount)} VNĐ</span></td>
+                            </tr>
+                        </tfoot>
+                        
+                    </table>
+                    <hr />
+                        <p>
+                            <b>Người thanh toán: {dataInvoicePrint[0].payer}</b>
+                        </p>
+                        
+                </div>
             )}
         </>
   )
