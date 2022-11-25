@@ -163,7 +163,7 @@ const ColumnsDataPower: (ColumnTypes[number] & {
         render: (oldValue) => {
             return (
                 <>
-                    <InputNumber value={oldValue} />
+                    <InputNumber value={oldValue} disabled />
                 </>
             );
         },

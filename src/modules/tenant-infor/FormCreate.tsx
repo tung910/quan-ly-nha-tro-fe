@@ -210,7 +210,10 @@ const FormCreate = ({
                             },
                         ]}
                     >
-                        <Input style={{ width: 400 }} />
+                        <DatePicker
+                            format={DateFormat.DATE_DEFAULT}
+                            style={{ width: 400 }}
+                        />
                     </Form.Item>
                 </Col>
             </Row>
