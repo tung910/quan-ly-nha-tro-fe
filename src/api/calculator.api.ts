@@ -19,6 +19,9 @@ export const getCalculator = (id: string) => {
 export const calculatorMoney = (data: any) => {
     return instance.post('/calculator-money/calculator', data);
 };
+export const CalculatorMoneyAll = (data: any) => {
+    return instance.post('/calculator-money/calculator-all', { data });
+};
 export const deleteCalculator = (id: string) => {
     return instance.delete(`/calculator-money/delete/${id}`);
 };

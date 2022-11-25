@@ -1,4 +1,5 @@
 /* eslint-disable indent */
+
 /* eslint-disable no-console */
 import {
     Button,
@@ -21,6 +22,7 @@ import { DateFormat } from '~/constants/const';
 import { ACTION } from '~/constants/member.const';
 import { DataTable } from '~/types/Member.type';
 import { convertDate } from '~/utils/helper';
+
 const { Option } = Select;
 
 const EditableContext = React.createContext<any>(null);

@@ -13,7 +13,6 @@ import {
     sendEmailAccount,
 } from '~/api/customer.api';
 import { getAllService } from '~/api/service.api';
-import uploadImg from '~/api/upload-images.api';
 import { useAppDispatch } from '~/app/hooks';
 import Tabs from '~/components/tabs';
 import { DateFormat } from '~/constants/const';
@@ -142,10 +141,8 @@ const CustomerRedirect = () => {
                 message.success(MESSAGES.ADD_SUCCESS);
                 navigate('/motel-room');
             }
-        } catch (error: any) {
+        } catch (error) {
             dispatch(setIsLoading(false));
-            const msgKey: string | any = Object.keys(error.messages[0]);
-            message.error(error.messages[0][msgKey]);
         }
     };
     const items: TypeTabs[] = [

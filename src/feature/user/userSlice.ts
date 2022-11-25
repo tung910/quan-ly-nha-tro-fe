@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { loginApi, logOutApi } from '~/api/auth.api';
+import { logOutApi, loginApi } from '~/api/auth.api';
 import { IUser } from '~/types/User.type';
+
 export const signIn = createAsyncThunk(
     'auth/login',
     async (user: IUser, thunkAPI) => {

@@ -26,7 +26,8 @@ import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import {
-    calculatorMoney,
+    CalculatorMoney,
+    CalculatorMoneyAll,
     deleteCalculator,
     getCalculator,
     listCalculator,
@@ -186,6 +187,7 @@ const Calculate = () => {
                 data: [
                     {
                         ...values,
+                        motelRoomID: room._id,
                         motelID: room.motelID,
                         dataPowerID: dataPower.data._id,
                         dataWaterID: dataWater.data._id,
@@ -212,6 +214,16 @@ const Calculate = () => {
         }
 
         form.resetFields();
+        setIsModalOpen(false);
+    };
+    const onCalculatorAll = async () => {
+        await CalculatorMoneyAll({
+            date: moment(new Date()).format(DateFormat.DATE_DEFAULT),
+        });
+        const { data } = await listCalculator({
+            month: thisMonth,
+        });
+        setCalculators(data);
         setIsModalOpen(false);
     };
     const getPayer = async (id: string) => {
@@ -339,9 +351,6 @@ const Calculate = () => {
                     className={cx('header-top')}
                     title='Tính Tiền'
                     extra={[
-                        <Button icon={<SearchOutlined />} key={1}>
-                            Xem
-                        </Button>,
                         <Button
                             type='primary'
                             icon={<CalculatorOutlined />}
@@ -357,6 +366,25 @@ const Calculate = () => {
                         open={isModalOpen}
                         onOk={form.submit}
                         onCancel={handleCancel}
+                        footer={[
+                            <Button key='back' onClick={handleCancel}>
+                                Hủy
+                            </Button>,
+                            <Button
+                                key='link'
+                                type='primary'
+                                onClick={onCalculatorAll}
+                            >
+                                Tính tất cả
+                            </Button>,
+                            <Button
+                                key='submit'
+                                type='primary'
+                                onClick={form.submit}
+                            >
+                                Tính
+                            </Button>,
+                        ]}
                     >
                         <>
                             <Form
