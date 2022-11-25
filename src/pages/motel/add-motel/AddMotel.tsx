@@ -1,15 +1,9 @@
-import { Form, Input, Row, Col, message, Select } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
+import { Col, Form, Input, Row, Select, message } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
-import { MotelType } from '~/types/MotelType';
-import styles from './AddMotel.module.scss';
 import classNames from 'classnames/bind';
-const { Option } = Select;
-import { addMotel } from '~/api/motel.api';
-import { useNavigate } from 'react-router-dom';
-import HeaderPage from '~/components/page-header';
-import { MESSAGES } from '~/constants/message.const';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     getDistrict,
     getDistrictByProvince,
@@ -18,6 +12,15 @@ import {
     getWard,
     getWardByDistrict,
 } from '~/api/addressCheckout';
+import { addMotel } from '~/api/motel.api';
+import HeaderPage from '~/components/page-header';
+import { MESSAGES } from '~/constants/message.const';
+import { MotelType } from '~/types/MotelType';
+
+import styles from './AddMotel.module.scss';
+
+const { Option } = Select;
+
 const cx = classNames.bind(styles);
 
 const AddMotel = () => {
@@ -110,8 +113,8 @@ const AddMotel = () => {
                                         },
                                         {
                                             type: 'string',
-                                            min: 3,
-                                            message: 'Phải lớn hơn 3 ký tự!',
+                                            min: 5,
+                                            message: 'Phải lớn hơn 5 ký tự!',
                                         },
                                     ]}
                                 >

@@ -1,11 +1,12 @@
-import { Form, Button, Row, Col, Input, DatePicker } from 'antd';
-import styles from './Contract.module.scss';
 import { DownloadOutlined } from '@ant-design/icons';
+import { Button, Col, DatePicker, Form, Input, Row } from 'antd';
 import classNames from 'classnames/bind';
 import moment from 'moment';
-import { exportHtmlToWord } from '~/utils/helper';
 import { exportWordContract } from '~/api/export.api';
 import { DateFormat } from '~/constants/const';
+import { exportHtmlToWord } from '~/utils/helper';
+
+import styles from './Contract.module.scss';
 
 const cx = classNames.bind(styles);
 type Props = {

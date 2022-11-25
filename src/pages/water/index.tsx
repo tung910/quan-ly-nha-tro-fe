@@ -6,12 +6,12 @@ import {
     Form,
     Input,
     InputNumber,
-    message,
     Modal,
     PageHeader,
     Row,
     Select,
     Table,
+    message,
 } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import classNames from 'classnames/bind';
@@ -25,6 +25,7 @@ import { MESSAGES } from '~/constants/message.const';
 import { IDataWater } from '~/types/DataWater.type';
 import { MotelType } from '~/types/MotelType';
 import { generatePriceToVND } from '~/utils/helper';
+
 import styles from './Water.module.scss';
 
 const cx = classNames.bind(styles);
