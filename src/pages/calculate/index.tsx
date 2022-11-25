@@ -187,6 +187,7 @@ const Calculate = () => {
                 data: [
                     {
                         ...values,
+                        motelRoomID: room._id,
                         motelID: room.motelID,
                         dataPowerID: dataPower.data._id,
                         dataWaterID: dataWater.data._id,
