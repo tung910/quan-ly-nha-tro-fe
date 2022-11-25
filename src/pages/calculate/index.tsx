@@ -28,8 +28,8 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-    CalculatorMoney,
     CalculatorMoneyAll,
+    calculatorMoney,
     deleteCalculator,
     getCalculator,
     listCalculator,
@@ -64,7 +64,7 @@ const Calculate = () => {
 
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listNameRoom, setListNameRoom] = useState<RoomType[]>([]);
-    const [calculators, setCalculators] = useState([]);
+    const [calculators, setCalculators] = useState<any>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalReceipt, setIsModalReceipt] = useState(false);
     const [prepayment, setPrepayment] = useState(false);
@@ -99,7 +99,7 @@ const Calculate = () => {
                             disabled={+item?.remainAmount === 0 ? true : false}
                             title='Nhập số tiền đã thu'
                         />
-                         
+
                         <Button
                             htmlType='submit'
                             type='primary'
@@ -353,8 +353,6 @@ const Calculate = () => {
             },
         });
     };
-
-    console.log(idCalculator,calculators)
 
     useEffect(() => {
         const handleFetchData = async () => {
@@ -657,8 +655,7 @@ const Calculate = () => {
                     onOk={() => setIsModalReceipt(false)}
                     onCancel={() => setIsModalReceipt(false)}
                     footer={[
-                        <Button type='primary' key='button_1'
-                        >
+                        <Button type='primary' key='button_1'>
                             Tải file PDF
                         </Button>,
                         <Button
