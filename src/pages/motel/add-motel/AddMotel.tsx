@@ -113,8 +113,8 @@ const AddMotel = () => {
                                         },
                                         {
                                             type: 'string',
-                                            min: 3,
-                                            message: 'Phải lớn hơn 3 ký tự!',
+                                            min: 5,
+                                            message: 'Phải lớn hơn 5 ký tự!',
                                         },
                                     ]}
                                 >

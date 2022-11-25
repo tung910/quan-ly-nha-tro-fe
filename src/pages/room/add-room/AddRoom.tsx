@@ -15,7 +15,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllMotel } from '~/api/motel.api';
 import { addRoom } from '~/api/room.api';
-import uploadImg from '~/api/upload-images.api';
 import { useAppDispatch } from '~/app/hooks';
 import HeaderPage from '~/components/page-header';
 import { MESSAGES } from '~/constants/message.const';
