@@ -6,20 +6,23 @@ import {
     Form,
     Input,
     InputNumber,
+    message,
     Row,
     Select,
     Upload,
     UploadProps,
-    message,
 } from 'antd';
 import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { listSearchRoomDeposit } from '~/api/booking.api';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
 import { getRoom } from '~/api/room.api';
+import { useAppDispatch } from '~/app/hooks';
 import { DateFormat } from '~/constants/const';
-
+import { setIsLoading } from '~/feature/service/appSlice';
+import { convertDate } from '~/utils/helper';
 import styles from './FormCreate.module.scss';
 
 const cx = classNames.bind(styles);
@@ -68,6 +71,8 @@ const FormCreate = ({
     setImageUrl,
 }: Props) => {
     const [loading, setLoading] = useState(false);
+    const dispatch = useAppDispatch();
+    const [roomDeposit, setRoomDeposit] = useState<any>([]);
 
     const handleChange: UploadProps['onChange'] = (
         info: UploadChangeParam<UploadFile>
@@ -96,6 +101,7 @@ const FormCreate = ({
             <div style={{ marginTop: 8 }}>Upload</div>
         </div>
     );
+
     useEffect(() => {
         if (roomId) {
             const readRoom = async () => {
@@ -125,6 +131,46 @@ const FormCreate = ({
         }
     }, []);
 
+    useEffect(() => {
+        const handleFetchData = async () => {
+            try {
+                dispatch(setIsLoading(true));
+                const result = {
+                    data: {
+                        fromDate: convertDate(
+                            moment(new Date()).startOf('month'),
+                            DateFormat.DATE_M_D_Y
+                        ),
+                        toDate: convertDate(
+                            moment(new Date()).endOf('month'),
+                            DateFormat.DATE_M_D_Y
+                        ),
+                    },
+                };
+
+                const { data } = await listSearchRoomDeposit(result);
+                setRoomDeposit(data);
+                dispatch(setIsLoading(false));
+            } catch (error) {
+                // message.error(error);
+            }
+        };
+        handleFetchData();
+    }, []);
+
+    const handleCheckRoomDeposit = (roomId: string) => {
+        let result = {};
+        if (roomDeposit.length > 0) {
+            result = roomDeposit.find((item: any) => {
+                return item.motelRoomId?._id === roomId && item;
+            });
+        }
+
+        return result ?? {};
+    };
+
+    const roomDeposits: any = handleCheckRoomDeposit(roomId);
+
     return (
         <Form
             className={cx('form-create')}
@@ -149,9 +195,13 @@ const FormCreate = ({
                                     'Vui lòng nhập tên người dùng của bạn!',
                             },
                         ]}
-                        validateTrigger={['onBlur', 'onChange']}
+                        validateTrigger={['onChange']}
                     >
-                        <Input style={{ width: 400 }} autoFocus />
+                        <Input
+                            defaultValue={roomDeposits?.fullName}
+                            style={{ width: 400 }}
+                            autoFocus
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -411,7 +461,7 @@ const FormCreate = ({
                         label={<>Ngày bắt đầu </>}
                         colon={false}
                         labelAlign='left'
-                        name='startDate'
+                        name={'startDate'}
                         initialValue={moment()}
                     >
                         <DatePicker
@@ -424,11 +474,15 @@ const FormCreate = ({
                     <Form.Item
                         label={<>Đặt cọc</>}
                         colon={false}
-                        initialValue={0}
-                        name='deposit'
+                        name={
+                            Object.keys(roomDeposit).length <= 0
+                                ? 'deposit'
+                                : 'bookingAmount'
+                        }
                         labelAlign='left'
                     >
                         <InputNumber
+                            value={roomDeposits?.bookingAmount}
                             formatter={(value) =>
                                 ` ${value}`.replace(
                                     /\B(?=(\d{3})+(?!\d))/g,
@@ -440,7 +494,7 @@ const FormCreate = ({
                             }
                             addonAfter='VNĐ'
                             style={{ width: 400 }}
-                        />
+                        />{' '}
                     </Form.Item>
                 </Col>
             </Row>

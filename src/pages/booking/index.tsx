@@ -12,19 +12,19 @@ import {
     Col,
     DatePicker,
     Form,
+    message,
     Modal,
     PageHeader,
     Row,
     Select,
     Space,
     Tooltip,
-    message,
 } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { deleteRoomDeposit, listSearchRoomDeposit } from '~/api/booking.api';
 import { getAllMotel } from '~/api/motel.api';
 import { getListRooms, getRooms } from '~/api/room.api';
@@ -35,7 +35,6 @@ import { IBooking } from '~/types/Booking.type';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { convertDate, generatePriceToVND } from '~/utils/helper';
-
 import styles from './Booking.module.scss';
 
 const cx = classNames.bind(styles);
@@ -44,6 +43,7 @@ const BookingRoomDeposit = () => {
     const [listMotels, setListMotels] = useState<MotelType[]>([]);
     const [listRooms, setListRooms] = useState<RoomType[]>([]);
     const [dataSource, setdataSource] = useState<any>([]);
+    const navigate = useNavigate();
 
     const columns: ColumnsType = [
         {
@@ -179,7 +179,7 @@ const BookingRoomDeposit = () => {
         if (record) {
             const newDate = {
                 ...record,
-                checkInDate: record.bookingDate,
+                checkInDate: record.dateOfArrival,
                 hasCheckIn: !record.hasCheckIn,
             };
             Modal.confirm({
@@ -203,15 +203,21 @@ const BookingRoomDeposit = () => {
                 ),
                 cancelText: 'Cancel',
                 okText: 'Lưu',
+                onOk: () => handleSave(record),
             });
         }
+    };
+    const handleSave = async (record: any) => {
+        navigate(
+            `/customer/create?roomId=${record?.motelRoomId._id}&&roomName=${record?.motelRoomId.roomName}&&motelId=${record?.motelId._id}`
+        );
     };
 
     const handleCancel = (record: any) => {
         if (record) {
             const newDate = {
                 ...record,
-                cancelDate: record.bookingDate,
+                cancelDate: record.dateOfArrival,
                 hasCancel: !record.hasCancel,
             };
             Modal.confirm({
