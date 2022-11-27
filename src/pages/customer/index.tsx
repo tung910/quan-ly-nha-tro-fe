@@ -6,6 +6,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getProvinces } from '~/api/addressCheckout';
+import { updateStatusRoomDeposit } from '~/api/booking.api';
 import {
     addCustomerToRoom,
     editCustomerToRoom,
@@ -25,6 +26,7 @@ import FormCreate from '~/modules/tenant-infor/FormCreate';
 import { TypeCustomer } from '~/types/Customer';
 import { IService } from '~/types/Service.type';
 import { TypeTabs } from '~/types/Setting.type';
+import { useGetParam } from '~/utils/helper';
 
 import styles from './Create.module.scss';
 
@@ -134,7 +136,6 @@ const CustomerRedirect = () => {
                 const sendEmail = {
                     email: [data?.CustomerInfo.email],
                 };
-
                 await addCustomerToRoom(data);
                 await sendEmailAccount(sendEmail);
                 dispatch(setIsLoading(false));
@@ -144,6 +145,25 @@ const CustomerRedirect = () => {
         } catch (error) {
             dispatch(setIsLoading(false));
         }
+    };
+    const [bookingId] = useGetParam('booking');
+    const handleSubmit = async () => {
+        form.validateFields()
+            .then(() => {
+                form.submit();
+                if (bookingId) {
+                    const value = {
+                        data: {
+                            checkInDate: Date(),
+                            hasCheckIn: true,
+                        },
+                    };
+                    updateStatusRoomDeposit(bookingId, value);
+                }
+            })
+            .catch(() => {
+                // console.log('errorfields', errorfields);
+            });
     };
     const items: TypeTabs[] = [
         {
@@ -223,7 +243,7 @@ const CustomerRedirect = () => {
                         </Button>,
                         <Button
                             key={2}
-                            onClick={form.submit}
+                            onClick={handleSubmit}
                             htmlType='submit'
                             type='primary'
                             className={cx('btn-submit')}

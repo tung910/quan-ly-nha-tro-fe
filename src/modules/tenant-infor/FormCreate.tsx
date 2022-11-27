@@ -6,23 +6,24 @@ import {
     Form,
     Input,
     InputNumber,
-    message,
     Row,
     Select,
     Upload,
     UploadProps,
+    message,
 } from 'antd';
 import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { listSearchRoomDeposit } from '~/api/booking.api';
+import { getRoomDeposit } from '~/api/booking.api';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
 import { getRoom } from '~/api/room.api';
 import { useAppDispatch } from '~/app/hooks';
 import { DateFormat } from '~/constants/const';
 import { setIsLoading } from '~/feature/service/appSlice';
-import { convertDate } from '~/utils/helper';
+import { useGetParam } from '~/utils/helper';
+
 import styles from './FormCreate.module.scss';
 
 const cx = classNames.bind(styles);
@@ -70,9 +71,10 @@ const FormCreate = ({
     imageUrl,
     setImageUrl,
 }: Props) => {
+    const [bookingId] = useGetParam('booking');
+    const [roomDeposit, setRoomDeposit] = useState<any>([]);
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch();
-    const [roomDeposit, setRoomDeposit] = useState<any>([]);
 
     const handleChange: UploadProps['onChange'] = (
         info: UploadChangeParam<UploadFile>
@@ -132,44 +134,25 @@ const FormCreate = ({
     }, []);
 
     useEffect(() => {
-        const handleFetchData = async () => {
-            try {
-                dispatch(setIsLoading(true));
-                const result = {
-                    data: {
-                        fromDate: convertDate(
-                            moment(new Date()).startOf('month'),
-                            DateFormat.DATE_M_D_Y
-                        ),
-                        toDate: convertDate(
-                            moment(new Date()).endOf('month'),
-                            DateFormat.DATE_M_D_Y
-                        ),
-                    },
-                };
-
-                const { data } = await listSearchRoomDeposit(result);
-                setRoomDeposit(data);
-                dispatch(setIsLoading(false));
-            } catch (error) {
-                // message.error(error);
-            }
-        };
-        handleFetchData();
-    }, []);
-
-    const handleCheckRoomDeposit = (roomId: string) => {
-        let result = {};
-        if (roomDeposit.length > 0) {
-            result = roomDeposit.find((item: any) => {
-                return item.motelRoomId?._id === roomId && item;
-            });
+        if (bookingId) {
+            const handleFetchData = async () => {
+                try {
+                    dispatch(setIsLoading(true));
+                    const { data } = await getRoomDeposit(bookingId);
+                    form.setFieldsValue({
+                        customerName: data.fullName,
+                        phone: data.telephone,
+                        deposit: data.bookingAmount,
+                    });
+                    setRoomDeposit(data);
+                    dispatch(setIsLoading(false));
+                } catch (error) {
+                    // message.error(error);
+                }
+            };
+            handleFetchData();
         }
-
-        return result ?? {};
-    };
-
-    const roomDeposits: any = handleCheckRoomDeposit(roomId);
+    }, [bookingId]);
 
     return (
         <Form
@@ -197,11 +180,7 @@ const FormCreate = ({
                         ]}
                         validateTrigger={['onChange']}
                     >
-                        <Input
-                            defaultValue={roomDeposits?.fullName}
-                            style={{ width: 400 }}
-                            autoFocus
-                        />
+                        <Input style={{ width: 400 }} autoFocus />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -474,15 +453,11 @@ const FormCreate = ({
                     <Form.Item
                         label={<>Đặt cọc</>}
                         colon={false}
-                        name={
-                            Object.keys(roomDeposit).length <= 0
-                                ? 'deposit'
-                                : 'bookingAmount'
-                        }
+                        name='deposit'
                         labelAlign='left'
                     >
                         <InputNumber
-                            value={roomDeposits?.bookingAmount}
+                            value={roomDeposit?.bookingAmount}
                             formatter={(value) =>
                                 ` ${value}`.replace(
                                     /\B(?=(\d{3})+(?!\d))/g,
@@ -603,25 +578,6 @@ const FormCreate = ({
                                 uploadButton
                             )}
                         </Upload>
-                        {/*   <Dragger
-                            {...{
-                                fileList,
-                                defaultFileList: fileList,
-                                onRemove: handleRemove,
-                                beforeUpload: handleBeforeUpload,
-                                multiple: false,
-                                onChange: handleChangeFiles,
-                                listType: 'picture',
-                            }}
-                            style={{ width: '100%' }}
-                        >
-                            <p className='ant-upload-drag-icon'>
-                                <InboxOutlined />
-                            </p>
-                            <p className='ant-upload-text'>
-                                Click or drag file to this area to upload
-                            </p>
-                        </Dragger> */}
                     </Form.Item>
                 </Col>
             </Row>

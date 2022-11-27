@@ -12,20 +12,24 @@ import {
     Col,
     DatePicker,
     Form,
-    message,
     Modal,
     PageHeader,
     Row,
     Select,
     Space,
     Tooltip,
+    message,
 } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { deleteRoomDeposit, listSearchRoomDeposit } from '~/api/booking.api';
+import {
+    deleteRoomDeposit,
+    listSearchRoomDeposit,
+    updateStatusRoomDeposit,
+} from '~/api/booking.api';
 import { getAllMotel } from '~/api/motel.api';
 import { getListRooms, getRooms } from '~/api/room.api';
 import Table from '~/components/table';
@@ -35,6 +39,7 @@ import { IBooking } from '~/types/Booking.type';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { convertDate, generatePriceToVND } from '~/utils/helper';
+
 import styles from './Booking.module.scss';
 
 const cx = classNames.bind(styles);
@@ -121,24 +126,41 @@ const BookingRoomDeposit = () => {
             title: 'Trạng thái',
             dataIndex: 'record',
             key: '_id',
-            render: (text, record) => {
+            render: (text, record: any) => {
                 return (
                     <Space>
-                        <Tooltip title='Nhận phòng'>
-                            <Button
-                                type='primary'
-                                icon={<CheckOutlined />}
-                                onClick={() => handleCheckIn(record)}
-                            ></Button>
-                        </Tooltip>
-                        <Tooltip title='Hủy'>
-                            <Button
-                                type='dashed'
-                                onClick={() => handleCancel(record)}
-                                icon={<CloseOutlined />}
-                                danger
-                            ></Button>
-                        </Tooltip>
+                        {!record.hasCheckIn ? (
+                            record.hasCancel ? (
+                                `Khách hủy đặt ngày ${convertDate(
+                                    record?.cancelDate
+                                )}`
+                            ) : (
+                                <>
+                                    {' '}
+                                    <Tooltip title='Nhận phòng'>
+                                        <Button
+                                            type='primary'
+                                            icon={<CheckOutlined />}
+                                            onClick={() =>
+                                                handleCheckIn(record)
+                                            }
+                                        ></Button>
+                                    </Tooltip>
+                                    <Tooltip title='Hủy'>
+                                        <Button
+                                            type='dashed'
+                                            onClick={() => handleCancel(record)}
+                                            icon={<CloseOutlined />}
+                                            danger
+                                        ></Button>
+                                    </Tooltip>
+                                </>
+                            )
+                        ) : (
+                            `Khách đã vào ngày ${convertDate(
+                                record?.checkInDate
+                            )}`
+                        )}
                     </Space>
                 );
             },
@@ -209,7 +231,7 @@ const BookingRoomDeposit = () => {
     };
     const handleSave = async (record: any) => {
         navigate(
-            `/customer/create?roomId=${record?.motelRoomId._id}&&roomName=${record?.motelRoomId.roomName}&&motelId=${record?.motelId._id}`
+            `/customer/create?roomId=${record?.motelRoomId._id}&&roomName=${record?.motelRoomId.roomName}&&motelId=${record?.motelId._id}&&booking=${record._id}`
         );
     };
 
@@ -241,8 +263,15 @@ const BookingRoomDeposit = () => {
                         </>
                     </>
                 ),
-                cancelText: 'Cancel',
-                okText: 'Lưu',
+                onOk: () => {
+                    const value = {
+                        data: {
+                            cancelDate: moment(newDate.cancelDate),
+                            hasCancel: true,
+                        },
+                    };
+                    updateStatusRoomDeposit(record._id, value);
+                },
             });
         }
     };
@@ -264,7 +293,6 @@ const BookingRoomDeposit = () => {
 
         if (result.data.fromDate < result.data.toDate) {
             const listData = await listSearchRoomDeposit(result);
-
             setdataSource(listData.data);
         } else {
             message.error('Vui lòng kiểm tra lại');
