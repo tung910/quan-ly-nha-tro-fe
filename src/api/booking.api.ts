@@ -26,3 +26,7 @@ export const getRoomDeposit = (roomDepositId: string, roomId = '') => {
 export const updateRoomDeposit = (data: any) => {
     return instance.post(`/room-deposit/add-or-update?id=${data._id}`, data);
 };
+
+export const updateStatusRoomDeposit = (id: string, data: any) => {
+    return instance.patch(`/room-deposit/add-or-update/${id}`, data);
+};

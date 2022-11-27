@@ -16,9 +16,13 @@ import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { getRoomDeposit } from '~/api/booking.api';
 import { getDetailCustomerToRoom } from '~/api/customer.api';
 import { getRoom } from '~/api/room.api';
+import { useAppDispatch } from '~/app/hooks';
 import { DateFormat } from '~/constants/const';
+import { setIsLoading } from '~/feature/service/appSlice';
+import { useGetParam } from '~/utils/helper';
 
 import styles from './FormCreate.module.scss';
 
@@ -67,7 +71,10 @@ const FormCreate = ({
     imageUrl,
     setImageUrl,
 }: Props) => {
+    const [bookingId] = useGetParam('booking');
+    const [roomDeposit, setRoomDeposit] = useState<any>([]);
     const [loading, setLoading] = useState(false);
+    const dispatch = useAppDispatch();
 
     const handleChange: UploadProps['onChange'] = (
         info: UploadChangeParam<UploadFile>
@@ -96,6 +103,7 @@ const FormCreate = ({
             <div style={{ marginTop: 8 }}>Upload</div>
         </div>
     );
+
     useEffect(() => {
         if (roomId) {
             const readRoom = async () => {
@@ -125,6 +133,27 @@ const FormCreate = ({
         }
     }, []);
 
+    useEffect(() => {
+        if (bookingId) {
+            const handleFetchData = async () => {
+                try {
+                    dispatch(setIsLoading(true));
+                    const { data } = await getRoomDeposit(bookingId);
+                    form.setFieldsValue({
+                        customerName: data.fullName,
+                        phone: data.telephone,
+                        deposit: data.bookingAmount,
+                    });
+                    setRoomDeposit(data);
+                    dispatch(setIsLoading(false));
+                } catch (error) {
+                    // message.error(error);
+                }
+            };
+            handleFetchData();
+        }
+    }, [bookingId]);
+
     return (
         <Form
             className={cx('form-create')}
@@ -149,7 +178,7 @@ const FormCreate = ({
                                     'Vui lòng nhập tên người dùng của bạn!',
                             },
                         ]}
-                        validateTrigger={['onBlur', 'onChange']}
+                        validateTrigger={['onChange']}
                     >
                         <Input style={{ width: 400 }} autoFocus />
                     </Form.Item>
@@ -411,7 +440,7 @@ const FormCreate = ({
                         label={<>Ngày bắt đầu </>}
                         colon={false}
                         labelAlign='left'
-                        name='startDate'
+                        name={'startDate'}
                         initialValue={moment()}
                     >
                         <DatePicker
@@ -424,11 +453,11 @@ const FormCreate = ({
                     <Form.Item
                         label={<>Đặt cọc</>}
                         colon={false}
-                        initialValue={0}
                         name='deposit'
                         labelAlign='left'
                     >
                         <InputNumber
+                            value={roomDeposit?.bookingAmount}
                             formatter={(value) =>
                                 ` ${value}`.replace(
                                     /\B(?=(\d{3})+(?!\d))/g,
@@ -440,7 +469,7 @@ const FormCreate = ({
                             }
                             addonAfter='VNĐ'
                             style={{ width: 400 }}
-                        />
+                        />{' '}
                     </Form.Item>
                 </Col>
             </Row>
@@ -549,25 +578,6 @@ const FormCreate = ({
                                 uploadButton
                             )}
                         </Upload>
-                        {/*   <Dragger
-                            {...{
-                                fileList,
-                                defaultFileList: fileList,
-                                onRemove: handleRemove,
-                                beforeUpload: handleBeforeUpload,
-                                multiple: false,
-                                onChange: handleChangeFiles,
-                                listType: 'picture',
-                            }}
-                            style={{ width: '100%' }}
-                        >
-                            <p className='ant-upload-drag-icon'>
-                                <InboxOutlined />
-                            </p>
-                            <p className='ant-upload-text'>
-                                Click or drag file to this area to upload
-                            </p>
-                        </Dragger> */}
                     </Form.Item>
                 </Col>
             </Row>
