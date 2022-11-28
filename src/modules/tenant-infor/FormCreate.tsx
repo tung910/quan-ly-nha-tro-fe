@@ -118,7 +118,6 @@ const FormCreate = ({
         if (roomRentID) {
             const dataRoom = async () => {
                 const { data } = await getDetailCustomerToRoom(roomRentID);
-
                 form.setFieldsValue({
                     ...data,
                     dateOfBirth: data.dateOfBirth
@@ -127,6 +126,9 @@ const FormCreate = ({
                     startDate: data.startDate
                         ? moment(data.startDate, DateFormat.DATE_DEFAULT)
                         : moment(new Date(), DateFormat.DATE_DEFAULT),
+                    dateRange: data.dateRange
+                        ? moment(data.dateRange, DateFormat.DATE_DEFAULT)
+                        : '',
                 });
             };
             dataRoom();
@@ -457,7 +459,6 @@ const FormCreate = ({
                         labelAlign='left'
                     >
                         <InputNumber
-                            value={roomDeposit?.bookingAmount}
                             formatter={(value) =>
                                 ` ${value}`.replace(
                                     /\B(?=(\d{3})+(?!\d))/g,

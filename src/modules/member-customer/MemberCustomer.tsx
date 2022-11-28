@@ -1,6 +1,4 @@
 /* eslint-disable indent */
-
-/* eslint-disable no-console */
 import {
     Button,
     DatePicker,
@@ -18,10 +16,8 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { DateFormat } from '~/constants/const';
 import { ACTION } from '~/constants/member.const';
 import { DataTable } from '~/types/Member.type';
-import { convertDate } from '~/utils/helper';
 
 const { Option } = Select;
 
