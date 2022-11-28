@@ -177,7 +177,7 @@ const Calculate = () => {
             },
         },
         {
-            title: 'Còn lại',
+            title: 'Còn nợ',
             dataIndex: 'remainAmount',
             key: 'remainAmount',
             render: (remainAmount: number) => {
@@ -675,8 +675,6 @@ const Calculate = () => {
                         </Button>,
                     ]}
                 >
-                    <h1>Hóa đơn</h1>
-                    <hr />
                     {bill &&
                         bill.map((item: any) => {
                             return (
@@ -691,7 +689,7 @@ const Calculate = () => {
                                     </p>
                                     <p>
                                         3.Sử dụng điện:{' '}
-                                        {item.dataPowerID.useValue} số
+                                        {item.dataPowerID.useValue} kWh/số
                                     </p>
                                     <p>
                                         4.sử dụng nước:{' '}

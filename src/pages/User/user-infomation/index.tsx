@@ -1,5 +1,5 @@
-import { PageHeader } from 'antd';
-import { useState } from 'react';
+import { Form, PageHeader } from 'antd';
+import { useEffect, useState } from 'react';
 import { useAppSelector } from '~/app/hooks';
 import Tabs from '~/components/tabs';
 import { TypeTabs } from '~/types/Setting.type';
@@ -10,12 +10,22 @@ import ChangePassword from './ChangePassword';
 const UserInformation = () => {
     const [tab, setTab] = useState('info');
     const user = useAppSelector((state: any) => state.user.user);
+    const [form] = Form.useForm();
+    useEffect(() => {
+        form.setFieldsValue({
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            citizenIdentificationNumber: user.citizenIdentificationNumber,
+            address: user.address,
+        });
+    }, [form]);
 
     const items: TypeTabs[] = [
         {
             label: 'Thay đổi thông tin cá nhân',
             key: 'info',
-            children: <ChangeInformation user={user} />,
+            children: <ChangeInformation user={user} form={form} />,
         },
         {
             label: 'Thay đổi mật khẩu ',

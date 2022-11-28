@@ -147,7 +147,13 @@ const AddRoom = () => {
                                         },
                                     ]}
                                 >
-                                    <Input placeholder='' addonAfter='Người' />
+                                    <InputNumber
+                                        placeholder=''
+                                        addonAfter='Người'
+                                        max={5}
+                                        min={0}
+                                        width='100%'
+                                    />
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
@@ -191,7 +197,11 @@ const AddRoom = () => {
                                         },
                                     ]}
                                 >
-                                    <Input placeholder='' addonAfter='m' />
+                                    <InputNumber
+                                        placeholder=''
+                                        addonAfter='m'
+                                        min={0}
+                                    />
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
@@ -205,7 +215,11 @@ const AddRoom = () => {
                                         },
                                     ]}
                                 >
-                                    <Input placeholder='' addonAfter='m' />
+                                    <InputNumber
+                                        placeholder=''
+                                        addonAfter='m'
+                                        min={0}
+                                    />
                                 </Form.Item>
                             </Col>
                         </Row>
