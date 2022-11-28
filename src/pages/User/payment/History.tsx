@@ -8,19 +8,17 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { listCalculator, paymentMoneyVNPay } from '~/api/calculator.api';
-import { generatePriceToVND } from '~/utils/helper';
+import { STATUS_CODE } from '~/types/Api-Response.type';
+import { generatePriceToVND, useGetParam } from '~/utils/helper';
 
 const { Title } = Typography;
 const { Panel } = Collapse;
 
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
 const History = () => {
     const [paymentHistory, setPaymentHistory] = useState<any>([]);
+    const [responseCode] = useGetParam('vnp_ResponseCode');
     useEffect(() => {
         const handleFetchData = async () => {
             const currentRoom = JSON.parse(
@@ -31,11 +29,16 @@ const History = () => {
         };
         handleFetchData();
     }, []);
+    useEffect(() => {
+        if (responseCode === STATUS_CODE.VNPAY_RESPONSE) {
+            console.log(responseCode);
+        }
+    }, [responseCode]);
     const handlePayment = async (payment: any) => {
         const value = {
             amount: +payment.totalAmount,
             bankCode: '',
-            orderInfo: 'Thanh toan nha tro 01',
+            orderInfo: `Phòng ${payment.motelRoomId.roomName} thanh toán tiến trọ tháng ${payment.month}/${payment.year}`,
             orderType: 'billpayment',
         };
         const { data } = await paymentMoneyVNPay(value);
