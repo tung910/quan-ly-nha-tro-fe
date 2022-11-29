@@ -21,15 +21,14 @@ import {
     Table,
     Tooltip,
     Typography,
-    message,
 } from 'antd';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-    CalculatorMoney,
     CalculatorMoneyAll,
+    calculatorMoney,
     deleteCalculator,
     getCalculator,
     listCalculator,
@@ -64,7 +63,7 @@ const Calculate = () => {
 
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listNameRoom, setListNameRoom] = useState<RoomType[]>([]);
-    const [calculators, setCalculators] = useState([]);
+    const [calculators, setCalculators] = useState<any>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalReceipt, setIsModalReceipt] = useState(false);
     const [prepayment, setPrepayment] = useState(false);
@@ -98,14 +97,6 @@ const Calculate = () => {
                             }}
                             disabled={+item?.remainAmount === 0 ? true : false}
                             title='Nhập số tiền đã thu'
-                        />
-                         
-                        <Button
-                            htmlType='submit'
-                            type='primary'
-                            icon={<PrinterOutlined />}
-                            onClick={() => seeTheBill(id)}
-                            title='In hóa đơn'
                         />
                         <Button
                             htmlType='submit'
@@ -177,7 +168,7 @@ const Calculate = () => {
             },
         },
         {
-            title: 'Còn lại',
+            title: 'Còn nợ',
             dataIndex: 'remainAmount',
             key: 'remainAmount',
             render: (remainAmount: number) => {
@@ -225,11 +216,12 @@ const Calculate = () => {
                         ),
                         month: moment(values.month).format('MM'),
                         year: moment(values.month).format('YYYY'),
+                        motelRoomId: values.roomID,
                     },
                 ],
             };
 
-            await CalculatorMoney(values);
+            await calculatorMoney(values);
 
             const { data } = await listCalculator({
                 month: thisMonth,
@@ -348,12 +340,10 @@ const Calculate = () => {
                 setCalculators(
                     calculators.filter((item: any) => item._id !== id)
                 );
-                message.success(MESSAGES.DEL_SUCCESS);
+                notification({ message: MESSAGES.DEL_SUCCESS });
             },
         });
     };
-
-    console.log(idCalculator,calculators)
 
     useEffect(() => {
         const handleFetchData = async () => {
@@ -649,6 +639,7 @@ const Calculate = () => {
                         );
                     }}
                     rowKey='_id'
+                    pagination={{ pageSize: 8 }}
                 />
                 <Modal
                     open={isModalReceipt}
@@ -656,8 +647,7 @@ const Calculate = () => {
                     onOk={() => setIsModalReceipt(false)}
                     onCancel={() => setIsModalReceipt(false)}
                     footer={[
-                        <Button type='primary' key='button_1'
-                        >
+                        <Button type='primary' key='button_1'>
                             Tải file PDF
                         </Button>,
                         <Button
@@ -677,8 +667,6 @@ const Calculate = () => {
                         </Button>,
                     ]}
                 >
-                    <h1>Hóa đơn</h1>
-                    <hr />
                     {bill &&
                         bill.map((item: any) => {
                             return (
@@ -693,7 +681,7 @@ const Calculate = () => {
                                     </p>
                                     <p>
                                         3.Sử dụng điện:{' '}
-                                        {item.dataPowerID.useValue} số
+                                        {item.dataPowerID.useValue} kWh/số
                                     </p>
                                     <p>
                                         4.sử dụng nước:{' '}

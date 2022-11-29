@@ -44,7 +44,7 @@ const itemsMenu: MenuItem[] = [
     getItem('Dịch vụ', '/service', <SolutionOutlined />),
     getItem('Chỉ số điện', '/data-power', <ThunderboltOutlined />),
     getItem('Chỉ số nước', '/data-water', <SwapOutlined />),
-    getItem('Phát sinh', '/other-fee', <AlertOutlined />),
+    // getItem('Phát sinh', '/other-fee', <AlertOutlined />),
     getItem('Tính tiền', '/calculator-money', <CalculatorOutlined />),
     getItem('Cọc giữ phòng', '/booking', <ScheduleOutlined />),
     getItem('Tài khoản', '/tenant-account', <UserOutlined />),

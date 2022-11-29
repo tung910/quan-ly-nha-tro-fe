@@ -6,6 +6,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getProvinces } from '~/api/addressCheckout';
+import { updateStatusRoomDeposit } from '~/api/booking.api';
 import {
     addCustomerToRoom,
     editCustomerToRoom,
@@ -14,6 +15,7 @@ import {
 } from '~/api/customer.api';
 import { getAllService } from '~/api/service.api';
 import { useAppDispatch } from '~/app/hooks';
+import notification from '~/components/notification';
 import Tabs from '~/components/tabs';
 import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
@@ -25,6 +27,7 @@ import FormCreate from '~/modules/tenant-infor/FormCreate';
 import { TypeCustomer } from '~/types/Customer';
 import { IService } from '~/types/Service.type';
 import { TypeTabs } from '~/types/Setting.type';
+import { useGetParam } from '~/utils/helper';
 
 import styles from './Create.module.scss';
 
@@ -48,6 +51,7 @@ const CustomerRedirect = () => {
     const motelID = new URLSearchParams(search).get('motelId') || '';
     const [form]: any = Form.useForm();
     const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
+    const [bookingId] = useGetParam('booking');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -117,12 +121,13 @@ const CustomerRedirect = () => {
                                   DateFormat.DATE_DEFAULT
                               )
                             : undefined,
-                        startDate: moment(values.startDate).format(
-                            DateFormat.DATE_DEFAULT
-                        ),
-                        dateStart: moment(values.dateStart).format(
-                            DateFormat.DATE_DEFAULT
-                        ),
+                        startDate: values.startDate
+                            ? moment(values.startDate).format(
+                                  DateFormat.DATE_DEFAULT
+                              )
+                            : moment(Date.now()).format(
+                                  DateFormat.DATE_DEFAULT
+                              ),
                         motelRoomID: roomId,
                         motelID,
                         roomName,
@@ -130,20 +135,54 @@ const CustomerRedirect = () => {
                     },
                     Service: service.length <= 0 ? services : service,
                     Member: member,
+                    Contract: {
+                        coinNumber: values?.coinNumber,
+                        startDate: values?.startDate
+                            ? moment(values.startDate).format(
+                                  DateFormat.DATE_DEFAULT
+                              )
+                            : moment(Date.now()).format(
+                                  DateFormat.DATE_DEFAULT
+                              ),
+                        timeCoin: values?.timeCoin,
+                        lateDate: values?.lateDate
+                            ? moment(values.lateDate).format(
+                                  DateFormat.DATE_DEFAULT
+                              )
+                            : undefined,
+                    },
                 };
                 const sendEmail = {
                     email: [data?.CustomerInfo.email],
                 };
-
                 await addCustomerToRoom(data);
                 await sendEmailAccount(sendEmail);
                 dispatch(setIsLoading(false));
-                message.success(MESSAGES.ADD_SUCCESS);
+                notification({ message: MESSAGES.ADD_SUCCESS });
                 navigate('/motel-room');
             }
         } catch (error) {
             dispatch(setIsLoading(false));
         }
+    };
+
+    const handleSubmit = async () => {
+        form.validateFields()
+            .then(() => {
+                form.submit();
+                if (bookingId) {
+                    const value = {
+                        data: {
+                            checkInDate: Date(),
+                            hasCheckIn: true,
+                        },
+                    };
+                    updateStatusRoomDeposit(bookingId, value);
+                }
+            })
+            .catch(() => {
+                // console.log('errorfields', errorfields);
+            });
     };
     const items: TypeTabs[] = [
         {
@@ -223,7 +262,7 @@ const CustomerRedirect = () => {
                         </Button>,
                         <Button
                             key={2}
-                            onClick={form.submit}
+                            onClick={handleSubmit}
                             htmlType='submit'
                             type='primary'
                             className={cx('btn-submit')}

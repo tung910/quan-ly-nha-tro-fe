@@ -164,7 +164,7 @@ const ColumnsDataWater: (ColumnTypes[number] & {
         render: (oldValue) => {
             return (
                 <>
-                    <InputNumber value={oldValue} />
+                    <InputNumber value={oldValue} disabled />
                 </>
             );
         },
@@ -473,6 +473,7 @@ const PowerOnly = () => {
                     dataSource={dataWater}
                     columns={columns as ColumnTypes}
                     rowKey='_id'
+                    pagination={{ pageSize: 8 }}
                 />
             </div>
         </div>

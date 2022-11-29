@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAllMotel } from '~/api/motel.api';
 import { addRoom } from '~/api/room.api';
 import { useAppDispatch } from '~/app/hooks';
+import notification from '~/components/notification';
 import HeaderPage from '~/components/page-header';
 import { MESSAGES } from '~/constants/message.const';
 import { setIsLoading } from '~/feature/service/appSlice';
@@ -47,7 +48,7 @@ const AddRoom = () => {
         dispatch(setIsLoading(true));
         try {
             await addRoom({ ...values, images: fileList });
-            message.success(MESSAGES.ADD_SUCCESS);
+            notification({ message: MESSAGES.ADD_SUCCESS });
             navigate('/motel-room');
         } catch (error) {
             //
@@ -147,7 +148,13 @@ const AddRoom = () => {
                                         },
                                     ]}
                                 >
-                                    <Input placeholder='' addonAfter='Người' />
+                                    <InputNumber
+                                        placeholder=''
+                                        addonAfter='Người'
+                                        max={5}
+                                        min={0}
+                                        width='100%'
+                                    />
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
@@ -191,7 +198,11 @@ const AddRoom = () => {
                                         },
                                     ]}
                                 >
-                                    <Input placeholder='' addonAfter='m' />
+                                    <InputNumber
+                                        placeholder=''
+                                        addonAfter='m'
+                                        min={0}
+                                    />
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
@@ -205,7 +216,11 @@ const AddRoom = () => {
                                         },
                                     ]}
                                 >
-                                    <Input placeholder='' addonAfter='m' />
+                                    <InputNumber
+                                        placeholder=''
+                                        addonAfter='m'
+                                        min={0}
+                                    />
                                 </Form.Item>
                             </Col>
                         </Row>

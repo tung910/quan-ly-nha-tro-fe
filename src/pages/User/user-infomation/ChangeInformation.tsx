@@ -1,9 +1,10 @@
-import { Button, Card, Col, Form, Image, Input, Row } from 'antd';
+import { Button, Card, Col, Form, FormInstance, Image, Input, Row } from 'antd';
 
 type Props = {
     user: any;
+    form: FormInstance<any>;
 };
-const ChangeInformation = ({ user }: Props) => {
+const ChangeInformation = ({ user, form }: Props) => {
     return (
         <div>
             <Row
@@ -23,7 +24,10 @@ const ChangeInformation = ({ user }: Props) => {
                         style={{ width: 300, textAlign: 'center' }}
                     >
                         <p style={{ marginTop: 30 }}>
-                            <Image src='https://znews-photo.zingcdn.me/w660/Uploaded/qhj_yvobvhfwbv/2018_07_18/Nguyen_Huy_Binh1.jpg' />
+                            <Image
+                                src='https://znews-photo.zingcdn.me/w660/Uploaded/qhj_yvobvhfwbv/2018_07_18/Nguyen_Huy_Binh1.jpg'
+                                loading='lazy'
+                            />
                         </p>
                         <p
                             style={{
@@ -53,6 +57,7 @@ const ChangeInformation = ({ user }: Props) => {
                             wrapperCol={{ span: 16 }}
                             style={{ marginTop: 10, padding: 10 }}
                             autoComplete='off'
+                            form={form}
                         >
                             <Form.Item
                                 label={<>Họ và tên</>}
@@ -68,10 +73,7 @@ const ChangeInformation = ({ user }: Props) => {
                                 ]}
                                 validateTrigger={['onChange']}
                             >
-                                <Input
-                                    defaultValue={user.name}
-                                    style={{ width: 400 }}
-                                />
+                                <Input style={{ width: 400 }} />
                             </Form.Item>
                             <Form.Item
                                 label={<>Email</>}
@@ -87,10 +89,7 @@ const ChangeInformation = ({ user }: Props) => {
                                 ]}
                                 validateTrigger={['onChange']}
                             >
-                                <Input
-                                    defaultValue={user.email}
-                                    style={{ width: 400 }}
-                                />
+                                <Input style={{ width: 400 }} disabled />
                             </Form.Item>
                             <Form.Item
                                 label={<>Số điện thoại</>}
@@ -106,10 +105,7 @@ const ChangeInformation = ({ user }: Props) => {
                                 ]}
                                 validateTrigger={['onChange']}
                             >
-                                <Input
-                                    defaultValue={user.phone}
-                                    style={{ width: 400 }}
-                                />
+                                <Input style={{ width: 400 }} maxLength={10} />
                             </Form.Item>
                             <Form.Item
                                 label={<>Số CMND</>}
@@ -125,12 +121,7 @@ const ChangeInformation = ({ user }: Props) => {
                                 ]}
                                 validateTrigger={['onChange']}
                             >
-                                <Input
-                                    defaultValue={
-                                        user.citizenIdentificationNumber
-                                    }
-                                    style={{ width: 400 }}
-                                />
+                                <Input style={{ width: 400 }} />
                             </Form.Item>
 
                             <Form.Item
@@ -147,10 +138,7 @@ const ChangeInformation = ({ user }: Props) => {
                                 ]}
                                 validateTrigger={['onBlur', 'onChange']}
                             >
-                                <Input
-                                    defaultValue={user.address}
-                                    style={{ width: 400 }}
-                                />
+                                <Input style={{ width: 400 }} />
                             </Form.Item>
                             <Form.Item>
                                 <Button type='primary' htmlType='submit'>

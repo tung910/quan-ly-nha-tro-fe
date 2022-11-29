@@ -1,6 +1,4 @@
 /* eslint-disable indent */
-
-/* eslint-disable no-console */
 import {
     Button,
     DatePicker,
@@ -18,10 +16,8 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { DateFormat } from '~/constants/const';
 import { ACTION } from '~/constants/member.const';
 import { DataTable } from '~/types/Member.type';
-import { convertDate } from '~/utils/helper';
 
 const { Option } = Select;
 
@@ -214,16 +210,16 @@ const MemberCustomer = ({ onGetMember, roomRentID, newdataMember }: Props) => {
             render: (carNumber: any) => <Input value={carNumber} />,
         },
         {
-            title: 'operation',
+            title: '',
             dataIndex: 'operation',
             key: 'operation',
             render: (_: any, record: any) =>
                 dataSource!.length >= 1 ? (
                     <Popconfirm
-                        title='Sure to delete?'
+                        title='Bạn có chắc muốn xóa'
                         onConfirm={() => handleDelete(record)}
                     >
-                        <a>Delete</a>
+                        <a>Xóa</a>
                     </Popconfirm>
                 ) : null,
         },
@@ -285,7 +281,7 @@ const MemberCustomer = ({ onGetMember, roomRentID, newdataMember }: Props) => {
                     marginBottom: 16,
                 }}
             >
-                Add a row
+                Thêm
             </Button>
             <Table
                 components={components}

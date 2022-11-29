@@ -10,8 +10,10 @@ interface Props {
     dataSource: object[];
     rowSelection?: TableRowSelection<object> | any;
     bordered?: boolean;
-    pagination?: false | TablePaginationConfig;
+    pagination?: TablePaginationConfig;
     components?: any;
+    passProps?: any;
+    style?: any;
 }
 
 const Table = (props: Props) => {
@@ -21,7 +23,7 @@ const Table = (props: Props) => {
         dataSource,
         rowSelection,
         bordered = true,
-        pagination = false,
+        pagination,
         ...passProps
     } = props;
     return (

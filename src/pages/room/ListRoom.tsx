@@ -244,6 +244,34 @@ const ListRoom = ({ motelId }: Props) => {
             },
         },
         {
+            title: 'Ngày bắt đầu',
+            dataIndex: 'roomRentID',
+            key: 'roomRentID',
+            render: (roomRent) => {
+                return <>{roomRent ? roomRent?.startDate : <i>N/A</i>}</>;
+            },
+        },
+        {
+            title: 'Ngày kết thúc',
+            dataIndex: 'roomRentID',
+            key: 'roomRentID',
+            render: (roomRent) => {
+                return (
+                    <>
+                        {roomRent ? (
+                            roomRent?.contract?.lateDate ? (
+                                roomRent?.contract?.lateDate
+                            ) : (
+                                <i>Không xác định</i>
+                            )
+                        ) : (
+                            <i>N/A</i>
+                        )}
+                    </>
+                );
+            },
+        },
+        {
             title: 'Hợp đồng',
             dataIndex: 'roomRentID',
             key: 'roomRentID',
@@ -256,7 +284,7 @@ const ListRoom = ({ motelId }: Props) => {
                                     type='primary'
                                     icon={
                                         <Link
-                                            to={`/export-pdf?roomRentId=${roomRentID}`}
+                                            to={`/export-pdf?roomRentId=${roomRentID._id}`}
                                             target='_blank'
                                         >
                                             <DownloadOutlined />
@@ -292,7 +320,7 @@ const ListRoom = ({ motelId }: Props) => {
                                                 icon={<UndoOutlined />}
                                                 onClick={() => {
                                                     setRoomRentId(
-                                                        record.roomRentID
+                                                        record.roomRentID._id
                                                     );
                                                     setmotelRoomID(record._id);
                                                     setIsModalPayHostelOpen(
@@ -311,7 +339,7 @@ const ListRoom = ({ motelId }: Props) => {
                                                 }}
                                                 onClick={() => {
                                                     setRoomRentId(
-                                                        record.roomRentID
+                                                        record.roomRentID._id
                                                     );
                                                     setIsModalOpen(true);
                                                 }}
@@ -319,7 +347,7 @@ const ListRoom = ({ motelId }: Props) => {
                                         </Tooltip>
                                         <Tooltip title='Xem chi tiết'>
                                             <Link
-                                                to={`/customer/view?roomRentID=${record.roomRentID}&&roomName=${record.roomName}`}
+                                                to={`/customer/view?roomRentID=${record.roomRentID._id}&&roomName=${record.roomName}`}
                                             >
                                                 <Button
                                                     type='primary'
@@ -333,7 +361,7 @@ const ListRoom = ({ motelId }: Props) => {
                                         </Tooltip>
                                         <Tooltip title='Sửa thông tin'>
                                             <Link
-                                                to={`/customer/edit?roomRentID=${record.roomRentID}&&roomName=${record.roomName}`}
+                                                to={`/customer/edit?roomRentID=${record.roomRentID._id}&&roomName=${record.roomName}`}
                                             >
                                                 <Button
                                                     type='primary'
@@ -375,7 +403,11 @@ const ListRoom = ({ motelId }: Props) => {
 
     return (
         <div className={cx('table')}>
-            <Table dataSource={rooms} columns={columns} />
+            <Table
+                dataSource={rooms}
+                columns={columns}
+                pagination={{ pageSize: 5 }}
+            />
             <div>
                 <Modal
                     title='Đổi phòng'

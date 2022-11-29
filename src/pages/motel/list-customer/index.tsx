@@ -42,7 +42,7 @@ const ColumnsListCustomer: any = [
         title: 'Số điện thoại',
         dataIndex: '',
         render: (phoneNumber: number) => {
-            return <Input>{phoneNumber}</Input>;
+            return <Input maxLength={10}>{phoneNumber}</Input>;
         },
     },
     {

@@ -54,17 +54,13 @@ const PaymentTracking = ({ newDataPaymentChecking, setDate }: Props) => {
         <div>
             <Card title='Theo dõi thanh toán' bordered={true}>
                 <Row gutter={[8, 8]}>
-                    <Form.Item
-                        label={<>Tháng/Năm</>}
-                        initialValue={moment()}
-                        colon={false}
-                        name='date'
-                    >
+                    <Form.Item label={<>Tháng/Năm</>} colon={false} name='date'>
                         <DatePicker
                             picker='month'
                             onChange={(e: any) =>
                                 setDate(moment(e).format(DateFormat.DATE_M_Y))
                             }
+                            defaultValue={moment()}
                             clearIcon={null}
                             format={DateFormat.DATE_M_Y}
                         />
