@@ -21,7 +21,6 @@ import {
     Table,
     Tooltip,
     Typography,
-    message,
 } from 'antd';
 import classNames from 'classnames/bind';
 import moment from 'moment';
@@ -98,14 +97,6 @@ const Calculate = () => {
                             }}
                             disabled={+item?.remainAmount === 0 ? true : false}
                             title='Nhập số tiền đã thu'
-                        />
-
-                        <Button
-                            htmlType='submit'
-                            type='primary'
-                            icon={<PrinterOutlined />}
-                            onClick={() => seeTheBill(id)}
-                            title='In hóa đơn'
                         />
                         <Button
                             htmlType='submit'
@@ -349,7 +340,7 @@ const Calculate = () => {
                 setCalculators(
                     calculators.filter((item: any) => item._id !== id)
                 );
-                message.success(MESSAGES.DEL_SUCCESS);
+                notification({ message: MESSAGES.DEL_SUCCESS });
             },
         });
     };
@@ -648,6 +639,7 @@ const Calculate = () => {
                         );
                     }}
                     rowKey='_id'
+                    pagination={{ pageSize: 8 }}
                 />
                 <Modal
                     open={isModalReceipt}

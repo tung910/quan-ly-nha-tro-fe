@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { getCalculator } from '~/api/calculator.api';
 import { generatePriceToVND, useGetParam } from '~/utils/helper';
+
 import './Invoice.scss';
 
 const Invoice = () => {
@@ -17,6 +18,7 @@ const Invoice = () => {
     useLayoutEffect(() => {
         if (dataInvoicePrintLength > 0) {
             window.print();
+            window.close();
         }
     }, [dataInvoicePrintLength]);
 
@@ -36,7 +38,7 @@ const Invoice = () => {
                         <thead>
                             <tr>
                                 <th className='col1'>Khoản thu</th>
-                                <th className='col1'>Chỉ số điện (số)</th>
+                                <th className='col1'>Chỉ số điện (kWh/số)</th>
                                 <th className='col1'>Chỉ số nước (Khối)</th>
                                 <th className='col1'>Giá phòng</th>
                                 <th className='col1'>Thành tiền</th>

@@ -473,6 +473,7 @@ const PowerOnly = () => {
                     dataSource={dataWater}
                     columns={columns as ColumnTypes}
                     rowKey='_id'
+                    pagination={{ pageSize: 8 }}
                 />
             </div>
         </div>

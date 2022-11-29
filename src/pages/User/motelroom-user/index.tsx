@@ -139,7 +139,7 @@ const UserMotelRoom = () => {
                                         </span>
                                     }
                                 >
-                                    {dataRoom?.power?.useValue} số
+                                    {dataRoom?.power?.useValue} kWh/số
                                 </Descriptions.Item>
                                 <Descriptions.Item
                                     label={

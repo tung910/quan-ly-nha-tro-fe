@@ -28,7 +28,7 @@ const ContractCustomer = ({ onSave, form, roomRentID }: Props) => {
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
                 style={{ marginTop: 20, padding: 20 }}
-                // form={form}
+                form={form}
                 onFinish={onSave}
             >
                 <p className={cx('title-contract')}>
@@ -52,7 +52,7 @@ const ContractCustomer = ({ onSave, form, roomRentID }: Props) => {
                             label={<>Ngày bắt đầu</>}
                             colon={false}
                             labelAlign='left'
-                            name='dateStart'
+                            name='startDate'
                             initialValue={moment(new Date())}
                         >
                             <DatePicker
@@ -79,7 +79,7 @@ const ContractCustomer = ({ onSave, form, roomRentID }: Props) => {
                             label={<>Ngày kết thúc</>}
                             colon={false}
                             labelAlign='left'
-                            name='dateLate'
+                            name='lateDate'
                         >
                             <DatePicker
                                 format={DateFormat.DATE_DEFAULT}

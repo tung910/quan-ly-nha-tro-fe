@@ -199,7 +199,7 @@ const FormCreate = ({
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <Input style={{ width: 400 }} />
+                        <Input style={{ width: 400 }} maxLength={12} />
                     </Form.Item>
                 </Col>
             </Row>
@@ -263,7 +263,7 @@ const FormCreate = ({
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <Input style={{ width: 400 }} />
+                        <Input style={{ width: 400 }} maxLength={10} />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
@@ -432,6 +432,8 @@ const FormCreate = ({
                             }
                             addonAfter={'VND'}
                             style={{ width: 400 }}
+                            maxLength={10}
+                            min={0}
                         />
                     </Form.Item>
                 </Col>
@@ -470,7 +472,9 @@ const FormCreate = ({
                             }
                             addonAfter='VNĐ'
                             style={{ width: 400 }}
-                        />{' '}
+                            min={0}
+                            maxLength={10}
+                        />
                     </Form.Item>
                 </Col>
             </Row>
@@ -481,6 +485,7 @@ const FormCreate = ({
                         colon={false}
                         labelAlign='left'
                         name='paymentPeriod'
+                        initialValue={30}
                     >
                         <Select
                             placeholder='Mời chọn kỳ thanh toán'
@@ -503,8 +508,8 @@ const FormCreate = ({
                                     )
                             }
                         >
-                            <Option value={1}>Kỳ 30</Option>
-                            <Option value={2}>Kỳ 15</Option>
+                            <Option value={30}>Kỳ 30</Option>
+                            <Option value={15}>Kỳ 15</Option>
                         </Select>
                     </Form.Item>
                 </Col>
@@ -514,6 +519,7 @@ const FormCreate = ({
                         colon={false}
                         labelAlign='left'
                         name='payEachTime'
+                        initialValue={1}
                     >
                         <Select
                             placeholder='Mời chọn thanh toán mỗi lần'
@@ -536,6 +542,7 @@ const FormCreate = ({
                                         ).toLowerCase()
                                     )
                             }
+                            defaultValue={1}
                         >
                             <Option value={1}>1</Option>
                             <Option value={2}>2</Option>

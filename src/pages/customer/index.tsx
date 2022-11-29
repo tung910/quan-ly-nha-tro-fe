@@ -15,6 +15,7 @@ import {
 } from '~/api/customer.api';
 import { getAllService } from '~/api/service.api';
 import { useAppDispatch } from '~/app/hooks';
+import notification from '~/components/notification';
 import Tabs from '~/components/tabs';
 import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
@@ -50,6 +51,7 @@ const CustomerRedirect = () => {
     const motelID = new URLSearchParams(search).get('motelId') || '';
     const [form]: any = Form.useForm();
     const roomRentID = new URLSearchParams(search).get('roomRentID') || '';
+    const [bookingId] = useGetParam('booking');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -119,12 +121,13 @@ const CustomerRedirect = () => {
                                   DateFormat.DATE_DEFAULT
                               )
                             : undefined,
-                        startDate: moment(values.startDate).format(
-                            DateFormat.DATE_DEFAULT
-                        ),
-                        dateStart: moment(values.dateStart).format(
-                            DateFormat.DATE_DEFAULT
-                        ),
+                        startDate: values.startDate
+                            ? moment(values.startDate).format(
+                                  DateFormat.DATE_DEFAULT
+                              )
+                            : moment(Date.now()).format(
+                                  DateFormat.DATE_DEFAULT
+                              ),
                         motelRoomID: roomId,
                         motelID,
                         roomName,
@@ -132,6 +135,22 @@ const CustomerRedirect = () => {
                     },
                     Service: service.length <= 0 ? services : service,
                     Member: member,
+                    Contract: {
+                        coinNumber: values?.coinNumber,
+                        startDate: values?.startDate
+                            ? moment(values.startDate).format(
+                                  DateFormat.DATE_DEFAULT
+                              )
+                            : moment(Date.now()).format(
+                                  DateFormat.DATE_DEFAULT
+                              ),
+                        timeCoin: values?.timeCoin,
+                        lateDate: values?.lateDate
+                            ? moment(values.lateDate).format(
+                                  DateFormat.DATE_DEFAULT
+                              )
+                            : undefined,
+                    },
                 };
                 const sendEmail = {
                     email: [data?.CustomerInfo.email],
@@ -139,14 +158,14 @@ const CustomerRedirect = () => {
                 await addCustomerToRoom(data);
                 await sendEmailAccount(sendEmail);
                 dispatch(setIsLoading(false));
-                message.success(MESSAGES.ADD_SUCCESS);
+                notification({ message: MESSAGES.ADD_SUCCESS });
                 navigate('/motel-room');
             }
         } catch (error) {
             dispatch(setIsLoading(false));
         }
     };
-    const [bookingId] = useGetParam('booking');
+
     const handleSubmit = async () => {
         form.validateFields()
             .then(() => {

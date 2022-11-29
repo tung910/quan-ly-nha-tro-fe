@@ -8,7 +8,6 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { listCalculator, paymentMoneyVNPay } from '~/api/calculator.api';
 import { STATUS_CODE } from '~/types/Api-Response.type';
 import { generatePriceToVND, useGetParam } from '~/utils/helper';

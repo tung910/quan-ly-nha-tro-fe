@@ -22,6 +22,7 @@ import {
 } from '~/api/booking.api';
 import { getAllMotel } from '~/api/motel.api';
 import { getListRooms, getRooms } from '~/api/room.api';
+import notification from '~/components/notification';
 import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
 import { IBooking } from '~/types/Booking.type';
@@ -104,7 +105,7 @@ const AddEditBooking = () => {
 
         try {
             await createRoomDeposit(result);
-            message.success(MESSAGES.ADD_SUCCESS);
+            notification({ message: MESSAGES.ADD_SUCCESS });
             goBack();
             return;
         } catch (error: any) {
@@ -289,7 +290,7 @@ const AddEditBooking = () => {
                                 colon={false}
                                 name='telephone'
                             >
-                                <Input style={{ width: 350 }} />
+                                <Input style={{ width: 350 }} maxLength={10} />
                             </Form.Item>
                         </Col>
                         <Col span={8} offset={4}>

@@ -20,4 +20,7 @@ export type TypeCustomer = {
     roomName: string;
     dateStart: string;
     dateLate: string;
+    coinNumber: string;
+    timeCoin: string;
+    lateDate: string;
 };

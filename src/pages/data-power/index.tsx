@@ -475,6 +475,7 @@ const PowerOnly = () => {
                     dataSource={dataPower}
                     columns={columns as ColumnTypes}
                     rowKey='_id'
+                    pagination={{ pageSize: 10 }}
                 />
             </div>
         </div>
