@@ -105,7 +105,7 @@ const ChangeInformation = ({ user, form }: Props) => {
                                 ]}
                                 validateTrigger={['onChange']}
                             >
-                                <Input style={{ width: 400 }} />
+                                <Input style={{ width: 400 }} maxLength={10} />
                             </Form.Item>
                             <Form.Item
                                 label={<>Số CMND</>}

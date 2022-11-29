@@ -13,6 +13,7 @@ import {
     getWardByDistrict,
 } from '~/api/addressCheckout';
 import { addMotel } from '~/api/motel.api';
+import notification from '~/components/notification';
 import HeaderPage from '~/components/page-header';
 import { MESSAGES } from '~/constants/message.const';
 import { MotelType } from '~/types/MotelType';
@@ -75,7 +76,7 @@ const AddMotel = () => {
             values.address;
         try {
             await addMotel({ ...values, address: dataAddress });
-            message.success(MESSAGES.ADD_SUCCESS);
+            notification({ message: MESSAGES.ADD_SUCCESS });
             navigate('/motel-room');
         } catch (error) {
             message.error(MESSAGES.ERROR);

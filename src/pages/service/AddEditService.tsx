@@ -14,6 +14,7 @@ import {
 import { useEffect } from 'react';
 import { getServiceAPI } from '~/api/service.api';
 import { useAppDispatch } from '~/app/hooks';
+import notification from '~/components/notification';
 import { MESSAGES } from '~/constants/message.const';
 import { serviceTypeOptions } from '~/constants/service.const';
 import { createService, updateService } from '~/feature/service/serviceSlice';
@@ -57,7 +58,7 @@ const AddEditService = () => {
             ...service,
         };
         await dispatch(createService(payload));
-        message.success(MESSAGES.ADD_SUCCESS);
+        notification({ message: MESSAGES.ADD_SUCCESS });
         goBack();
         return;
     };

@@ -210,16 +210,16 @@ const MemberCustomer = ({ onGetMember, roomRentID, newdataMember }: Props) => {
             render: (carNumber: any) => <Input value={carNumber} />,
         },
         {
-            title: 'operation',
+            title: '',
             dataIndex: 'operation',
             key: 'operation',
             render: (_: any, record: any) =>
                 dataSource!.length >= 1 ? (
                     <Popconfirm
-                        title='Sure to delete?'
+                        title='Bạn có chắc muốn xóa'
                         onConfirm={() => handleDelete(record)}
                     >
-                        <a>Delete</a>
+                        <a>Xóa</a>
                     </Popconfirm>
                 ) : null,
         },
@@ -281,7 +281,7 @@ const MemberCustomer = ({ onGetMember, roomRentID, newdataMember }: Props) => {
                     marginBottom: 16,
                 }}
             >
-                Add a row
+                Thêm
             </Button>
             <Table
                 components={components}

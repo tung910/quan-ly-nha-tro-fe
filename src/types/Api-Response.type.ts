@@ -3,6 +3,7 @@ enum STATUS_CODE {
     BAD_REQUEST = 400,
     UNAUTHORIZE = 401,
     FORBIDDEN = 403,
+    VNPAY_RESPONSE = `00`,
     NOT_FOUND = 404,
 }
 export { STATUS_CODE };
