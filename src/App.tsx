@@ -7,6 +7,7 @@ import SignIn from './feature/user/signIn';
 import SignUpPage from './feature/user/signUp';
 import MainLayout from './layout/main-layout';
 import ExportPdf from './pages/export-pdf';
+import Invoice from './pages/invoice-print';
 import routes, { routesUser } from './routes';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
                         <Route path='/sign-up' element={<SignUpPage />} />
                         <Route path='/login' element={<SignIn />} />
                         <Route path='/export-pdf' element={<ExportPdf />} />
+                        <Route path='/invoice-print' element={<Invoice />} />
 
                         <Route
                             path='/'

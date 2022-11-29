@@ -8,7 +8,6 @@ import {
     Image,
     PageHeader,
     Row,
-    Tabs,
 } from 'antd';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
@@ -16,17 +15,17 @@ import { Link } from 'react-router-dom';
 import { getRoomDetailByEmail } from '~/api/customer.api';
 import { getUserById } from '~/api/user.api';
 import { useAppSelector } from '~/app/hooks';
-import { TypeTabs } from '~/types/Setting.type';
+import Table from '~/components/table';
 import { generatePriceToVND } from '~/utils/helper';
 
 import styles from './MotelRoomUser.module.scss';
+import { columnsMember } from './dataFileld';
 
 const cx = classNames.bind(styles);
 const UserMotelRoom = () => {
     const user = useAppSelector((state: any) => state.user.user);
     const [dataUser, setDataUser] = useState<any>({});
     const [dataRoom, setdataRoom] = useState<any>({});
-    const [tab, setTab] = useState('info');
 
     useEffect(() => {
         const handleGetData = async () => {
@@ -34,82 +33,15 @@ const UserMotelRoom = () => {
                 email: user.email,
             };
             const { data } = await getRoomDetailByEmail(payload);
-
             setDataUser(data);
-
             const currentRoom = JSON.stringify(data.motelRoomID);
             localStorage.setItem('currentRoom', currentRoom);
-
-            const getUser = async () => {
-                const { data } = await getUserById(user._id);
-
-                setdataRoom(data);
-            };
-            getUser();
+            const { data: dataUser } = await getUserById(user._id);
+            setdataRoom(dataUser);
         };
         handleGetData();
     }, [user.email]);
 
-    const items: TypeTabs[] = [
-        {
-            label: `${dataUser.roomName}`,
-            key: 'info',
-            children: (
-                <Descriptions title='Thông tin phòng' style={{ width: 800 }}>
-                    <Descriptions.Item
-                        label={
-                            <span style={{ fontWeight: 'bold' }}>
-                                Số lượng thành viên
-                            </span>
-                        }
-                    >
-                        {dataUser?.member?.length} người
-                    </Descriptions.Item>
-                    <Descriptions.Item
-                        label={
-                            <span style={{ fontWeight: 'bold' }}>
-                                Giá phòng/Tháng
-                            </span>
-                        }
-                    >
-                        {generatePriceToVND(dataUser?.priceRoom)} đ/Tháng
-                    </Descriptions.Item>
-                    <Descriptions.Item
-                        label={
-                            <span style={{ fontWeight: 'bold' }}>Địa chỉ</span>
-                        }
-                    >
-                        {dataUser?.address}
-                    </Descriptions.Item>
-                    <Descriptions.Item
-                        label={
-                            <span style={{ fontWeight: 'bold' }}>Tiền cọc</span>
-                        }
-                    >
-                        {generatePriceToVND(dataUser?.deposit)}đ
-                    </Descriptions.Item>
-                    <Descriptions.Item
-                        label={
-                            <span style={{ fontWeight: 'bold' }}>
-                                Chỉ số điện đã dùng
-                            </span>
-                        }
-                    >
-                        {dataRoom?.power?.useValue} số
-                    </Descriptions.Item>
-                    <Descriptions.Item
-                        label={
-                            <span style={{ fontWeight: 'bold' }}>
-                                Chỉ số nước đã dùng
-                            </span>
-                        }
-                    >
-                        {dataRoom?.water?.useValue} số
-                    </Descriptions.Item>
-                </Descriptions>
-            ),
-        },
-    ];
     return (
         <div>
             <div>
@@ -157,18 +89,82 @@ const UserMotelRoom = () => {
                         marginTop: 50,
                     }}
                 >
-                    <Col span={12}>
+                    <Col span={18}>
                         <p style={{ fontWeight: 'bold', fontSize: 18 }}>
                             Nhà Trọ Vương Anh
                         </p>
-                        <Tabs
-                            activeKey={tab}
-                            onChange={setTab}
-                            items={items}
-                        ></Tabs>
+                        <>
+                            <Descriptions title='Thông tin phòng'>
+                                <Descriptions.Item
+                                    label={
+                                        <span style={{ fontWeight: 'bold' }}>
+                                            Số lượng thành viên
+                                        </span>
+                                    }
+                                >
+                                    {dataUser?.member?.length} người
+                                </Descriptions.Item>
+                                <Descriptions.Item
+                                    label={
+                                        <span style={{ fontWeight: 'bold' }}>
+                                            Giá phòng/Tháng
+                                        </span>
+                                    }
+                                >
+                                    {generatePriceToVND(dataUser?.priceRoom)}{' '}
+                                    đ/Tháng
+                                </Descriptions.Item>
+                                <Descriptions.Item
+                                    label={
+                                        <span style={{ fontWeight: 'bold' }}>
+                                            Địa chỉ
+                                        </span>
+                                    }
+                                >
+                                    {dataUser?.address}
+                                </Descriptions.Item>
+                                <Descriptions.Item
+                                    label={
+                                        <span style={{ fontWeight: 'bold' }}>
+                                            Tiền cọc
+                                        </span>
+                                    }
+                                >
+                                    {generatePriceToVND(dataUser?.deposit)}đ
+                                </Descriptions.Item>
+                                <Descriptions.Item
+                                    label={
+                                        <span style={{ fontWeight: 'bold' }}>
+                                            Chỉ số điện đã dùng
+                                        </span>
+                                    }
+                                >
+                                    {dataRoom?.power?.useValue} số
+                                </Descriptions.Item>
+                                <Descriptions.Item
+                                    label={
+                                        <span style={{ fontWeight: 'bold' }}>
+                                            Chỉ số nước đã dùng
+                                        </span>
+                                    }
+                                >
+                                    {dataRoom?.water?.useValue} số
+                                </Descriptions.Item>
+                            </Descriptions>
+                            <Descriptions title='Thành viên'>
+                                <Row>
+                                    <Table
+                                        columns={columnsMember}
+                                        dataSource={dataUser.member}
+                                        style={{ width: '100%' }}
+                                        rowKey='dataIndex'
+                                    ></Table>
+                                </Row>
+                            </Descriptions>
+                        </>
                     </Col>
 
-                    <Col span={6} offset={5}>
+                    <Col span={6}>
                         <Card
                             title={
                                 <>
