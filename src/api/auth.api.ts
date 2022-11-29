@@ -25,6 +25,9 @@ const changePassword = (id: string, password: string) => {
 const deleteAccount = (id: string) => {
     return instance.delete(`/users/delete/${id}`);
 };
+const updateProfile = (userId: string, data: any) => {
+    return instance.put(`/update-info/${userId}`, data);
+};
 
 export {
     loginApi,
@@ -34,4 +37,5 @@ export {
     changePassword,
     deleteAccount,
     logOutApi,
+    updateProfile,
 };
