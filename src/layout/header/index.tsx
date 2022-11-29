@@ -44,6 +44,10 @@ const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const userId = user?.role === 1 ? '' : user._id;
+    const handleNavigate = (path: string) => {
+        const url = user?.role === 1 ? path : '/user' + path;
+        navigate(url);
+    };
 
     useEffect(() => {
         const handleGetNotifications = async () => {
@@ -91,7 +95,14 @@ const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
             items={[
                 {
                     key: '1',
-                    label: <Button type='text'>Thông tin tài khoản</Button>,
+                    label: (
+                        <Button
+                            type='text'
+                            onClick={() => handleNavigate('/profile')}
+                        >
+                            Thông tin tài khoản
+                        </Button>
+                    ),
                 },
                 {
                     key: '2',

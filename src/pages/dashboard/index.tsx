@@ -121,11 +121,8 @@ const Dashboard = () => {
             </Row>
             <Row gutter={[16, 16]} className={cx('row')}>
                 <Col span={12}>
-                    {Object.keys(payment).length > 0 && (
-                        <PaymentTracking
-                            setDate={setDate}
-                            newDataPaymentChecking={payment}
-                        />
+                    {state.emptyRooms && (
+                        <AvailableRooms roomStatus={state.emptyRooms} />
                     )}
                 </Col>
                 <Col span={12}>
@@ -134,8 +131,11 @@ const Dashboard = () => {
             </Row>
             <Row gutter={[16, 16]} className={cx('row')}>
                 <Col span={12}>
-                    {state.emptyRooms && (
-                        <AvailableRooms roomStatus={state.emptyRooms} />
+                    {Object.keys(payment).length > 0 && (
+                        <PaymentTracking
+                            setDate={setDate}
+                            newDataPaymentChecking={payment}
+                        />
                     )}
                 </Col>
                 <Col span={12}>

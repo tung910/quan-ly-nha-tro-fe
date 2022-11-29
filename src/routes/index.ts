@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import MotelCustomer from '~/pages/User/motel';
 import UserMotelRoom from '~/pages/User/motelroom-user';
 import History from '~/pages/User/payment/History';
-import UserInformation from '~/pages/User/user-infomation';
+import Profile from '~/pages/User/user-infomation/Profile';
 import BookingRoomDeposit from '~/pages/booking';
 import AddEditBooking from '~/pages/booking/AddorEditBooking';
 import Calculate from '~/pages/calculate';
@@ -49,12 +49,13 @@ const routes: Route[] = [
     { path: '/booking/edit-booking', component: AddEditBooking },
     { path: '/tenant-account', component: TenantAccount },
     { path: '/payment-history', component: PaymentHistory },
+    { path: '/profile', component: Profile },
 ];
 export const routesUser: Route[] = [
-    { path: '/user', component: UserInformation },
     { path: '/user/motel-room', component: UserMotelRoom },
     { path: '/user/motel', component: MotelCustomer },
     { path: '/user/payment-history', component: History },
+    { path: '/user/profile', component: Profile },
 ];
 
 export default routes;
