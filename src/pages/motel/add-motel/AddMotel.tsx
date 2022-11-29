@@ -86,7 +86,6 @@ const AddMotel = () => {
     return (
         <div>
             <Content>
-                <div></div>
                 <div className={cx('form-add')}>
                     <Form
                         autoComplete='off'

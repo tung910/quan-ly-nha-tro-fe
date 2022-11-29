@@ -389,11 +389,11 @@ const ListRoom = ({ motelId }: Props) => {
                                 )}
                             </Space>
                         ) : (
-                            <Button type='text'>
+                            <p style={{ width: '150px' }}>
                                 Phòng đã được anh/chị {roomDeposit?.fullName}{' '}
                                 cọc tới ngày{' '}
                                 {convertDate(roomDeposit?.dateOfArrival)}
-                            </Button>
+                            </p>
                         )}
                     </>
                 );
