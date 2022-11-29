@@ -12,6 +12,10 @@ import {
 } from 'antd';
 import { RcFile } from 'antd/lib/upload';
 import { useState } from 'react';
+import { updateProfile } from '~/api/auth.api';
+import { useAppDispatch, useAppSelector } from '~/app/hooks';
+import notification from '~/components/notification';
+import { MESSAGES } from '~/constants/message.const';
 
 const getImgBase64 = (file: RcFile): Promise<string> =>
     new Promise((resolve, reject) => {
@@ -21,11 +25,12 @@ const getImgBase64 = (file: RcFile): Promise<string> =>
         reader.onerror = (error) => reject(error);
     });
 const Information = ({ form, imageUrl }: any) => {
+    const user = useAppSelector((state: any) => state.user.user);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
-
+    const [fileList, setFileList] = useState<UploadFile[]>(user?.images || []);
+    const dispath = useAppDispatch();
     const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
         setFileList(newFileList);
     };
@@ -47,11 +52,14 @@ const Information = ({ form, imageUrl }: any) => {
             file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1)
         );
     };
-    const handleSubmit = (e: any) => {
-        const profile = {
+    const handleSubmit = async (e: any) => {
+        const data = {
             ...e,
             avatar: imageUrl,
+            images: fileList,
         };
+        const { data: dataUpdate } = await updateProfile(user._id, { data });
+        notification({ message: MESSAGES.EDIT_SUCCESS });
     };
     return (
         <Form
@@ -90,7 +98,7 @@ const Information = ({ form, imageUrl }: any) => {
                 ]}
                 validateTrigger={['onChange']}
             >
-                <Input style={{ width: 400 }} disabled />
+                <Input style={{ width: 400 }} />
             </Form.Item>
             <Form.Item
                 label={<>Số điện thoại</>}

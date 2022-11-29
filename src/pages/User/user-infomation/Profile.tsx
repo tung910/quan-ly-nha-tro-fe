@@ -42,11 +42,12 @@ const beforeUpload = (file: RcFile) => {
 const Profile = () => {
     const user = useAppSelector((state: any) => state.user.user);
     const [loading, setLoading] = useState(false);
-    const [imageUrl, setImageUrl] = useState<string>(BASE_IMG);
+    const [imageUrl, setImageUrl] = useState<string>(user?.avatar || BASE_IMG);
     const [form] = Form.useForm();
     const [tab, setTab] = useState('info');
     useEffect(() => {
         form.setFieldsValue({
+            userId: user._id,
             name: user.name,
             email: user.email,
             phone: user.phone,
