@@ -68,6 +68,7 @@ const AddEditService = () => {
                 const { data } = await getServiceAPI(param);
                 form.setFieldsValue({
                     serviceName: data.serviceName,
+                    serviceTypeId: data.serviceTypeName,
                     unitPrice: +data.unitPrice,
                     isActive: data.isActive,
                     note: data.note,
@@ -126,6 +127,31 @@ const AddEditService = () => {
                             validateTrigger={['onBlur', 'onChange']}
                         >
                             <Input autoFocus />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={20}>
+                    <Col span={12}>
+                        <Form.Item
+                            label={<>Loại dịch vụ</>}
+                            labelAlign='left'
+                            name='serviceTypeId'
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        'Vui lòng nhập tên người dùng của bạn!',
+                                },
+                            ]}
+                            validateTrigger={['onBlur', 'onChange']}
+                        >
+                            <Select>
+                                {serviceTypeOptions.map((serviceType) => (
+                                    <Option key={serviceType.serviceTypeId}>
+                                        {serviceType.serviceTypeName}
+                                    </Option>
+                                ))}
+                            </Select>
                         </Form.Item>
                     </Col>
                 </Row>
