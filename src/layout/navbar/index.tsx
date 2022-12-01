@@ -1,5 +1,4 @@
 import {
-    AlertOutlined,
     CalculatorOutlined,
     HomeOutlined,
     IdcardOutlined,
@@ -11,7 +10,7 @@ import {
     TransactionOutlined,
     UserOutlined,
 } from '@ant-design/icons';
-import { Menu, MenuProps } from 'antd';
+import { Image, Menu, MenuProps } from 'antd';
 import classNames from 'classnames/bind';
 import { memo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -74,7 +73,14 @@ const Navbar = () => {
 
     return (
         <nav>
-            <div className={cx('logo')}></div>
+            <div className={cx('logo')}>
+                <Image
+                    src='./public/logo.jpg'
+                    className='img-cover'
+                    preview={false}
+                    loading='eager'
+                />
+            </div>
             <Menu
                 theme='light'
                 onClick={handlerNavigate}

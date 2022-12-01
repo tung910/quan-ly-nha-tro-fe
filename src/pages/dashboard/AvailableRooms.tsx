@@ -34,7 +34,7 @@ const AvailableRooms = ({ roomStatus }: Props) => {
                     dataSource={dataSource}
                     columns={columnsAvailableRooms}
                     rowKey='key'
-                    pagination={true}
+                    pagination={{ pageSize: 5 }}
                 />
             </Card>
         </div>

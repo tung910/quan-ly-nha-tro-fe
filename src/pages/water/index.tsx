@@ -20,6 +20,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { editDataWater, listDataWater } from '~/api/data-water.api';
 import { getAllMotel } from '~/api/motel.api';
 import { getStatisticalRoomStatus } from '~/api/room.api';
+import notification from '~/components/notification';
 import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
 import { IDataWater } from '~/types/DataWater.type';
@@ -252,7 +253,7 @@ const handSubmitData = async (record: any) => {
         useValue: record.useValue,
     };
     await editDataWater({ data: tempData });
-    message.success(MESSAGES.EDIT_SUCCESS);
+    notification({ message: MESSAGES.EDIT_SUCCESS });
 };
 
 function handleSaveAll(datawater: any) {
@@ -284,7 +285,7 @@ const handleSaveAllData = (datawater: any) => {
     datawater.map(async (item: any) => {
         await editDataWater({ data: item });
     });
-    message.success(MESSAGES.EDIT_SUCCESS);
+    notification({ message: MESSAGES.EDIT_SUCCESS });
 };
 const PowerOnly = () => {
     const [formSearch] = Form.useForm();

@@ -16,6 +16,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getAllMotel } from '~/api/motel.api';
 import { editRoom, getRoom } from '~/api/room.api';
 import { useAppDispatch } from '~/app/hooks';
+import notification from '~/components/notification';
 import HeaderPage from '~/components/page-header';
 import { MESSAGES } from '~/constants/message.const';
 import { setIsLoading } from '~/feature/service/appSlice';
@@ -59,7 +60,7 @@ const EditRoom = () => {
         dispatch(setIsLoading(true));
         try {
             await editRoom({ ...values, images: fileList, _id: id });
-            message.success(MESSAGES.EDIT_SUCCESS);
+            notification({ message: MESSAGES.EDIT_SUCCESS });
             navigate('/motel-room');
         } catch (error) {
             //

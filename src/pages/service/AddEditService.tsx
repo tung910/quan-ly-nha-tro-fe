@@ -49,7 +49,7 @@ const AddEditService = () => {
                 ...service,
             };
             dispatch(updateService({ ...payload, _id: param }));
-            message.success(MESSAGES.EDIT_SUCCESS);
+            notification({ message: MESSAGES.EDIT_SUCCESS });
             goBack();
             return;
         }

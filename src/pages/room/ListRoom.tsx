@@ -3,7 +3,6 @@ import {
     DownloadOutlined,
     EditOutlined,
     EyeOutlined,
-    RetweetOutlined,
     UndoOutlined,
     UserAddOutlined,
 } from '@ant-design/icons';
@@ -329,7 +328,7 @@ const ListRoom = ({ motelId }: Props) => {
                                                 }}
                                             ></Button>
                                         </Tooltip>
-                                        <Tooltip title='Đổi phòng'>
+                                        {/*     <Tooltip title='Đổi phòng'>
                                             <Button
                                                 type='primary'
                                                 icon={<RetweetOutlined />}
@@ -344,7 +343,7 @@ const ListRoom = ({ motelId }: Props) => {
                                                     setIsModalOpen(true);
                                                 }}
                                             ></Button>
-                                        </Tooltip>
+                                        </Tooltip> */}
                                         <Tooltip title='Xem chi tiết'>
                                             <Link
                                                 to={`/customer/view?roomRentID=${record.roomRentID._id}&&roomName=${record.roomName}`}

@@ -155,7 +155,6 @@ const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
                 }
             )}
             <div>
-                <SearchOutlined style={{ fontSize: 18, marginRight: 20 }} />
                 <Dropdown overlay={notificationList} placement={'bottomRight'}>
                     <Badge
                         count={notificationLength}
