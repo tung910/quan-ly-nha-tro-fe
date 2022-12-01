@@ -1,8 +1,7 @@
 export interface RoomType {
     _id: string;
     roomName: string;
-    width: number;
-    height: number;
+    area: number;
     unitPrice: number;
     maxPerson: number;
     motelID: string;

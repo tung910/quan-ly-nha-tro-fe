@@ -189,8 +189,8 @@ const AddRoom = () => {
                         <Row>
                             <Col span={12}>
                                 <Form.Item
-                                    name='height'
-                                    label='Dài'
+                                    name='area'
+                                    label='Diện Tích'
                                     rules={[
                                         {
                                             required: true,
@@ -200,29 +200,12 @@ const AddRoom = () => {
                                 >
                                     <InputNumber
                                         placeholder=''
-                                        addonAfter='m'
+                                        addonAfter='m2'
                                         min={0}
                                     />
                                 </Form.Item>
                             </Col>
-                            <Col span={12}>
-                                <Form.Item
-                                    name='width'
-                                    label='Rộng'
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Không được để trống',
-                                        },
-                                    ]}
-                                >
-                                    <InputNumber
-                                        placeholder=''
-                                        addonAfter='m'
-                                        min={0}
-                                    />
-                                </Form.Item>
-                            </Col>
+                            
                         </Row>
                         <Row>
                             <Col span={12}>
