@@ -11,4 +11,6 @@ export interface RoomType {
     customerName: string;
     roomRentID: string;
     images?: any;
+    width?: string | number;
+    height?: string | number;
 }
