@@ -75,10 +75,11 @@ const Navbar = () => {
         <nav>
             <div className={cx('logo')}>
                 <Image
-                    src='./public/logo.jpg'
+                    src='./logo.jpg'
                     className='img-cover'
                     preview={false}
                     loading='eager'
+                    title='Nhà trọ Vương Anh'
                 />
             </div>
             <Menu
