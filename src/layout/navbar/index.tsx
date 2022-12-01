@@ -52,7 +52,7 @@ const itemsMenu: MenuItem[] = [
 ];
 
 const itemsMenuUser: MenuItem[] = [
-    getItem('Cài đặt tài khoản', '/user', <IdcardOutlined />),
+    getItem('Cài đặt tài khoản', '/user/profile', <IdcardOutlined />),
     getItem('Nhà trọ', '/user/motel', <HomeOutlined />),
     getItem('Nhà trọ đang ở', '/user/motel-room', <HomeOutlined />),
     getItem(

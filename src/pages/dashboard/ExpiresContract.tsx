@@ -30,7 +30,7 @@ const ExpiresContract = () => {
     const [dataSource, setdataSource] = useState([]);
     return (
         <div>
-            <Card title='Danh sách phòng trống' bordered={true}>
+            <Card title='Theo dõi hợp đồng' bordered={true}>
                 <Table
                     dataSource={dataSource}
                     columns={columnsExpiresContract}
