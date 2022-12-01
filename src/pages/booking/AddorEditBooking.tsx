@@ -83,7 +83,7 @@ const AddEditBooking = () => {
                 isUpdate: true,
             };
             await updateRoomDeposit({ ...result, _id: param });
-            message.success(MESSAGES.EDIT_SUCCESS);
+            notification({ message: MESSAGES.EDIT_SUCCESS });
             goBack();
             return;
         }

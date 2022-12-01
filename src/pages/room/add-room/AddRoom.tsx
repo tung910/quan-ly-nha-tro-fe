@@ -147,6 +147,7 @@ const AddRoom = () => {
                                             message: 'Không được để trống',
                                         },
                                     ]}
+                                    initialValue={3}
                                 >
                                     <InputNumber
                                         placeholder=''
@@ -154,6 +155,7 @@ const AddRoom = () => {
                                         max={5}
                                         min={0}
                                         width='100%'
+                                        maxLength={1}
                                     />
                                 </Form.Item>
                             </Col>
@@ -182,6 +184,7 @@ const AddRoom = () => {
                                             )
                                         }
                                         addonAfter='VNĐ'
+                                        maxLength={11}
                                     />
                                 </Form.Item>
                             </Col>

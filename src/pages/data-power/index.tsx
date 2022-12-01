@@ -20,6 +20,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { editDataPower, listDataPower } from '~/api/data-power.api';
 import { getAllMotel } from '~/api/motel.api';
 import { getStatisticalRoomStatus } from '~/api/room.api';
+import notification from '~/components/notification';
 import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
 import { IDataPower } from '~/types/DataPower.type';
@@ -252,7 +253,7 @@ const handSubmitData = async (record: any) => {
         price: record.price,
     };
     await editDataPower({ data: tempData });
-    message.success(MESSAGES.EDIT_SUCCESS);
+    notification({ message: MESSAGES.EDIT_SUCCESS });
 };
 
 function handleSaveAll(dataPower: any) {
@@ -284,7 +285,7 @@ const handleSaveAllData = (dataPower: any) => {
     dataPower.map(async (item: any) => {
         await editDataPower({ data: item });
     });
-    message.success(MESSAGES.EDIT_SUCCESS);
+    notification({ message: MESSAGES.EDIT_SUCCESS });
 };
 const PowerOnly = () => {
     const [formSearch] = Form.useForm();

@@ -110,7 +110,7 @@ const CustomerRedirect = () => {
                 };
                 await editCustomerToRoom(data);
                 dispatch(setIsLoading(false));
-                message.success(MESSAGES.EDIT_SUCCESS);
+                notification({ message: MESSAGES.EDIT_SUCCESS });
                 navigate('/motel-room');
             } else {
                 const data = {
