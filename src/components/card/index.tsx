@@ -13,10 +13,8 @@ export interface Props {
 }
 const cx = classNames.bind(styles);
 const CardItem = ({ onClick, room }: Props) => {
-    const desc = ['1', '2', '3', '4', '5'];
-    const { unitPrice, maxPerson, roomName, isRent, images, width, height } =
-        room;
-    const [value, setValue] = useState(3);
+    const { unitPrice, maxPerson, roomName, isRent, images, area } = room;
+
     return (
         <Card
             className={cx(`card-item`)}
@@ -41,11 +39,8 @@ const CardItem = ({ onClick, room }: Props) => {
                 </Col>
 
                 <Col span={12}>
-                    <span style={{ fontWeight: 'bold' }}>Chiều dài: </span>{' '}
-                    {width}m<sup>2</sup>
-                    <br />
-                    <span style={{ fontWeight: 'bold' }}>Chiều rộng:</span>{' '}
-                    {height}m<sup>2</sup>
+                    <span style={{ fontWeight: 'bold' }}>Diện tích: </span>{' '}
+                    {area}m<sup>2</sup>
                 </Col>
             </Row>
             <p
