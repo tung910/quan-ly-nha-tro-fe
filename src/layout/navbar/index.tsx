@@ -15,6 +15,7 @@ import classNames from 'classnames/bind';
 import { memo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '~/app/hooks';
+import logo from '~/assets/logo.jpg';
 import { Role } from '~/constants/const';
 
 import styles from './Navbar.module.scss';
@@ -75,7 +76,7 @@ const Navbar = () => {
         <nav>
             <div className={cx('logo')}>
                 <Image
-                    src='./logo.jpg'
+                    src={logo}
                     className='img-cover'
                     preview={false}
                     loading='eager'

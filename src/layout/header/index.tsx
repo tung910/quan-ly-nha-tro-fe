@@ -122,16 +122,13 @@ const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
     const notificationList = (
         <Menu>
             {notifications.map((item: any, index) => (
-                <Menu.Item
-                    key={index}
-                    icon={<Avatar src='https://joeschmoe.io/api/v1/random' />}
-                >
+                <Menu.Item key={index} icon={<Avatar src={user.avatar} />}>
                     <div className={cx('noti')}>
                         <Text strong>{item.userId.email}</Text>
                         <div
                             className={cx('description')}
                         >{`Muốn đổi phòng từ phòng ${item.detail?.currentRoom?.roomName} sang phòng ${item.detail?.newRoom?.roomName}`}</div>
-                        {!item.isSeen && (
+                        {!item.isSeen && !userId && (
                             <Button
                                 type='primary'
                                 onClick={() => handleAccess(item)}

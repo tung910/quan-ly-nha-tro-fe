@@ -96,8 +96,7 @@ const Motel = () => {
                                         Tên phòng: {dataModal.roomName}
                                     </li>
                                     <li style={{ margin: 20 }}>
-                                        Diện tích: {dataModal.width} x{' '}
-                                        {dataModal.height} m2
+                                        Diện tích: {dataModal.area} m2
                                     </li>
                                     <li style={{ margin: 20 }}>
                                         Số lượng: {dataModal.maxPerson} người
