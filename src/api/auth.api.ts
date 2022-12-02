@@ -19,7 +19,7 @@ const verifyOtp = (user: { email: string; otp: string }) => {
 const getAllAccount = () => {
     return instance.get('/users');
 };
-const changePassword = (id: string, password: string) => {
+const changePassword = (id: string, password: { password: string }) => {
     return instance.put(`/users/${id}`, password);
 };
 const deleteAccount = (id: string) => {
