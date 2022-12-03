@@ -32,8 +32,9 @@ import {
 } from '~/api/booking.api';
 import { getAllMotel } from '~/api/motel.api';
 import { getListRooms, getRooms } from '~/api/room.api';
+import notification from '~/components/notification';
 import Table from '~/components/table';
-import { DateFormat } from '~/constants/const';
+import { DateFormat, NotificationType } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
 import { IBooking } from '~/types/Booking.type';
 import { MotelType } from '~/types/MotelType';
@@ -168,17 +169,17 @@ const BookingRoomDeposit = () => {
     ];
 
     useEffect(() => {
-        const getListMotels = async () => {
-            const { data } = await getAllMotel();
-            setListMotels(data);
+        const handleFetchData = async () => {
+            const [{ data: motels }, { data: rooms }] = await Promise.all([
+                getAllMotel(),
+                getListRooms(),
+                onSave(),
+            ]);
+            setListMotels(motels);
+            setListRooms(rooms);
         };
-        getListMotels();
 
-        const getListRoom = async () => {
-            const { data } = await getListRooms();
-            setListRooms(data);
-        };
-        getListRoom();
+        handleFetchData();
     }, []);
 
     const handleDelete = (id: any) => {
@@ -263,14 +264,15 @@ const BookingRoomDeposit = () => {
                         </>
                     </>
                 ),
-                onOk: () => {
+                onOk: async () => {
                     const value = {
                         data: {
                             cancelDate: moment(newDate.cancelDate),
                             hasCancel: true,
                         },
                     };
-                    updateStatusRoomDeposit(record._id, value);
+                    await updateStatusRoomDeposit(record._id, value);
+                    await onSave();
                 },
             });
         }
@@ -278,24 +280,26 @@ const BookingRoomDeposit = () => {
 
     const handleSelectRoom = async (id: any) => {
         const { data } = await getRooms(id);
-
         setListRooms(data);
     };
 
-    const onSave = async (values: any) => {
+    const onSave = async () => {
+        const value = form.getFieldsValue();
         const result = {
             data: {
-                ...values,
-                fromDate: convertDate(values.fromDate, DateFormat.DATE_M_D_Y),
-                toDate: convertDate(values.toDate, DateFormat.DATE_M_D_Y),
+                ...value,
+                fromDate: convertDate(value.fromDate, DateFormat.DATE_M_D_Y),
+                toDate: convertDate(value.toDate, DateFormat.DATE_M_D_Y),
             },
         };
-
-        if (result.data.fromDate < result.data.toDate) {
+        if (new Date(result.data.fromDate) < new Date(result.data.toDate)) {
             const listData = await listSearchRoomDeposit(result);
             setdataSource(listData.data);
         } else {
-            message.error('Vui lòng kiểm tra lại');
+            notification({
+                message: 'Vui lòng kiểm tra lại',
+                type: NotificationType.WARNING,
+            });
         }
     };
 
@@ -351,7 +355,6 @@ const BookingRoomDeposit = () => {
                                 type='primary'
                                 htmlType='submit'
                                 icon={<SearchOutlined />}
-                                onClick={form.submit}
                             >
                                 Xem
                             </Button>
