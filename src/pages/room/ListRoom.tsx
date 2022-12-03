@@ -168,7 +168,14 @@ const ListRoom = ({ motelId }: Props) => {
 
         return result ?? {};
     };
+    const isDeposit = (room: any) => {
+        let result = Object.keys(room).length <= 0 ? true : false;
+        if (room.checkInDate || room.cancelDate) {
+            result = true;
+        }
 
+        return result;
+    };
     const columns: ColumnsType<object> | undefined = [
         {
             title: '',
@@ -303,9 +310,10 @@ const ListRoom = ({ motelId }: Props) => {
             dataIndex: '_id',
             render: (text, record: any) => {
                 const roomDeposit: any = handleCheckRoomDeposit(record._id);
+
                 return (
                     <>
-                        {Object.keys(roomDeposit).length <= 0 ? (
+                        {isDeposit(roomDeposit) ? (
                             <Space>
                                 {record.isRent ? (
                                     <>

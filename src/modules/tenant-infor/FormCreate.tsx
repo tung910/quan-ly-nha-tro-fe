@@ -22,7 +22,7 @@ import { getRoom } from '~/api/room.api';
 import { useAppDispatch } from '~/app/hooks';
 import { DateFormat } from '~/constants/const';
 import { setIsLoading } from '~/feature/service/appSlice';
-import { useGetParam } from '~/utils/helper';
+import { convertDate, useGetParam } from '~/utils/helper';
 
 import styles from './FormCreate.module.scss';
 
@@ -478,7 +478,7 @@ const FormCreate = ({
                     </Form.Item>
                 </Col>
             </Row>
-            
+
             <Row>
                 <Col span={8}>
                     <Form.Item
