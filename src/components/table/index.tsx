@@ -3,6 +3,7 @@ import { Table as TableAntd } from 'antd';
 import { TablePaginationConfig } from 'antd/es/table';
 import { ColumnGroupType, ColumnsType } from 'antd/lib/table';
 import { TableRowSelection } from 'antd/lib/table/interface';
+import { memo } from 'react';
 
 interface Props {
     columns: (ColumnGroupType<object> | ColumnsType<object>)[] | any;
@@ -41,4 +42,4 @@ const Table = (props: Props) => {
     );
 };
 
-export default Table;
+export default memo(Table);
