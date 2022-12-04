@@ -132,7 +132,7 @@ const EditRoom = () => {
                                         },
                                     ]}
                                 >
-                                    <Select defaultValue='Mời chọn nhà'>
+                                    <Select placeholder='Mời chọn nhà'>
                                         {motels &&
                                             motels.map((item, index) => {
                                                 return (
@@ -195,8 +195,8 @@ const EditRoom = () => {
                         <Row>
                             <Col span={12}>
                                 <Form.Item
-                                    name='height'
-                                    label='Dài'
+                                    name='area'
+                                    label='Diện Tích'
                                     rules={[
                                         {
                                             required: true,
@@ -204,21 +204,16 @@ const EditRoom = () => {
                                         },
                                     ]}
                                 >
-                                    <Input placeholder='' addonAfter='m' />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item
-                                    name='width'
-                                    label='Rộng'
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Không được để trống',
-                                        },
-                                    ]}
-                                >
-                                    <Input placeholder='' addonAfter='m' />
+                                    <InputNumber
+                                        placeholder=''
+                                        addonAfter={
+                                            <>
+                                                m<sup>2</sup>
+                                            </>
+                                        }
+                                        min={0}
+                                        maxLength={2}
+                                    />
                                 </Form.Item>
                             </Col>
                         </Row>

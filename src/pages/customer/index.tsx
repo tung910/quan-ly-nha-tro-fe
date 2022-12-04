@@ -27,7 +27,7 @@ import FormCreate from '~/modules/tenant-infor/FormCreate';
 import { TypeCustomer } from '~/types/Customer';
 import { IService } from '~/types/Service.type';
 import { TypeTabs } from '~/types/Setting.type';
-import { useGetParam } from '~/utils/helper';
+import { convertDate, useGetParam } from '~/utils/helper';
 
 import styles from './Create.module.scss';
 
@@ -101,6 +101,9 @@ const CustomerRedirect = () => {
                         startDate: moment(values.startDate).format(
                             DateFormat.DATE_DEFAULT
                         ),
+                        dateRange: values.dateRange
+                            ? convertDate(values.dateRange)
+                            : undefined,
                         roomName,
                         motelRoomID: newMotelRoomID,
                         motelID,
@@ -128,6 +131,9 @@ const CustomerRedirect = () => {
                             : moment(Date.now()).format(
                                   DateFormat.DATE_DEFAULT
                               ),
+                        dateRange: values.dateRange
+                            ? convertDate(values.dateRange)
+                            : undefined,
                         motelRoomID: roomId,
                         motelID,
                         roomName,

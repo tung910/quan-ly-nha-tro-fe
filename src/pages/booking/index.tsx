@@ -388,7 +388,7 @@ const BookingRoomDeposit = () => {
                             >
                                 <Select
                                     style={{ width: 150 }}
-                                    defaultValue='Tất cả'
+                                    placeholder='Tất cả'
                                     showSearch
                                     onChange={handleSelectRoom}
                                 >
@@ -414,7 +414,7 @@ const BookingRoomDeposit = () => {
                             >
                                 <Select
                                     style={{ width: 150 }}
-                                    defaultValue='Tất cả'
+                                    placeholder='Tất cả'
                                     showSearch
                                 >
                                     {listRooms &&

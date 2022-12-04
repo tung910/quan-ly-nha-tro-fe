@@ -122,7 +122,7 @@ const defaultColumns: (ColumnTypes[number] & {
         },
     },
     {
-        title: 'Number',
+        title: 'Số lượng',
         dataIndex: 'quantity',
         key: 'quantity',
         editable: true,

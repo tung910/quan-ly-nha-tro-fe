@@ -411,7 +411,7 @@ const PowerOnly = () => {
                             >
                                 <Select
                                     style={{ width: 150 }}
-                                    defaultValue='Tất cả'
+                                    placeholder='Tất cả'
                                     showSearch
                                 >
                                     {listStatusRoom &&
@@ -435,7 +435,7 @@ const PowerOnly = () => {
                             >
                                 <Select
                                     style={{ width: 150 }}
-                                    defaultValue='Tất cả'
+                                    placeholder='Tất cả'
                                     showSearch
                                 >
                                     {listNameMotel &&

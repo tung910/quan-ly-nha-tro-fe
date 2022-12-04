@@ -19,8 +19,6 @@ import React, {
 import { ACTION } from '~/constants/member.const';
 import { DataTable } from '~/types/Member.type';
 
-const { Option } = Select;
-
 const EditableContext = React.createContext<any>(null);
 const dateFormat = 'YYYY-MM-DD';
 const EditableRow = ({ index, ...props }: any) => {
@@ -89,8 +87,8 @@ const EditableCell = ({
             >
                 {dataIndex === 'gender' ? (
                     <Select ref={inputRef} defaultValue='1' onBlur={save}>
-                        <Option value='1'>Nam</Option>
-                        <Option value='2'>Nữ</Option>
+                        <Select.Option value='1'>Nam</Select.Option>
+                        <Select.Option value='2'>Nữ</Select.Option>
                     </Select>
                 ) : dataIndex === 'date' ? (
                     <DatePicker
@@ -174,9 +172,9 @@ const MemberCustomer = ({ onGetMember, roomRentID, newdataMember }: Props) => {
             editable: true,
             render: (gender: any) => (
                 <>
-                    <Select defaultValue='Giới tính' value={gender}>
-                        <Option value='1'>Nam</Option>
-                        <Option value='2'>Nữ</Option>
+                    <Select placeholder='Giới tính' value={gender}>
+                        <Select.Option value='1'>Nam</Select.Option>
+                        <Select.Option value='2'>Nữ</Select.Option>
                     </Select>
                 </>
             ),
@@ -186,7 +184,7 @@ const MemberCustomer = ({ onGetMember, roomRentID, newdataMember }: Props) => {
             dataIndex: 'cmnd',
             key: 'cmnd',
             editable: true,
-            render: (cmnd: any) => <Input value={cmnd} />,
+            render: (cmnd: any) => <Input value={cmnd} maxLength={12} />,
         },
         {
             title: 'Địa chỉ',
@@ -200,7 +198,9 @@ const MemberCustomer = ({ onGetMember, roomRentID, newdataMember }: Props) => {
             dataIndex: 'phoneNumber',
             key: 'phoneNumber',
             editable: true,
-            render: (phoneNumber: any) => <Input value={phoneNumber} />,
+            render: (phoneNumber: any) => (
+                <Input value={phoneNumber} maxLength={10} />
+            ),
         },
         {
             title: 'Số xe',
