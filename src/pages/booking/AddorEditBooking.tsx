@@ -32,7 +32,6 @@ import { convertDate, generatePriceToVND, useGetParam } from '~/utils/helper';
 
 import styles from './Booking.module.scss';
 
-const Option = Select;
 const cx = classNames.bind(styles);
 const AddEditBooking = () => {
     const [form] = Form.useForm();
@@ -41,17 +40,15 @@ const AddEditBooking = () => {
     const [param] = useGetParam('bookingId');
 
     useEffect(() => {
-        const getListMotels = async () => {
-            const { data } = await getAllMotel();
-            setListMotels(data);
+        const handleFetchData = async () => {
+            const [{ data: motels }, { data: rooms }] = await Promise.all([
+                getAllMotel(),
+                getListRooms(),
+            ]);
+            setListMotels(motels);
+            setListRooms(rooms);
         };
-        getListMotels();
-
-        const getListRoom = async () => {
-            const { data } = await getListRooms();
-            setListRooms(data);
-        };
-        getListRoom();
+        handleFetchData();
     }, []);
 
     const handleSelectRoom = async (id: any) => {
@@ -195,19 +192,19 @@ const AddEditBooking = () => {
                             >
                                 <Select
                                     style={{ width: 350 }}
-                                    defaultValue='Tất cả'
+                                    placeholder='Tất cả'
                                     showSearch
                                     onChange={handleSelectRoom}
                                 >
                                     {listMotels &&
                                         listMotels.map((item, index) => {
                                             return (
-                                                <Option
+                                                <Select.Option
                                                     key={index}
                                                     value={item._id}
                                                 >
                                                     {item.name}
-                                                </Option>
+                                                </Select.Option>
                                             );
                                         })}
                                 </Select>
@@ -229,18 +226,18 @@ const AddEditBooking = () => {
                             >
                                 <Select
                                     style={{ width: 350 }}
-                                    defaultValue='Tất cả'
+                                    placeholder='Tất cả'
                                     showSearch
                                 >
                                     {listRooms &&
                                         listRooms.map((item, index) => {
                                             return (
-                                                <Option
+                                                <Select.Option
                                                     key={index}
                                                     value={item._id}
                                                 >
                                                     {item.roomName}
-                                                </Option>
+                                                </Select.Option>
                                             );
                                         })}
                                 </Select>
@@ -313,6 +310,7 @@ const AddEditBooking = () => {
                                     }
                                     addonAfter={'VND'}
                                     style={{ width: 350 }}
+                                    maxLength={10}
                                 />
                             </Form.Item>
                         </Col>

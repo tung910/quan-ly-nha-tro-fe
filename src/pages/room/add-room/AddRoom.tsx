@@ -1,14 +1,5 @@
 import { InboxOutlined, RollbackOutlined } from '@ant-design/icons';
-import {
-    Col,
-    Form,
-    Input,
-    InputNumber,
-    Row,
-    Select,
-    Upload,
-    message,
-} from 'antd';
+import { Col, Form, Input, InputNumber, Row, Select, Upload } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
@@ -22,15 +13,16 @@ import { MESSAGES } from '~/constants/message.const';
 import { setIsLoading } from '~/feature/service/appSlice';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
+import { useGetParam } from '~/utils/helper';
 
 import styles from './AddRoom.module.scss';
 
-const { Option } = Select;
 const { Dragger } = Upload;
 const cx = classNames.bind(styles);
 const { TextArea } = Input;
 
 const AddRoom = () => {
+    const [motelId] = useGetParam('motelId');
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -39,6 +31,10 @@ const AddRoom = () => {
     useEffect(() => {
         const getMotels = async () => {
             const { data } = await getAllMotel();
+            const motel = data.find(
+                (item: any) => item._id === motelId && item
+            );
+            form.setFieldValue('motelID', motel._id);
             setMotels(data);
         };
         getMotels();
@@ -93,7 +89,7 @@ const AddRoom = () => {
                             <Col span={12}>
                                 <Form.Item
                                     name='roomName'
-                                    label='Phòng số'
+                                    label='Tên phòng'
                                     rules={[
                                         {
                                             required: true,
@@ -120,16 +116,16 @@ const AddRoom = () => {
                                         },
                                     ]}
                                 >
-                                    <Select defaultValue='Mời chọn nhà'>
+                                    <Select placeholder='Mời chọn nhà'>
                                         {motels &&
                                             motels.map((item, index) => {
                                                 return (
-                                                    <Option
+                                                    <Select.Option
                                                         key={index}
                                                         value={item._id}
                                                     >
                                                         {item.name}
-                                                    </Option>
+                                                    </Select.Option>
                                                 );
                                             })}
                                     </Select>
@@ -193,7 +189,7 @@ const AddRoom = () => {
                             <Col span={12}>
                                 <Form.Item
                                     name='area'
-                                    label='Diện Tích'
+                                    label='Diện tích'
                                     rules={[
                                         {
                                             required: true,
@@ -203,12 +199,16 @@ const AddRoom = () => {
                                 >
                                     <InputNumber
                                         placeholder=''
-                                        addonAfter='m2'
+                                        addonAfter={
+                                            <>
+                                                m<sup>2</sup>
+                                            </>
+                                        }
                                         min={0}
+                                        maxLength={2}
                                     />
                                 </Form.Item>
                             </Col>
-                            
                         </Row>
                         <Row>
                             <Col span={12}>

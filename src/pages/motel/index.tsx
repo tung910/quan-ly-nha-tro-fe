@@ -85,7 +85,10 @@ const Motel = () => {
                                         color: 'white',
                                         textDecoration: 'none',
                                     }}
-                                    to={'/motel-room/add-room'}
+                                    to={
+                                        '/motel-room/add-room?motelId=' +
+                                        item._id
+                                    }
                                 >
                                     Thêm phòng trọ
                                 </Link>

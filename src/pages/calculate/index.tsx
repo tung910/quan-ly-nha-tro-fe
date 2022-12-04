@@ -273,7 +273,7 @@ const Calculate = () => {
         data.map(async (item: any) => {
             if (values.payAmount > item.remainAmount) {
                 Modal.error({
-                    title: 'Thông báo',
+                    title: 'Lỗi',
                     content:
                         'Số tiền trả lớn hơn số tiền phải trả. Mời nhập lại!',
                 });
@@ -381,7 +381,7 @@ const Calculate = () => {
                     ]}
                 >
                     <Modal
-                        title='Thông báo'
+                        title='Thanh toán'
                         open={isModalOpen}
                         onOk={form.submit}
                         onCancel={handleCancel}
@@ -413,21 +413,6 @@ const Calculate = () => {
                                 onFinish={onCalculator}
                             >
                                 <Form.Item
-                                    label={<>Kỳ</>}
-                                    colon={false}
-                                    labelAlign='left'
-                                    name='paymentPeriod'
-                                >
-                                    <Select
-                                        style={{ width: 375 }}
-                                        placeholder='Tất cả'
-                                        showSearch
-                                    >
-                                        <Option value={2}>Kỳ 30</Option>
-                                        <Option value={3}>Kỳ 15</Option>
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item
                                     label={<>Ngày</>}
                                     colon={false}
                                     labelAlign='left'
@@ -444,9 +429,9 @@ const Calculate = () => {
                                     label={<>Tháng/năm</>}
                                     colon={false}
                                     name='month'
+                                    initialValue={moment()}
                                 >
                                     <DatePicker
-                                        defaultValue={moment()}
                                         clearIcon={null}
                                         format={'MM/YYYY'}
                                         picker='month'
@@ -550,11 +535,15 @@ const Calculate = () => {
                             >
                                 <Select
                                     style={{ width: 150 }}
-                                    defaultValue='Tất cả'
+                                    placeholder='Tất cả'
                                     showSearch
                                 >
-                                    <Option value={2}>Kỳ 30</Option>
-                                    <Option value={3}>Kỳ 15</Option>
+                                    <Select.Option value={2}>
+                                        Kỳ 30
+                                    </Select.Option>
+                                    <Select.Option value={3}>
+                                        Kỳ 15
+                                    </Select.Option>
                                 </Select>
                             </Form.Item>
                         </Col>
@@ -566,7 +555,7 @@ const Calculate = () => {
                             >
                                 <Select
                                     style={{ width: 150 }}
-                                    defaultValue='Tất cả'
+                                    placeholder='Tất cả'
                                     showSearch
                                 >
                                     {listNameMotel &&
@@ -782,11 +771,9 @@ const Calculate = () => {
                                     label={<>Thanh toán</>}
                                     labelAlign='left'
                                     name='paymentMethod'
+                                    initialValue={1}
                                 >
-                                    <Select
-                                        style={{ width: 375 }}
-                                        defaultValue={1}
-                                    >
+                                    <Select style={{ width: 375 }}>
                                         <Option value={1}>Tiền mặt</Option>
                                         <Option value={2}>Chuyển khoản</Option>
                                     </Select>
