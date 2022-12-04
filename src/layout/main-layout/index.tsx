@@ -1,6 +1,6 @@
 import { Layout } from 'antd';
 import classNames from 'classnames/bind';
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import Header from '../header';
@@ -29,7 +29,9 @@ const MainLayout: React.FC = () => {
                     setCollapsed={setCollapsed}
                 ></Header>
                 <Content className={cx('wrapper')}>
-                    <Outlet />
+                    <Suspense fallback={<>loading...</>}>
+                        <Outlet />
+                    </Suspense>
                 </Content>
             </Layout>
         </Layout>
