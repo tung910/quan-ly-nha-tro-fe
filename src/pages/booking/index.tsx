@@ -48,15 +48,22 @@ const BookingRoomDeposit = () => {
     const [form] = Form.useForm();
     const [listMotels, setListMotels] = useState<MotelType[]>([]);
     const [listRooms, setListRooms] = useState<RoomType[]>([]);
-    const [dataSource, setdataSource] = useState<any>([]);
+    const [dataSource, setdataSource] = useState<IBooking[]>([]);
     const navigate = useNavigate();
 
-    const columns: ColumnsType = [
+    const isDeposit = (room: IBooking) => {
+        let result = false;
+        if (room.checkInDate || room.cancelDate) {
+            result = true;
+        }
+        return result;
+    };
+    const columns: ColumnsType<IBooking> = [
         {
             title: '',
             dataIndex: '_id',
             key: '_id',
-            render: (id) => {
+            render: (id, record) => {
                 return (
                     <Space>
                         <Tooltip title='Sửa phòng'>
@@ -64,6 +71,7 @@ const BookingRoomDeposit = () => {
                                 <Button
                                     type='primary'
                                     icon={<EditOutlined />}
+                                    disabled={isDeposit(record)}
                                 ></Button>
                             </Link>
                         </Tooltip>
@@ -73,6 +81,7 @@ const BookingRoomDeposit = () => {
                                 type='dashed'
                                 danger
                                 onClick={() => handleDelete(id)}
+                                disabled={isDeposit(record)}
                             ></Button>
                         </Tooltip>
                     </Space>
@@ -111,7 +120,7 @@ const BookingRoomDeposit = () => {
             title: 'Tiền cọc',
             dataIndex: 'bookingAmount',
             key: 'bookingAmount',
-            render: (bookingAmount: any) => {
+            render: (bookingAmount) => {
                 return <>{generatePriceToVND(bookingAmount)}</>;
             },
         },
@@ -127,7 +136,7 @@ const BookingRoomDeposit = () => {
             title: 'Trạng thái',
             dataIndex: 'record',
             key: '_id',
-            render: (text, record: any) => {
+            render: (text, record) => {
                 return (
                     <Space>
                         {!record.hasCheckIn ? (
@@ -182,7 +191,7 @@ const BookingRoomDeposit = () => {
         handleFetchData();
     }, []);
 
-    const handleDelete = (id: any) => {
+    const handleDelete = (id: string) => {
         Modal.confirm({
             centered: true,
             title: `Bạn có đồng ý xóa không ?`,
@@ -190,15 +199,13 @@ const BookingRoomDeposit = () => {
             okText: 'Lưu',
             onOk: async () => {
                 await deleteRoomDeposit(id);
-                setdataSource(
-                    dataSource.filter((item: any) => item._id !== id)
-                );
+                setdataSource(dataSource.filter((item) => item._id !== id));
                 message.success(MESSAGES.DEL_SUCCESS);
             },
         });
     };
 
-    const handleCheckIn = (record: any) => {
+    const handleCheckIn = (record: IBooking) => {
         if (record) {
             const newDate = {
                 ...record,
@@ -230,9 +237,9 @@ const BookingRoomDeposit = () => {
             });
         }
     };
-    const handleSave = async (record: any) => {
+    const handleSave = (record: any) => {
         navigate(
-            `/customer/create?roomId=${record?.motelRoomId._id}&&roomName=${record?.motelRoomId.roomName}&&motelId=${record?.motelId._id}&&booking=${record._id}`
+            `/customer/create?roomId=${record?.motelRoomId?._id}&&roomName=${record?.motelRoomId?.roomName}&&motelId=${record?.motelId?._id}&&booking=${record._id}`
         );
     };
 
@@ -278,7 +285,7 @@ const BookingRoomDeposit = () => {
         }
     };
 
-    const handleSelectRoom = async (id: any) => {
+    const handleSelectRoom = async (id: string) => {
         const { data } = await getRooms(id);
         setListRooms(data);
     };
@@ -440,12 +447,7 @@ const BookingRoomDeposit = () => {
                     (*) Cọc giữ phòng chỉ có hiệu lực trong vòng 1 tháng kể từ
                     khi bắt đầu
                 </i>
-                <Table
-                    dataSource={
-                        dataSource && dataSource.map((item: IBooking) => item)
-                    }
-                    columns={columns as ColumnsType}
-                />
+                <Table dataSource={dataSource} columns={columns} />
             </div>
         </div>
     );
