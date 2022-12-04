@@ -58,12 +58,6 @@ const TenantAccount = () => {
             },
         },
     ];
-    const handleChangePassword = async (value: string) => {
-        await changePassword(idAccount, value);
-        form.resetFields();
-        setIsModalOpen(false);
-        message.success(MESSAGES.CHANGE_PASSWORD);
-    };
     const handleLockAccount = async (id: string) => {
         Modal.confirm({
             centered: true,
@@ -93,36 +87,6 @@ const TenantAccount = () => {
                 title='Danh sách tài khoản'
             />
             <Table columns={ColumnsData} dataSource={listAccount} />
-            <Modal
-                title='Nhập mật khẩu mới'
-                open={isModalOpen}
-                onOk={form.submit}
-                onCancel={() => setIsModalOpen(false)}
-            >
-                <Form
-                    autoComplete='off'
-                    form={form}
-                    labelCol={{ span: 5 }}
-                    onFinish={handleChangePassword}
-                >
-                    <Form.Item
-                        colon={false}
-                        labelAlign='left'
-                        name='password'
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập mật khẩu!',
-                            },
-                        ]}
-                    >
-                        <Input
-                            type='password'
-                            placeholder='Mời bạn nhập mật khẩu'
-                        />
-                    </Form.Item>
-                </Form>
-            </Modal>
         </div>
     );
 };
