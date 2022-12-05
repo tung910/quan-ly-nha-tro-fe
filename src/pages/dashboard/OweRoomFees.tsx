@@ -57,11 +57,9 @@ const OweRoomFees = ({ dataOwe }: Props) => {
         <div>
             <Card title='Danh sách khách nợ tiền phòng' bordered={true}>
                 <Table
-                    dataSource={
-                        dataSource && dataSource.map((item: any) => item)
-                    }
+                    dataSource={dataSource}
                     columns={columnsOweRoomFees}
-                    rowKey='key'
+                    rowKey='_id'
                 />
             </Card>
         </div>

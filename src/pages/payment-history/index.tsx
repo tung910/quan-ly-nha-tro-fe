@@ -240,7 +240,11 @@ const PaymentHistory = () => {
                             ? 'Không có kết quả nào được tìm thấy...'
                             : `Hiện tại đang có ${dataSource.length} kết quả`}
                     </span>
-                    <Table dataSource={dataSource} columns={columns} />
+                    <Table
+                        dataSource={dataSource}
+                        columns={columns}
+                        rowKey='_id'
+                    />
                 </>
             </div>
         </div>
