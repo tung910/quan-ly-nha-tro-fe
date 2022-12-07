@@ -2,7 +2,6 @@ import {
     BellOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
-    SearchOutlined,
 } from '@ant-design/icons';
 import {
     Avatar,
@@ -23,7 +22,6 @@ import {
 import { useAppDispatch, useAppSelector } from '~/app/hooks';
 import { logOut } from '~/feature/user/userSlice';
 import { IUser } from '~/types/User.type';
-
 import styles from './Header.module.scss';
 
 const cx = classNames.bind(styles);
@@ -124,7 +122,7 @@ const Header = ({ collapsed, setCollapsed }: HeaderProps) => {
             {notifications.map((item: any, index) => (
                 <Menu.Item key={index} icon={<Avatar src={user.avatar} />}>
                     <div className={cx('noti')}>
-                        <Text strong>{item.userId.email}</Text>
+                        <Text strong>{item?.userId?.email}</Text>
                         <div
                             className={cx('description')}
                         >{`Muốn đổi phòng từ phòng ${item.detail?.currentRoom?.roomName} sang phòng ${item.detail?.newRoom?.roomName}`}</div>
