@@ -19,7 +19,6 @@ import { getListRooms, getRooms } from '~/api/room.api';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { generatePriceToVND } from '~/utils/helper';
-
 import styles from './PaymentHistory.module.scss';
 
 const cx = classNames.bind(styles);
@@ -120,6 +119,7 @@ const PaymentHistory = () => {
                 motelID: values.motelID,
                 // motelRoomId: values.motelRoomId,
             });
+
             setdataSource(data);
 
             if (data) {
@@ -168,7 +168,7 @@ const PaymentHistory = () => {
                         </Col>
                         <Col span={6}>
                             <Form.Item
-                                name='motelId'
+                                name='motelID'
                                 label={<>Nhà</>}
                                 colon={false}
                             >
@@ -192,31 +192,7 @@ const PaymentHistory = () => {
                                 </Select>
                             </Form.Item>
                         </Col>
-                        <Col span={6}>
-                            <Form.Item
-                                name='motelRoomId'
-                                label={<>Phòng</>}
-                                colon={false}
-                            >
-                                <Select
-                                    style={{ width: 150 }}
-                                    placeholder='Tất cả'
-                                    showSearch
-                                >
-                                    {listRooms &&
-                                        listRooms.map((item, index) => {
-                                            return (
-                                                <Select.Option
-                                                    key={index}
-                                                    value={item._id}
-                                                >
-                                                    {item.roomName}
-                                                </Select.Option>
-                                            );
-                                        })}
-                                </Select>
-                            </Form.Item>
-                        </Col>
+
                         <Col span={6}>
                             <Form.Item colon={false}>
                                 <Button
@@ -226,7 +202,6 @@ const PaymentHistory = () => {
                                 >
                                     Xem
                                 </Button>
-                                ,
                             </Form.Item>
                         </Col>
                     </Row>
