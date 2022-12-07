@@ -2,6 +2,7 @@ enum MESSAGES {
     ADD_SUCCESS = 'Thêm thành công',
     DEL_SUCCESS = 'Xóa thành công',
     EDIT_SUCCESS = 'Chỉnh sửa thành công',
+    SAVE_SUCCESS = 'Lưu thành công',
     ERROR = 'Không thành công ',
     CHECK_ROLE = 'Bạn không có quyền truy cập',
     CHANGE_PASSWORD = 'Đổi mật khẩu thành công ',

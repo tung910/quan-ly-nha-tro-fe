@@ -11,7 +11,6 @@ import {
     Row,
     Select,
     Table,
-    message,
 } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import classNames from 'classnames/bind';
@@ -26,7 +25,6 @@ import { MESSAGES } from '~/constants/message.const';
 import { IDataWater } from '~/types/DataWater.type';
 import { MotelType } from '~/types/MotelType';
 import { generatePriceToVND } from '~/utils/helper';
-
 import styles from './Water.module.scss';
 
 const cx = classNames.bind(styles);
@@ -215,7 +213,7 @@ const ColumnsDataWater: (ColumnTypes[number] & {
                         icon={<SaveOutlined />}
                         onClick={() => handleSubmitData(record)}
                     >
-                        Lưu
+                        Sửa
                     </Button>
                 </>
             );
@@ -253,7 +251,7 @@ const handSubmitData = async (record: any) => {
         useValue: record.useValue,
     };
     await editDataWater({ data: tempData });
-    notification({ message: MESSAGES.EDIT_SUCCESS });
+    notification({ message: MESSAGES.SAVE_SUCCESS });
 };
 
 function handleSaveAll(datawater: any) {
@@ -285,7 +283,7 @@ const handleSaveAllData = (datawater: any) => {
     datawater.map(async (item: any) => {
         await editDataWater({ data: item });
     });
-    notification({ message: MESSAGES.EDIT_SUCCESS });
+    notification({ message: MESSAGES.SAVE_SUCCESS });
 };
 const PowerOnly = () => {
     const [formSearch] = Form.useForm();
