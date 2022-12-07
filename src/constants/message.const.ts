@@ -10,5 +10,6 @@ enum MESSAGES {
     CHANGE_ROOM = 'Bạn đổi phòng thành công',
     PAY_HOSTEL = 'Trả phòng thành công',
     PASSWORD_SUCCESS = 'Thay đổi mật khẩu thành công',
+    PAY_ERR = 'Thanh toán thất bại',
 }
 export { MESSAGES };
