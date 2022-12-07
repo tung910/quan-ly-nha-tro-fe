@@ -11,7 +11,6 @@ import {
     Row,
     Select,
     Table,
-    message,
 } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import classNames from 'classnames/bind';
@@ -26,7 +25,6 @@ import { MESSAGES } from '~/constants/message.const';
 import { IDataPower } from '~/types/DataPower.type';
 import { MotelType } from '~/types/MotelType';
 import { generatePriceToVND } from '~/utils/helper';
-
 import styles from './DataPower.module.scss';
 
 const cx = classNames.bind(styles);
@@ -214,7 +212,7 @@ const ColumnsDataPower: (ColumnTypes[number] & {
                         icon={<SaveOutlined />}
                         onClick={() => handleSubmitData(record)}
                     >
-                        Lưu
+                        Sửa
                     </Button>
                 </>
             );
@@ -253,7 +251,7 @@ const handSubmitData = async (record: any) => {
         price: record.price,
     };
     await editDataPower({ data: tempData });
-    notification({ message: MESSAGES.EDIT_SUCCESS });
+    notification({ message: MESSAGES.SAVE_SUCCESS });
 };
 
 function handleSaveAll(dataPower: any) {
@@ -285,7 +283,7 @@ const handleSaveAllData = (dataPower: any) => {
     dataPower.map(async (item: any) => {
         await editDataPower({ data: item });
     });
-    notification({ message: MESSAGES.EDIT_SUCCESS });
+    notification({ message: MESSAGES.SAVE_SUCCESS });
 };
 const PowerOnly = () => {
     const [formSearch] = Form.useForm();
@@ -463,7 +461,6 @@ const PowerOnly = () => {
                                 >
                                     Xem
                                 </Button>
-                                ,
                             </Form.Item>
                         </Col>
                     </Row>
