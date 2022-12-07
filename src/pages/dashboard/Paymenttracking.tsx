@@ -1,7 +1,7 @@
 import { Card, DatePicker, Form, Row } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import Table from '~/components/table';
 import { DateFormat } from '~/constants/const';
 import { generatePriceToVND } from '~/utils/helper';
@@ -50,26 +50,35 @@ const PaymentTracking = ({ newDataPaymentChecking, setDate }: Props) => {
             },
         },
     ];
+
     return (
         <div>
             <Card title='Theo dõi thanh toán' bordered={true}>
                 <Row gutter={[8, 8]}>
-                    <Form.Item label={<>Tháng/Năm</>} colon={false} name='date'>
-                        <DatePicker
-                            picker='month'
-                            onChange={(e: any) =>
-                                setDate(moment(e).format(DateFormat.DATE_M_Y))
-                            }
-                            defaultValue={moment()}
-                            clearIcon={null}
-                            format={DateFormat.DATE_M_Y}
-                        />
-                    </Form.Item>
+                    <Form>
+                        <Form.Item
+                            label={<>Tháng/Năm</>}
+                            colon={false}
+                            name='date'
+                            initialValue={moment()}
+                        >
+                            <DatePicker
+                                picker='month'
+                                onChange={(e: any) =>
+                                    setDate(
+                                        moment(e).format(DateFormat.DATE_M_Y)
+                                    )
+                                }
+                                clearIcon={null}
+                                format={DateFormat.DATE_M_Y}
+                            />
+                        </Form.Item>
+                    </Form>
                 </Row>
                 <Table
                     dataSource={dataSource}
                     columns={columnsPaymentTracking}
-                    rowKey='key'
+                    rowKey='title'
                 />
             </Card>
         </div>

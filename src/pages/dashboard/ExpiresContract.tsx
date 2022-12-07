@@ -34,7 +34,7 @@ const ExpiresContract = () => {
                 <Table
                     dataSource={dataSource}
                     columns={columnsExpiresContract}
-                    rowKey='key'
+                    rowKey='_id'
                 />
             </Card>
         </div>
