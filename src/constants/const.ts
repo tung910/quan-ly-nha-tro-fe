@@ -19,6 +19,7 @@ enum NotificationType {
     SUCCESS = 'success',
     INFO = 'info',
     WARNING = 'warning',
+    ERROR = 'error',
 }
 
 const BASE_IMG =
