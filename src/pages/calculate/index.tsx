@@ -1,6 +1,5 @@
 import {
     CalculatorOutlined,
-    DeleteOutlined,
     DollarCircleOutlined,
     EyeOutlined,
     PrinterOutlined,
@@ -27,9 +26,8 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-    CalculatorMoneyAll,
     calculatorMoney,
-    deleteCalculator,
+    CalculatorMoneyAll,
     getCalculator,
     listCalculator,
     paymentMoney,
@@ -42,11 +40,9 @@ import { revenueStatistics } from '~/api/revenue-statistics.api';
 import { getRoom, getRooms } from '~/api/room.api';
 import notification from '~/components/notification';
 import { DateFormat } from '~/constants/const';
-import { MESSAGES } from '~/constants/message.const';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { generatePriceToVND } from '~/utils/helper';
-
 import styles from './Calculate.module.scss';
 
 const cx = classNames.bind(styles);
@@ -97,14 +93,6 @@ const Calculate = () => {
                             }}
                             disabled={+item?.remainAmount === 0 ? true : false}
                             title='Nhập số tiền đã thu'
-                        />
-                        <Button
-                            htmlType='submit'
-                            icon={<DeleteOutlined />}
-                            onClick={() => handleDelete(id)}
-                            title='Xóa'
-                            disabled={+item?.remainAmount === 0 ? true : false}
-                            danger
                         />
                     </Space>
                 );
@@ -328,21 +316,6 @@ const Calculate = () => {
             setCalculators(data);
         };
         calculatorData();
-    };
-    const handleDelete = async (id: string) => {
-        Modal.confirm({
-            centered: true,
-            title: `Bạn có đồng ý xóa không ?`,
-            cancelText: 'Cancel',
-            okText: 'Xóa',
-            onOk: async () => {
-                await deleteCalculator(id);
-                setCalculators(
-                    calculators.filter((item: any) => item._id !== id)
-                );
-                notification({ message: MESSAGES.DEL_SUCCESS });
-            },
-        });
     };
 
     useEffect(() => {

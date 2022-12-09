@@ -1,7 +1,6 @@
 import {
     CheckOutlined,
     CloseOutlined,
-    DeleteOutlined,
     EditOutlined,
     FileExcelOutlined,
     PlusOutlined,
@@ -18,7 +17,6 @@ import {
     Select,
     Space,
     Tooltip,
-    message,
 } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import classNames from 'classnames/bind';
@@ -26,7 +24,6 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-    deleteRoomDeposit,
     listSearchRoomDeposit,
     updateStatusRoomDeposit,
 } from '~/api/booking.api';
@@ -40,7 +37,6 @@ import { IBooking } from '~/types/Booking.type';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { convertDate, generatePriceToVND } from '~/utils/helper';
-
 import styles from './Booking.module.scss';
 
 const cx = classNames.bind(styles);
@@ -74,15 +70,6 @@ const BookingRoomDeposit = () => {
                                     disabled={isDeposit(record)}
                                 ></Button>
                             </Link>
-                        </Tooltip>
-                        <Tooltip title='Xóa phòng'>
-                            <Button
-                                icon={<DeleteOutlined />}
-                                type='dashed'
-                                danger
-                                onClick={() => handleDelete(id)}
-                                disabled={isDeposit(record)}
-                            ></Button>
                         </Tooltip>
                     </Space>
                 );
@@ -191,20 +178,6 @@ const BookingRoomDeposit = () => {
         handleFetchData();
     }, []);
 
-    const handleDelete = (id: string) => {
-        Modal.confirm({
-            centered: true,
-            title: `Bạn có đồng ý xóa không ?`,
-            cancelText: 'Cancel',
-            okText: 'Lưu',
-            onOk: async () => {
-                await deleteRoomDeposit(id);
-                setdataSource(dataSource.filter((item) => item._id !== id));
-                message.success(MESSAGES.DEL_SUCCESS);
-            },
-        });
-    };
-
     const handleCheckIn = (record: IBooking) => {
         if (record) {
             const newDate = {
@@ -280,6 +253,7 @@ const BookingRoomDeposit = () => {
                     };
                     await updateStatusRoomDeposit(record._id, value);
                     await onSave();
+                    notification({ message: MESSAGES.CANCEL_SUCCESS });
                 },
             });
         }
