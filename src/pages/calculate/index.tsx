@@ -646,8 +646,15 @@ const Calculate = () => {
                                         {item.dataPowerID.useValue} kWh/số
                                     </p>
                                     <p>
-                                        4.sử dụng nước:{' '}
+                                        4.Sử dụng nước:{' '}
                                         {item.dataWaterID.useValue} khối
+                                    </p>
+                                    <p>
+                                        5.Tiền nợ tháng trước:{' '}
+                                        {generatePriceToVND(
+                                            +item.previousRemain
+                                        )}{' '}
+                                        VND
                                     </p>
                                     <hr />
                                     <p>
