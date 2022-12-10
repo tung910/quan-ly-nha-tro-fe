@@ -102,7 +102,7 @@ const History = () => {
     const handlePayment = async (payment: any) => {
         dispatch(setIsLoading(true));
         const value = {
-            amount: +payment.totalAmount,
+            amount: +payment.totalAmount / 100,
             bankCode: '',
             orderInfo: `${payment.motelRoomId.roomName} thanh toán tiến trọ tháng ${payment.month}/${payment.year} với mã thanh toán=${payment._id} `,
             orderType: 'billpayment',
