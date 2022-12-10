@@ -106,7 +106,7 @@ const AddEditBooking = () => {
             goBack();
             return;
         } catch (error: any) {
-            message.error(error.messages);
+            // message.error(error.messages);
         }
     };
 
