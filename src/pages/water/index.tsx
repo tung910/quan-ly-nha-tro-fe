@@ -1,10 +1,14 @@
-import { CheckOutlined, SaveOutlined, SearchOutlined } from '@ant-design/icons';
+import {
+    CheckOutlined,
+    DollarCircleOutlined,
+    SaveOutlined,
+    SearchOutlined,
+} from '@ant-design/icons';
 import {
     Button,
     Col,
     DatePicker,
     Form,
-    Input,
     InputNumber,
     Modal,
     PageHeader,
@@ -19,9 +23,11 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { editDataWater, listDataWater } from '~/api/data-water.api';
 import { getAllMotel } from '~/api/motel.api';
 import { getStatisticalRoomStatus } from '~/api/room.api';
+import { useAppDispatch } from '~/app/hooks';
 import notification from '~/components/notification';
 import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
+import { setIsLoading } from '~/feature/service/appSlice';
 import { IDataWater } from '~/types/DataWater.type';
 import { MotelType } from '~/types/MotelType';
 import { generatePriceToVND } from '~/utils/helper';
@@ -29,7 +35,6 @@ import styles from './Water.module.scss';
 
 const cx = classNames.bind(styles);
 const { Option } = Select;
-const dateFormat = 'MM/YYYY';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 interface EditableRowProps {
@@ -190,15 +195,8 @@ const ColumnsDataWater: (ColumnTypes[number] & {
         title: 'Giá tiền',
         dataIndex: 'price',
         key: 'price',
-        render: (price) => {
-            return (
-                <>
-                    <Input
-                        style={{ width: 100 }}
-                        value={generatePriceToVND(price)}
-                    />
-                </>
-            );
+        render: (price: any) => {
+            return generatePriceToVND(+price);
         },
     },
     {
@@ -249,6 +247,7 @@ const handSubmitData = async (record: any) => {
         oldValue: record.oldValue,
         newValue: record.newValue,
         useValue: record.useValue,
+        price: record.price,
     };
     await editDataWater({ data: tempData });
     notification({ message: MESSAGES.SAVE_SUCCESS });
@@ -287,9 +286,13 @@ const handleSaveAllData = (datawater: any) => {
 };
 const PowerOnly = () => {
     const [formSearch] = Form.useForm();
+    const [formPayment] = Form.useForm();
+
     const [dataWater, setDataWater] = useState<IDataWater[]>([]);
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listStatusRoom, setListStatusRoom] = useState([]);
+    const [showModalPrice, setshowModalPrice] = useState(false);
+    const dispatch = useAppDispatch();
     const thisMonth = moment(new Date()).format('MM');
 
     useEffect(() => {
@@ -308,6 +311,7 @@ const PowerOnly = () => {
         };
         handleGetData();
     }, []);
+
     useEffect(() => {
         const listMotelRoom = async () => {
             const { data } = await listDataWater({ month: thisMonth });
@@ -315,6 +319,41 @@ const PowerOnly = () => {
         };
         listMotelRoom();
     }, [thisMonth]);
+
+    const onUpdatePrice = async (values: any) => {
+        Modal.confirm({
+            centered: true,
+            title: `Bạn có đồng ý lưu giá tiền nước không ?`,
+            cancelText: 'Cancel',
+            okText: 'Lưu',
+            onOk: () => confirmSubmit(values),
+        });
+    };
+
+    const confirmSubmit = async (values: any) => {
+        dispatch(setIsLoading(true));
+
+        await editDataWater({
+            data: {
+                _id: 1,
+                price: values.price,
+                isUpdatePrice: true,
+            },
+        });
+
+        const result = dataWater.map((item) => {
+            return {
+                ...item,
+                price: values.price,
+            };
+        });
+        setDataWater(result);
+
+        formPayment.resetFields();
+        setshowModalPrice(false);
+        dispatch(setIsLoading(false));
+        notification({ message: MESSAGES.EDIT_SUCCESS });
+    };
 
     const handleSave = (row: IDataWater) => {
         const newData = [...dataWater];
@@ -326,6 +365,7 @@ const PowerOnly = () => {
         });
         setDataWater(newData);
     };
+
     const onSearch = (values: any) => {
         const calculatorData = async () => {
             const { data } = await listDataWater({
@@ -336,6 +376,7 @@ const PowerOnly = () => {
         };
         calculatorData();
     };
+
     const components = {
         body: {
             row: EditableRow,
@@ -459,7 +500,15 @@ const PowerOnly = () => {
                                 >
                                     Xem
                                 </Button>
-                                ,
+                                <Button
+                                    type='primary'
+                                    htmlType='submit'
+                                    icon={<DollarCircleOutlined />}
+                                    style={{ marginLeft: 10 }}
+                                    onClick={() => setshowModalPrice(true)}
+                                >
+                                    Sửa giá tiền
+                                </Button>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -467,6 +516,10 @@ const PowerOnly = () => {
             </div>
 
             <div>
+                <i>
+                    (*) Giá tiền nước sinh hoạt cố định là{' '}
+                    {generatePriceToVND(dataWater[0]?.price)} đồng/khối
+                </i>
                 <Table
                     components={components}
                     dataSource={dataWater}
@@ -474,6 +527,52 @@ const PowerOnly = () => {
                     rowKey='_id'
                     pagination={{ pageSize: 8 }}
                 />
+
+                <div>
+                    <Modal
+                        title='Giá tiền nước'
+                        open={showModalPrice}
+                        onCancel={() => setshowModalPrice(false)}
+                        onOk={formPayment.submit}
+                    >
+                        <>
+                            <Form
+                                form={formPayment}
+                                onFinish={onUpdatePrice}
+                                autoComplete='off'
+                                labelCol={{ span: 5 }}
+                            >
+                                <Form.Item
+                                    label={<>Giá tiền điện</>}
+                                    labelAlign='left'
+                                    name='price'
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Không được để trống',
+                                        },
+                                    ]}
+                                >
+                                    <InputNumber
+                                        style={{ width: '375px' }}
+                                        formatter={(value) =>
+                                            ` ${value}`.replace(
+                                                /\B(?=(\d{3})+(?!\d))/g,
+                                                ','
+                                            )
+                                        }
+                                        parser={(value: any) =>
+                                            value.replace(/\$\s?|(,*)/g, '')
+                                        }
+                                        addonAfter={'VND'}
+                                        maxLength={6}
+                                        min={0}
+                                    />
+                                </Form.Item>
+                            </Form>
+                        </>
+                    </Modal>
+                </div>
             </div>
         </div>
     );
