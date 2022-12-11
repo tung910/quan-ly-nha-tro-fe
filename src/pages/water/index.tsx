@@ -191,14 +191,7 @@ const ColumnsDataWater: (ColumnTypes[number] & {
         dataIndex: 'useValue',
         key: 'useValue',
     },
-    {
-        title: 'Giá tiền',
-        dataIndex: 'price',
-        key: 'price',
-        render: (price: any) => {
-            return generatePriceToVND(+price);
-        },
-    },
+
     {
         title: '',
         dataIndex: 'recond',
