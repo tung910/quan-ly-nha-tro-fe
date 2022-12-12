@@ -1,10 +1,14 @@
-import { CheckOutlined, SaveOutlined, SearchOutlined } from '@ant-design/icons';
+import {
+    CheckOutlined,
+    DollarCircleOutlined,
+    SaveOutlined,
+    SearchOutlined,
+} from '@ant-design/icons';
 import {
     Button,
     Col,
     DatePicker,
     Form,
-    Input,
     InputNumber,
     Modal,
     PageHeader,
@@ -19,9 +23,11 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { editDataPower, listDataPower } from '~/api/data-power.api';
 import { getAllMotel } from '~/api/motel.api';
 import { getStatisticalRoomStatus } from '~/api/room.api';
+import { useAppDispatch } from '~/app/hooks';
 import notification from '~/components/notification';
 import { DateFormat } from '~/constants/const';
 import { MESSAGES } from '~/constants/message.const';
+import { setIsLoading } from '~/feature/service/appSlice';
 import { IDataPower } from '~/types/DataPower.type';
 import { MotelType } from '~/types/MotelType';
 import { generatePriceToVND } from '~/utils/helper';
@@ -186,21 +192,6 @@ const ColumnsDataPower: (ColumnTypes[number] & {
         key: 'useValue',
     },
     {
-        title: 'Giá tiền',
-        dataIndex: 'price',
-        key: 'price',
-        render: (price) => {
-            return (
-                <>
-                    <Input
-                        style={{ width: 100 }}
-                        value={generatePriceToVND(price)}
-                    />
-                </>
-            );
-        },
-    },
-    {
         title: '',
         dataIndex: 'recond',
         render: (text, record) => {
@@ -285,12 +276,17 @@ const handleSaveAllData = (dataPower: any) => {
     });
     notification({ message: MESSAGES.SAVE_SUCCESS });
 };
+
 const PowerOnly = () => {
     const [formSearch] = Form.useForm();
+    const [formPayment] = Form.useForm();
 
     const [dataPower, setDataPower] = useState<IDataPower[]>([]);
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listStatusRoom, setListStatusRoom] = useState([]);
+    const [showModalPrice, setshowModalPrice] = useState(false);
+    const dispatch = useAppDispatch();
+
     const thisMonth = moment(new Date()).format('MM');
 
     useEffect(() => {
@@ -309,6 +305,7 @@ const PowerOnly = () => {
         };
         handleGetData();
     }, []);
+
     useEffect(() => {
         const listMotelRoom = async () => {
             const { data } = await listDataPower({ month: thisMonth });
@@ -316,6 +313,41 @@ const PowerOnly = () => {
         };
         listMotelRoom();
     }, [thisMonth]);
+
+    const onUpdatePrice = (values: any) => {
+        Modal.confirm({
+            centered: true,
+            title: `Bạn có đồng ý lưu giá tiền điện không ?`,
+            cancelText: 'Cancel',
+            okText: 'Lưu',
+            onOk: () => confirmSubmit(values),
+        });
+    };
+
+    const confirmSubmit = async (values: any) => {
+        dispatch(setIsLoading(true));
+
+        await editDataPower({
+            data: {
+                _id: 1,
+                price: values.price,
+                isUpdatePrice: true,
+            },
+        });
+
+        const result = dataPower.map((item) => {
+            return {
+                ...item,
+                price: values.price,
+            };
+        });
+        setDataPower(result);
+
+        formPayment.resetFields();
+        setshowModalPrice(false);
+        dispatch(setIsLoading(false));
+        notification({ message: MESSAGES.EDIT_SUCCESS });
+    };
 
     const handleSave = (row: IDataPower) => {
         const newData = [...dataPower];
@@ -327,6 +359,7 @@ const PowerOnly = () => {
         });
         setDataPower(newData);
     };
+
     const onSearch = (values: any) => {
         const calculatorData = async () => {
             const { data } = await listDataPower({
@@ -367,9 +400,6 @@ const PowerOnly = () => {
                     className={cx('header-top')}
                     title='Chỉ số điện'
                     extra={[
-                        <Button icon={<SearchOutlined />} key={1}>
-                            Xem
-                        </Button>,
                         <Button
                             onClick={() => handleSaveAll(dataPower)}
                             type='primary'
@@ -461,6 +491,15 @@ const PowerOnly = () => {
                                 >
                                     Xem
                                 </Button>
+                                <Button
+                                    type='primary'
+                                    htmlType='submit'
+                                    icon={<DollarCircleOutlined />}
+                                    style={{ marginLeft: 10 }}
+                                    onClick={() => setshowModalPrice(true)}
+                                >
+                                    Sửa giá tiền
+                                </Button>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -468,6 +507,10 @@ const PowerOnly = () => {
             </div>
 
             <div>
+                <i>
+                    (*) Giá tiền điện sinh hoạt cố định là{' '}
+                    {generatePriceToVND(dataPower[0]?.price)} đồng/kWh
+                </i>
                 <Table
                     components={components}
                     dataSource={dataPower}
@@ -475,6 +518,53 @@ const PowerOnly = () => {
                     rowKey='_id'
                     pagination={{ pageSize: 10 }}
                 />
+                <div>
+                    <Modal
+                        title='Giá tiền điện'
+                        open={showModalPrice}
+                        onCancel={() => {
+                            setshowModalPrice(false), formPayment.resetFields();
+                        }}
+                        onOk={formPayment.submit}
+                    >
+                        <>
+                            <Form
+                                form={formPayment}
+                                onFinish={onUpdatePrice}
+                                autoComplete='off'
+                                labelCol={{ span: 5 }}
+                            >
+                                <Form.Item
+                                    label={<>Giá tiền điện</>}
+                                    labelAlign='left'
+                                    name='price'
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Không được để trống',
+                                        },
+                                    ]}
+                                >
+                                    <InputNumber
+                                        style={{ width: '375px' }}
+                                        formatter={(value) =>
+                                            ` ${value}`.replace(
+                                                /\B(?=(\d{3})+(?!\d))/g,
+                                                ','
+                                            )
+                                        }
+                                        parser={(value: any) =>
+                                            value.replace(/\$\s?|(,*)/g, '')
+                                        }
+                                        addonAfter={'VND'}
+                                        maxLength={6}
+                                        min={0}
+                                    />
+                                </Form.Item>
+                            </Form>
+                        </>
+                    </Modal>
+                </div>
             </div>
         </div>
     );
