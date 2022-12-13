@@ -45,7 +45,7 @@ const EditMotel = () => {
             form.setFieldsValue(data);
         };
         readMotel();
-    }, []);
+    }, [id]);
 
     // provice render
     const handleChangeProvince = async (code: any) => {

@@ -74,8 +74,15 @@ const AddMotel = () => {
             dataWard.data.name +
             ', ' +
             values.address;
+
         try {
-            await addMotel({ ...values, address: dataAddress });
+            await addMotel({
+                ...values,
+                province: dataProvince.data.name,
+                district: dataDistrict.data.name,
+                commune: dataWard.data.name,
+                address: dataAddress,
+            });
             notification({ message: MESSAGES.ADD_SUCCESS });
             navigate('/motel-room');
         } catch (error) {
