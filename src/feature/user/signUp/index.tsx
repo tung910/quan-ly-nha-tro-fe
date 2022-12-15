@@ -4,6 +4,8 @@ import { notification } from 'antd';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { signUp, verifyOtp } from '~/api/auth.api';
+import { useAppDispatch } from '~/app/hooks';
+import { setIsLoading } from '~/feature/service/appSlice';
 import { IUser } from '~/types/User.type';
 
 import styles from './signUp.module.scss';
@@ -14,8 +16,10 @@ const SignUpPage = () => {
         handleSubmit,
         formState: { errors },
     } = useForm();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const onSubmit: SubmitHandler<any> = async (data: IUser) => {
+        dispatch(setIsLoading(true));
         try {
             await signUp(data);
             const otp = prompt(
@@ -25,16 +29,14 @@ const SignUpPage = () => {
                 return;
             }
             await verifyOtp({ email: data.email, otp });
+            dispatch(setIsLoading(false));
             await notification.open({
                 message: 'Đăng ký tài khoản thành công',
                 icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />,
             });
             navigate('/login');
         } catch (error: any) {
-            return notification.error({
-                message: error.messages || 'Some error',
-                icon: <CheckCircleOutlined style={{ color: '#fe0000' }} />,
-            });
+            dispatch(setIsLoading(false));
         }
     };
     return (
