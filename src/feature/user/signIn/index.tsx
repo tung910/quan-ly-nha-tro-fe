@@ -2,6 +2,7 @@ import { notification } from 'antd';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '~/app/hooks';
+import { setIsLoading } from '~/feature/service/appSlice';
 import { IUser } from '~/types/User.type';
 
 import { signIn } from '../userSlice';
@@ -16,22 +17,20 @@ const LoginPage = () => {
     } = useForm();
     const navidate = useNavigate();
     const onSubmit: SubmitHandler<any> = async (data: IUser) => {
+        dispatch(setIsLoading(true));
         try {
+            let url = '/';
             const a = await dispatch(signIn(data)).unwrap();
             if (a.user.role === 0) {
-                await notification.success({
-                    message: 'Đăng nhập thành công',
-                });
-                return navidate('/user/motel-room');
+                url = '/user/motel-room';
             }
             await notification.success({
                 message: 'Đăng nhập thành công',
             });
-            return navidate('/');
+            dispatch(setIsLoading(false));
+            return navidate(url);
         } catch (error: any) {
-            return notification.error({
-                message: error.messages || 'Some error',
-            });
+            dispatch(setIsLoading(false));
         }
     };
     return (
