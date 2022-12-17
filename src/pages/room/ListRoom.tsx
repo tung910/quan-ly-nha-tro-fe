@@ -237,9 +237,21 @@ const ListRoom = ({ motelId }: Props) => {
             },
         },
         {
-            title: 'Số lượng khách',
+            title: 'Số người tối đa',
             dataIndex: 'maxPerson',
             key: 'maxPerson',
+        },
+        {
+            title: 'Số người đang thuê',
+            dataIndex: 'maxPerson',
+            key: 'maxPerson',
+            render: (_, item: any) => {
+                return item.roomRentID ? (
+                    item?.roomRentID.member.length + 1
+                ) : (
+                    <i>N/A</i>
+                );
+            },
         },
         {
             title: 'Giá phòng',
