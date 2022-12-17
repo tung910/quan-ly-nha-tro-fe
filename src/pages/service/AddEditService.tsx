@@ -1,7 +1,6 @@
 import { RollbackOutlined, SaveOutlined } from '@ant-design/icons';
 import {
     Button,
-    Checkbox,
     Col,
     Form,
     Input,
@@ -9,7 +8,6 @@ import {
     PageHeader,
     Row,
     Select,
-    message,
 } from 'antd';
 import { useEffect } from 'react';
 import { getServiceAPI } from '~/api/service.api';
@@ -177,18 +175,20 @@ const AddEditService = () => {
                                         ','
                                     )
                                 }
-                                parser={(value) =>
-                                    ` ${value}`.replace(/\$\s?|(,*)/g, '')
+                                parser={(value: any) =>
+                                    value.replace(/\$\s?|(,*)/g, '')
                                 }
                                 addonAfter='VNĐ'
                                 style={{ width: 380 }}
+                                maxLength={8}
+                                min={0}
                             />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item name='isActive' valuePropName='checked'>
+                        {/* <Form.Item name='isActive' valuePropName='checked'>
                             <Checkbox checked={true}>Sử dụng</Checkbox>
-                        </Form.Item>
+                        </Form.Item> */}
                     </Col>
                 </Row>
                 <Row>

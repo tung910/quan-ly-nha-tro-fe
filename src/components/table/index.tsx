@@ -15,6 +15,7 @@ interface Props {
     components?: any;
     passProps?: any;
     style?: any;
+    loading?: boolean;
 }
 
 const Table = (props: Props) => {

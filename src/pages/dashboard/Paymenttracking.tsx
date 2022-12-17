@@ -1,7 +1,7 @@
 import { Card, DatePicker, Form, Row } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
-import { useEffect, useId, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import Table from '~/components/table';
 import { DateFormat } from '~/constants/const';
 import { generatePriceToVND } from '~/utils/helper';
@@ -85,4 +85,4 @@ const PaymentTracking = ({ newDataPaymentChecking, setDate }: Props) => {
     );
 };
 
-export default PaymentTracking;
+export default memo(PaymentTracking);

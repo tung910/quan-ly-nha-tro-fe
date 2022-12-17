@@ -1,6 +1,6 @@
 import { Card } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import Table from '~/components/table';
 import { generatePriceToVND } from '~/utils/helper';
 
@@ -66,4 +66,4 @@ const OweRoomFees = ({ dataOwe }: Props) => {
     );
 };
 
-export default OweRoomFees;
+export default memo(OweRoomFees);

@@ -271,7 +271,7 @@ const handleSaveAllData = (dataPower: any) => {
 const PowerOnly = () => {
     const [formSearch] = Form.useForm();
     const [formPayment] = Form.useForm();
-
+    const [loading, setLoading] = useState(true);
     const [dataPower, setDataPower] = useState<IDataPower[]>([]);
     const [listNameMotel, setListNameMotel] = useState<MotelType[]>([]);
     const [listStatusRoom, setListStatusRoom] = useState([]);
@@ -301,6 +301,7 @@ const PowerOnly = () => {
         const listMotelRoom = async () => {
             const { data } = await listDataPower({ month: thisMonth });
             setDataPower(data);
+            setLoading(false);
         };
         listMotelRoom();
     }, [thisMonth]);
@@ -508,6 +509,7 @@ const PowerOnly = () => {
                     columns={columns as ColumnTypes}
                     rowKey='_id'
                     pagination={{ pageSize: 10 }}
+                    loading={loading}
                 />
                 <div>
                     <Modal
