@@ -5,12 +5,10 @@ import {
     DatePicker,
     Form,
     Input,
-    InputNumber,
-    Row,
+    InputNumber, message, Row,
     Select,
     Upload,
-    UploadProps,
-    message,
+    UploadProps
 } from 'antd';
 import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload';
 import classNames from 'classnames/bind';
@@ -22,7 +20,7 @@ import { getRoom } from '~/api/room.api';
 import { useAppDispatch } from '~/app/hooks';
 import { DateFormat } from '~/constants/const';
 import { setIsLoading } from '~/feature/service/appSlice';
-import { convertDate, useGetParam } from '~/utils/helper';
+import { useGetParam } from '~/utils/helper';
 
 import styles from './FormCreate.module.scss';
 
@@ -482,11 +480,12 @@ const FormCreate = ({
             <Row>
                 <Col span={8}>
                     <Form.Item
-                        label={<>Số xe</>}
+                        label={<>Biển số xe</>}
                         colon={false}
                         labelAlign='left'
+                        name='licensePlates'
                     >
-                        <Input style={{ width: 400 }} />
+                        <Input style={{ width: 400 }} maxLength={9}/>
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>
