@@ -12,11 +12,11 @@ import {
     DatePicker,
     Form,
     Image,
+    message,
     Modal,
     Select,
     Space,
     Tooltip,
-    message,
 } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import classNames from 'classnames/bind';
@@ -35,7 +35,6 @@ import { setIsLoading } from '~/feature/service/appSlice';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { convertDate, generatePriceToVND } from '~/utils/helper';
-
 import styles from './ListRoom.module.scss';
 
 export interface Props {
@@ -176,11 +175,11 @@ const ListRoom = ({ motelId }: Props) => {
 
         return result;
     };
-    const columns: ColumnsType<object> | undefined = [
+    const columns: ColumnsType[number][] = [
         {
             title: '',
             dataIndex: '_id',
-            render: (id) => {
+            render: (id, item: any) => {
                 return (
                     <Space>
                         <Tooltip title='Sửa phòng'>
@@ -196,6 +195,7 @@ const ListRoom = ({ motelId }: Props) => {
                                 type='primary'
                                 danger
                                 icon={<DeleteOutlined />}
+                                disabled={item.isRent}
                                 onClick={() => onRemove(id)}
                             ></Button>
                         </Tooltip>
