@@ -1,0 +1,26 @@
+export type TypeCustomer = {
+    _id?: string;
+    customerName: string;
+    citizenIdentification: number;
+    dateRange: string;
+    phone: string;
+    issuedBy: string;
+    address: string;
+    gender: number;
+    email: string;
+    dateOfBirth: string;
+    birthPlace: string;
+    licensePlates: string;
+    motelRoomID: string;
+    priceRoom: number;
+    startDate: string;
+    deposit: number;
+    payEachTime: number;
+    paymentPeriod: number;
+    roomName: string;
+    dateStart: string;
+    dateLate: string;
+    coinNumber: string;
+    timeCoin: string;
+    lateDate: string;
+};

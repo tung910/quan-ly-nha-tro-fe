@@ -1,38 +1,84 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import './App.css';
+import { Spin } from 'antd';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+
+import { useAppSelector } from './app/hooks';
+import { appSelector } from './feature/service/appSlice';
+import SignIn from './feature/user/signIn';
+import SignUpPage from './feature/user/signUp';
+import MainLayout from './layout/main-layout';
+import ExportPdf from './pages/export-pdf';
+import Invoice from './pages/invoice-print';
+import routes, { routesUser } from './routes';
 
 function App() {
-    const [count, setCount] = useState(0);
-
+    const state = useAppSelector((state) => appSelector(state));
+    const user = useAppSelector((state: any) => {
+        return state.user.user;
+    });
     return (
-        <div className='App'>
-            <div>
-                <a href='https://vitejs.dev' target='_blank' rel='noreferrer'>
-                    <img src='/vite.svg' className='logo' alt='Vite logo' />
-                </a>
-                <a href='https://reactjs.org' target='_blank' rel='noreferrer'>
-                    <img
-                        src={reactLogo}
-                        className='logo react'
-                        alt='React logo'
-                    />
-                </a>
-            </div>
-            <h1>Vite + React</h1>
-            <div className='card'>
-                <button onClick={() => setCount((count) => count + 1)}>
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
-            </div>
-            <p className='read-the-docs'>
-                Click on the Vite and React logos to learn more
-            </p>
-        </div>
+        <Spin spinning={state.isLoading}>
+            <BrowserRouter>
+                <Routes>
+                    <Route path='/'>
+                        <Route path='/sign-up' element={<SignUpPage />} />
+                        <Route path='/login' element={<SignIn />} />
+                        <Route path='/export-pdf' element={<ExportPdf />} />
+                        <Route path='/invoice-print' element={<Invoice />} />
+
+                        <Route
+                            path='/'
+                            element={
+                                +user.role === 1 ? (
+                                    <MainLayout />
+                                ) : (
+                                    <Navigate to='/login' />
+                                )
+                            }
+                        >
+                            {routes.map((item, index) => {
+                                let Comp;
+                                if (item.component) {
+                                    Comp = item.component;
+                                }
+
+                                return (
+                                    <Route
+                                        key={index}
+                                        path={item.path}
+                                        element={<Comp />}
+                                    ></Route>
+                                );
+                            })}
+                        </Route>
+                        <Route
+                            path='/user'
+                            element={
+                                +user.role === 0 ? (
+                                    <MainLayout />
+                                ) : (
+                                    <Navigate to='/login' />
+                                )
+                            }
+                        >
+                            {routesUser.map((item, index) => {
+                                let Comp;
+                                if (item.component) {
+                                    Comp = item.component;
+                                }
+
+                                return (
+                                    <Route
+                                        key={index}
+                                        path={item.path}
+                                        element={<Comp />}
+                                    ></Route>
+                                );
+                            })}
+                        </Route>
+                    </Route>
+                </Routes>
+            </BrowserRouter>
+        </Spin>
     );
 }
-
 export default App;

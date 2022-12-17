@@ -16,9 +16,9 @@ yarn install
 -   Format code
 
 ```bash
-npm run format
+npm run beautiful
 # or
-yarn format
+yarn beautiful
 ```
 
 -   Check format code
@@ -43,6 +43,14 @@ yarn check:types
 npm run check:lint
 # or
 yarn check:lint
+```
+
+-   Format code
+
+```bash
+npm run format
+# or
+yarn run format
 ```
 
 ## 😎Front-end Support

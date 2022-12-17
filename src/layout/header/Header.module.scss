@@ -1,0 +1,29 @@
+.header {
+    background: #fff !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.trigger {
+    padding: 0 24px;
+    font-size: 18px;
+    line-height: 64px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.trigger:hover {
+    color: #1890ff;
+}
+
+.noti {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    .description {
+        color: #00000073;
+        font-size: 14px;
+        line-height: 1.5715;
+        display: inline;
+    }
+}

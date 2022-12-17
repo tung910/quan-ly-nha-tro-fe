@@ -1,0 +1,24 @@
+@import 'antd/dist/antd.css';
+
+a[href] {
+    color: #fff;
+}
+
+.d-flex {
+    display: flex;
+    &.-justify-space-between {
+        justify-content: space-between;
+    }
+}
+.w-full {
+    width: 100%;
+}
+.ant-spin-blur {
+    height: 100vh;
+    overflow-y: hidden;
+}
+.img-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
