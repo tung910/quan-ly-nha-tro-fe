@@ -72,13 +72,13 @@ const LoginPage = () => {
                         Đăng nhập
                     </button>
                     <div className={styles['signup_link']}>
-                        Bạn chưa có tài khoản?{' '}
+                        {/*  Bạn chưa có tài khoản?{' '}
                         <Link
                             to='/sign-up'
                             className={styles['signup_link-btn']}
                         >
                             Đăng kí
-                        </Link>
+                        </Link> */}
                     </div>
                 </form>
             </div>

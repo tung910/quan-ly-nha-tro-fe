@@ -31,6 +31,7 @@ import { setIsLoading } from '~/feature/service/appSlice';
 import { IDataWater } from '~/types/DataWater.type';
 import { MotelType } from '~/types/MotelType';
 import { generatePriceToVND } from '~/utils/helper';
+
 import styles from './Water.module.scss';
 
 const cx = classNames.bind(styles);
@@ -105,19 +106,9 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
     if (editable) {
         childNode = editing ? (
-            <Form.Item
-                style={{ margin: 0 }}
-                name={dataIndex}
-                rules={[
-                    {
-                        required: true,
-                        message: `${dataIndex} is required.`,
-                    },
-                ]}
-            >
+            <Form.Item style={{ margin: 0 }} name={dataIndex} initialValue={0}>
                 <InputNumber
                     min={0}
-                    max={999}
                     ref={inputRef}
                     onPressEnter={save}
                     onBlur={save}
@@ -399,9 +390,6 @@ const PowerOnly = () => {
                     className={cx('header-top')}
                     title='Chỉ số nước'
                     extra={[
-                        <Button icon={<SearchOutlined />} key={1}>
-                            Xem
-                        </Button>,
                         <Button
                             onClick={() => handleSaveAll(dataWater)}
                             type='primary'
@@ -536,7 +524,7 @@ const PowerOnly = () => {
                                 labelCol={{ span: 5 }}
                             >
                                 <Form.Item
-                                    label={<>Giá tiền điện</>}
+                                    label={<>Giá tiền nước</>}
                                     labelAlign='left'
                                     name='price'
                                     rules={[
@@ -558,7 +546,7 @@ const PowerOnly = () => {
                                             value.replace(/\$\s?|(,*)/g, '')
                                         }
                                         addonAfter={'VND'}
-                                        maxLength={6}
+                                        maxLength={8}
                                         min={0}
                                     />
                                 </Form.Item>
