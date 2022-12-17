@@ -31,6 +31,7 @@ import { setIsLoading } from '~/feature/service/appSlice';
 import { IDataPower } from '~/types/DataPower.type';
 import { MotelType } from '~/types/MotelType';
 import { generatePriceToVND } from '~/utils/helper';
+
 import styles from './DataPower.module.scss';
 
 const cx = classNames.bind(styles);
@@ -105,19 +106,9 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
     if (editable) {
         childNode = editing ? (
-            <Form.Item
-                style={{ margin: 0 }}
-                name={dataIndex}
-                rules={[
-                    {
-                        required: true,
-                        message: `${dataIndex} is required.`,
-                    },
-                ]}
-            >
+            <Form.Item style={{ margin: 0 }} name={dataIndex} initialValue={0}>
                 <InputNumber
                     min={0}
-                    max={999}
                     ref={inputRef}
                     onPressEnter={save}
                     onBlur={save}
