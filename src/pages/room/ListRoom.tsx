@@ -195,7 +195,7 @@ const ListRoom = ({ motelId }: Props) => {
                                 type='primary'
                                 danger
                                 icon={<DeleteOutlined />}
-                                disabled={item.customerName}
+                                disabled={item.isRent}
                                 onClick={() => onRemove(id)}
                             ></Button>
                         </Tooltip>
