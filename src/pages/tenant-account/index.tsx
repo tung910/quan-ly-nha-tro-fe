@@ -1,10 +1,9 @@
-import { KeyOutlined, LockOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Modal, PageHeader, Space, message } from 'antd';
+import { LockOutlined } from '@ant-design/icons';
+import { Button, Modal, PageHeader, Space } from 'antd';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
-import { changePassword, getAllAccount } from '~/api/auth.api';
+import { getAllAccount } from '~/api/auth.api';
 import Table from '~/components/table';
-import { MESSAGES } from '~/constants/message.const';
 
 import styles from './TenantAccount.module.scss';
 
@@ -13,10 +12,7 @@ type EditableTableProps = Parameters<typeof Table>[0];
 
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 const TenantAccount = () => {
-    const [form] = Form.useForm();
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [listAccount, setListAccount] = useState([]);
-    const [idAccount, setIdAccount] = useState<string>('');
     const ColumnsData: ColumnTypes[number][] = [
         {
             title: 'Nhà',

@@ -1,4 +1,4 @@
-import { Col, Form, Row } from 'antd';
+import { Col, Row } from 'antd';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -8,7 +8,9 @@ import {
     getPaymentChecking,
 } from '~/api/revenue-statistics.api';
 import { getStatisticalRoomStatus } from '~/api/room.api';
+import { useAppDispatch } from '~/app/hooks';
 import { DateFormat } from '~/constants/const';
+import { setIsLoading } from '~/feature/service/appSlice';
 import { IMonthlyRevenue, IStatistical } from '~/types/Statistical.type';
 
 import AvailableRooms from './AvailableRooms';
@@ -34,6 +36,7 @@ const initialSate = {
 };
 
 const Dashboard = () => {
+    const dispatch = useAppDispatch();
     const [state, setState] = useState<StateRoomStatus>({
         areRenting: null,
         emptyRooms: null,
@@ -42,7 +45,6 @@ const Dashboard = () => {
     const [monthYearMonthlyRevenue, setYearMonthlyRevenue] = useState(
         moment(Date()).format(DateFormat.DATE_Y)
     );
-
     const [payment, setPayment] = useState<any>({});
     const [dataOwe, setDataOwe] = useState<any>({});
     const [date, setDate] = useState(
@@ -59,6 +61,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         const handleGetData = async () => {
+            dispatch(setIsLoading(true));
             const res = await Promise.all([getStatisticalRoomStatus()]);
             const [statisticalRoomStatus] = res;
             const { data: statisticalRoomStatusValue } = statisticalRoomStatus;
@@ -68,6 +71,7 @@ const Dashboard = () => {
                 areRenting,
                 emptyRooms,
             });
+            dispatch(setIsLoading(false));
         };
         handleGetData();
     }, []);

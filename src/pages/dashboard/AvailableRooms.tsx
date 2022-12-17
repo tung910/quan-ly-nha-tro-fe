@@ -1,6 +1,6 @@
 import { Card } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import Table from '~/components/table';
 
 const columnsAvailableRooms: ColumnsType = [
@@ -40,4 +40,4 @@ const AvailableRooms = ({ roomStatus }: Props) => {
     );
 };
 
-export default AvailableRooms;
+export default memo(AvailableRooms);

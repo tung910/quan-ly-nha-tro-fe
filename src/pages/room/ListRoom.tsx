@@ -12,11 +12,11 @@ import {
     DatePicker,
     Form,
     Image,
-    message,
     Modal,
     Select,
     Space,
     Tooltip,
+    message,
 } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import classNames from 'classnames/bind';
@@ -35,6 +35,7 @@ import { setIsLoading } from '~/feature/service/appSlice';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { convertDate, generatePriceToVND } from '~/utils/helper';
+
 import styles from './ListRoom.module.scss';
 
 export interface Props {
@@ -47,7 +48,7 @@ const ListRoom = ({ motelId }: Props) => {
     const dispatch = useAppDispatch();
     const [rooms, setRooms] = useState<RoomType[]>([]);
     const [roomDeposit, setRoomDeposit] = useState<any>([]);
-
+    const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCheck, setIsCheck] = useState(true);
     const [isModalPayHostelOpen, setIsModalPayHostelOpen] = useState(false);
@@ -57,47 +58,47 @@ const ListRoom = ({ motelId }: Props) => {
     const [motelRoomID, setmotelRoomID] = useState<string>('');
 
     useEffect(() => {
-        const handleFetchData = async () => {
-            try {
+        if (motelId) {
+            (async () => {
                 dispatch(setIsLoading(true));
-                const [motels, rooms] = await Promise.all([
-                    getAllMotel(),
-                    getRooms(motelId),
-                ]);
-                setListNameMotel(motels.data);
-                setRooms(rooms.data);
+                try {
+                    const { data } = await getRooms(motelId);
+                    setRooms(data);
+                    setLoading(false);
+                } catch (error) {
+                    //
+                }
                 dispatch(setIsLoading(false));
-            } catch (error) {
-                // message.error(error);
-            }
-        };
-        handleFetchData();
+            })();
+        }
     }, [motelId]);
     useEffect(() => {
-        const handleFetchData = async () => {
+        (async () => {
+            dispatch(setIsLoading(true));
+            const search = {
+                data: {
+                    fromDate: convertDate(
+                        moment(new Date()).startOf('month'),
+                        DateFormat.DATE_M_D_Y
+                    ),
+                    toDate: convertDate(
+                        moment(new Date()).endOf('month'),
+                        DateFormat.DATE_M_D_Y
+                    ),
+                },
+            };
             try {
-                dispatch(setIsLoading(true));
-                const result = {
-                    data: {
-                        fromDate: convertDate(
-                            moment(new Date()).startOf('month'),
-                            DateFormat.DATE_M_D_Y
-                        ),
-                        toDate: convertDate(
-                            moment(new Date()).endOf('month'),
-                            DateFormat.DATE_M_D_Y
-                        ),
-                    },
-                };
-
-                const { data } = await listSearchRoomDeposit(result);
-                setRoomDeposit(data);
-                dispatch(setIsLoading(false));
+                const [motels, roomsDeposit] = await Promise.all([
+                    getAllMotel(),
+                    listSearchRoomDeposit(search),
+                ]);
+                setListNameMotel(motels.data);
+                setRoomDeposit(roomsDeposit.data);
             } catch (error) {
-                // message.error(error);
+                //
             }
-        };
-        handleFetchData();
+            dispatch(setIsLoading(false));
+        })();
     }, []);
 
     const onClickMotel = async (value: string) => {
@@ -426,6 +427,7 @@ const ListRoom = ({ motelId }: Props) => {
                 dataSource={rooms}
                 columns={columns}
                 pagination={{ pageSize: 5 }}
+                loading={loading}
             />
             <div>
                 <Modal
