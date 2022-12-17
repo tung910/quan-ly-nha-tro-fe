@@ -7,10 +7,10 @@ import {
     Form,
     Input,
     InputNumber,
+    Modal,
     PageHeader,
     Row,
     Select,
-    message,
 } from 'antd';
 import classNames from 'classnames/bind';
 import moment from 'moment';
@@ -28,8 +28,7 @@ import { MESSAGES } from '~/constants/message.const';
 import { IBooking } from '~/types/Booking.type';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
-import { convertDate, generatePriceToVND, useGetParam } from '~/utils/helper';
-
+import { convertDate, useGetParam } from '~/utils/helper';
 import styles from './Booking.module.scss';
 
 const cx = classNames.bind(styles);
@@ -101,10 +100,22 @@ const AddEditBooking = () => {
         };
 
         try {
-            await createRoomDeposit(result);
-            notification({ message: MESSAGES.ADD_SUCCESS });
-            goBack();
-            return;
+            if (values.dateOfArrival < values.bookingDate) {
+                Modal.error({
+                    title: 'Thông báo',
+                    content: 'Ngày nhận phòng phải lớn hơn ngày đặt phòng',
+                });
+            } else if (values.bookingAmount <= 500000) {
+                Modal.error({
+                    title: 'Thông báo',
+                    content: 'Số tiền cọc tối thiểu phải từ 500.000đ trở lên',
+                });
+            } else {
+                await createRoomDeposit(result);
+                notification({ message: MESSAGES.ADD_SUCCESS });
+                goBack();
+                return;
+            }
         } catch (error: any) {
             // message.error(error.messages);
         }
@@ -295,8 +306,13 @@ const AddEditBooking = () => {
                                 labelAlign='left'
                                 label={<>Tiền cọc</>}
                                 colon={false}
-                                initialValue={generatePriceToVND(0)}
                                 name='bookingAmount'
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Vui lòng nhập tiền cọc',
+                                    },
+                                ]}
                             >
                                 <InputNumber
                                     formatter={(value) =>

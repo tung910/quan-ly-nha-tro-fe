@@ -4,7 +4,6 @@ import {
     Col,
     DatePicker,
     Form,
-    Modal,
     PageHeader,
     Row,
     Select,
@@ -121,13 +120,6 @@ const PaymentHistory = () => {
             });
 
             setdataSource(data);
-
-            if (data) {
-                Modal.success({
-                    title: 'Tìm kiếm',
-                    content: `Hiện tại đang có ${data.length} kết quả`,
-                });
-            }
         };
         calculatorData();
     };
