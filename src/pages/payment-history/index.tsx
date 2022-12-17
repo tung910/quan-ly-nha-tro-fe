@@ -15,9 +15,12 @@ import { useEffect, useState } from 'react';
 import { listCalculator } from '~/api/calculator.api';
 import { getAllMotel } from '~/api/motel.api';
 import { getListRooms, getRooms } from '~/api/room.api';
+import { useAppDispatch } from '~/app/hooks';
+import { setIsLoading } from '~/feature/service/appSlice';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { generatePriceToVND } from '~/utils/helper';
+
 import styles from './PaymentHistory.module.scss';
 
 const cx = classNames.bind(styles);
@@ -27,6 +30,7 @@ const PaymentHistory = () => {
     const [listRooms, setListRooms] = useState<RoomType[]>([]);
     const [dataSource, setdataSource] = useState<any>([]);
     const thisMonth = moment(new Date()).format('MM');
+    const dispatch = useAppDispatch();
 
     const columns = [
         {
@@ -87,6 +91,7 @@ const PaymentHistory = () => {
 
     useEffect(() => {
         const handleFetchData = async () => {
+            dispatch(setIsLoading(true));
             try {
                 const [listMotels, listRooms, dataSource] = await Promise.all([
                     getAllMotel(),
@@ -101,6 +106,7 @@ const PaymentHistory = () => {
             } catch (error) {
                 // message.error(error);
             }
+            dispatch(setIsLoading(false));
         };
         handleFetchData();
     }, [thisMonth]);
