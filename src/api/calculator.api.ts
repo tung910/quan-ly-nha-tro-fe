@@ -34,3 +34,6 @@ export const paymentMoney = (data: any, id: string) => {
 export const paymentMoneyVNPay = (data: any) => {
     return instance.post(`/calculator-money/create_payment_url`, data);
 };
+export const sendEmailPayment = (data: any) => {
+    return instance.post(`/calculator-money/send-email`, data);
+};
