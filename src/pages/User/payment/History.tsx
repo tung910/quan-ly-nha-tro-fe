@@ -8,11 +8,12 @@ import {
     Typography,
 } from 'antd';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
     listCalculator,
     paymentMoney,
     paymentMoneyVNPay,
+    sendEmailPayment,
 } from '~/api/calculator.api';
 import { useAppDispatch, useAppSelector } from '~/app/hooks';
 import notification from '~/components/notification';
@@ -70,6 +71,19 @@ const History = () => {
             };
             if (orderInfo.split('=')[1]) {
                 paymentMoney(data, orderInfo.split('=')[1]).then(async () => {
+                    const payload = {
+                        email: user.email,
+                        name: user.name,
+                        roomName: orderInfo.split('_')[0],
+                        payer: user.name,
+                        payType: cardType,
+                        priceRoom: generatePriceToVND(+amount),
+                        date:
+                            moment(Date.now()).format('M') +
+                            '/' +
+                            moment(Date.now()).format('Y'),
+                    };
+                    await sendEmailPayment(payload);
                     await notification({
                         message: STATUS_CODE_VNPAY['0_0'],
                     });
@@ -104,7 +118,7 @@ const History = () => {
         const value = {
             amount: +payment.totalAmount / 100,
             bankCode: '',
-            orderInfo: `${payment.motelRoomId.roomName} thanh toán tiến trọ tháng ${payment.month}/${payment.year} với mã thanh toán=${payment._id} `,
+            orderInfo: `${payment.motelID.name}-${payment.motelRoomId.roomName} _thanh toán tiến trọ tháng ${payment.month}/${payment.year} với mã thanh toán=${payment._id} `,
             orderType: 'billpayment',
         };
         const { data } = await paymentMoneyVNPay(value);
