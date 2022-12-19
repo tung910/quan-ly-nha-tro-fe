@@ -5,10 +5,12 @@ import {
     DatePicker,
     Form,
     Input,
-    InputNumber, message, Row,
+    InputNumber,
+    Row,
     Select,
     Upload,
-    UploadProps
+    UploadProps,
+    message,
 } from 'antd';
 import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload';
 import classNames from 'classnames/bind';
@@ -73,6 +75,7 @@ const FormCreate = ({
     const [roomDeposit, setRoomDeposit] = useState<any>([]);
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch();
+    const { getFieldDecorator } = form;
 
     const handleChange: UploadProps['onChange'] = (
         info: UploadChangeParam<UploadFile>
@@ -335,7 +338,7 @@ const FormCreate = ({
                         ]}
                         validateTrigger={['onBlur', 'onChange']}
                     >
-                        <Input style={{ width: 400 }} />
+                        <Input type='email' style={{ width: 400 }} />
                     </Form.Item>
                 </Col>
             </Row>
@@ -468,7 +471,7 @@ const FormCreate = ({
                             parser={(value: any) =>
                                 value.replace(/\$\s?|(,*)/g, '')
                             }
-                            addonAfter='VNĐ'
+                            addonAfter='VND'
                             style={{ width: 400 }}
                             min={0}
                             maxLength={10}
@@ -485,7 +488,7 @@ const FormCreate = ({
                         labelAlign='left'
                         name='licensePlates'
                     >
-                        <Input style={{ width: 400 }} maxLength={9}/>
+                        <Input style={{ width: 400 }} maxLength={9} />
                     </Form.Item>
                 </Col>
                 <Col span={8} offset={4}>

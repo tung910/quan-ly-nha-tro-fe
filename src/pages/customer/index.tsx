@@ -151,11 +151,6 @@ const CustomerRedirect = () => {
                                   DateFormat.DATE_DEFAULT
                               ),
                         timeCoin: values?.timeCoin,
-                        lateDate: values?.lateDate
-                            ? moment(values.lateDate).format(
-                                  DateFormat.DATE_DEFAULT
-                              )
-                            : undefined,
                     },
                 };
                 const sendEmail = {

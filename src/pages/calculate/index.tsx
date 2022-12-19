@@ -26,8 +26,8 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-    calculatorMoney,
     CalculatorMoneyAll,
+    calculatorMoney,
     getCalculator,
     listCalculator,
     paymentMoney,
@@ -43,6 +43,7 @@ import { DateFormat } from '~/constants/const';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { generatePriceToVND } from '~/utils/helper';
+
 import styles from './Calculate.module.scss';
 
 const cx = classNames.bind(styles);
@@ -416,12 +417,6 @@ const Calculate = () => {
                                     colon={false}
                                     labelAlign='left'
                                     name='motelID'
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Vui lòng chọn!',
-                                        },
-                                    ]}
                                 >
                                     <Select
                                         placeholder='Mời bạn chọn nhà'
@@ -446,12 +441,6 @@ const Calculate = () => {
                                     colon={false}
                                     labelAlign='left'
                                     name='roomID'
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Vui lòng chọn!',
-                                        },
-                                    ]}
                                 >
                                     <Select
                                         placeholder='Mời bạn chọn phòng'
@@ -727,7 +716,7 @@ const Calculate = () => {
                                                 ''
                                             )
                                         }
-                                        addonAfter='VNĐ'
+                                        addonAfter='VND'
                                     />
                                 </Form.Item>
                                 {payer && (
