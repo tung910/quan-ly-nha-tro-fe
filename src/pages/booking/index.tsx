@@ -37,6 +37,7 @@ import { IBooking } from '~/types/Booking.type';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { convertDate, generatePriceToVND } from '~/utils/helper';
+
 import styles from './Booking.module.scss';
 
 const cx = classNames.bind(styles);
@@ -354,9 +355,6 @@ const BookingRoomDeposit = () => {
                                 >
                                     Thêm mới
                                 </Link>
-                            </Button>
-                            <Button type='primary' icon={<FileExcelOutlined />}>
-                                Xuất file excel
                             </Button>
                         </Col>
                     </Row>

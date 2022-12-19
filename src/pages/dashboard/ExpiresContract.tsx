@@ -27,6 +27,11 @@ const ExpiresContract = () => {
             dataIndex: 'email',
             key: 'email',
         },
+        {
+            title: 'Số điện thoại',
+            dataIndex: 'phone',
+            key: 'phone',
+        },
     ];
 
     useEffect(() => {

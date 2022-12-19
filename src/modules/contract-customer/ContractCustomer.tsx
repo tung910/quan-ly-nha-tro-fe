@@ -74,19 +74,6 @@ const ContractCustomer = ({ onSave, form, roomRentID }: Props) => {
                             <Input style={{ width: 400 }} suffix={'Tháng'} />
                         </Form.Item>
                     </Col>
-                    <Col span={8} offset={4}>
-                        <Form.Item
-                            label={<>Ngày kết thúc</>}
-                            colon={false}
-                            labelAlign='left'
-                            name='lateDate'
-                        >
-                            <DatePicker
-                                format={DateFormat.DATE_DEFAULT}
-                                style={{ width: 400 }}
-                            />
-                        </Form.Item>
-                    </Col>
                 </Row>
                 {roomRentID ? (
                     <Button

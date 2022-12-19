@@ -179,7 +179,7 @@ const AddRoom = () => {
                                                 ''
                                             )
                                         }
-                                        addonAfter='VNĐ'
+                                        addonAfter='VND'
                                         maxLength={11}
                                     />
                                 </Form.Item>

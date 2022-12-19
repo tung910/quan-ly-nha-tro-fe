@@ -187,7 +187,7 @@ const EditRoom = () => {
                                                 ''
                                             )
                                         }
-                                        addonAfter='VNĐ'
+                                        addonAfter='VND'
                                     />
                                 </Form.Item>
                             </Col>

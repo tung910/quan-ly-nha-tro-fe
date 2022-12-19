@@ -109,7 +109,7 @@ const defaultColumns: (ColumnTypes[number] & {
         width: 500,
     },
     {
-        title: 'Đơn giá (VNĐ)',
+        title: 'Đơn giá (VND)',
         dataIndex: 'unitPrice',
         key: 'unitPrice',
         editable: true,

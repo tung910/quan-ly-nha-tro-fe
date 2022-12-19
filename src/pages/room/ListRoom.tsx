@@ -271,26 +271,6 @@ const ListRoom = ({ motelId }: Props) => {
             },
         },
         {
-            title: 'Ngày kết thúc',
-            dataIndex: 'roomRentID',
-            key: 'roomRentID',
-            render: (roomRent) => {
-                return (
-                    <>
-                        {roomRent ? (
-                            roomRent?.contract?.lateDate ? (
-                                roomRent?.contract?.lateDate
-                            ) : (
-                                <i>Không xác định</i>
-                            )
-                        ) : (
-                            <i>N/A</i>
-                        )}
-                    </>
-                );
-            },
-        },
-        {
             title: 'Hợp đồng',
             dataIndex: 'roomRentID',
             key: 'roomRentID',

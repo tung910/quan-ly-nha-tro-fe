@@ -35,6 +35,11 @@ const TenantAccount = () => {
             key: 'email',
         },
         {
+            title: 'Số điện thoại',
+            dataIndex: 'phone',
+            key: 'phone',
+        },
+        {
             title: '',
             dataIndex: '_id',
             key: '_id',

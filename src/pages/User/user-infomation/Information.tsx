@@ -98,7 +98,7 @@ const Information = ({ form, imageUrl }: any) => {
                 ]}
                 validateTrigger={['onChange']}
             >
-                <Input style={{ width: 400 }} />
+                <Input type='email' style={{ width: 400 }} />
             </Form.Item>
             <Form.Item
                 label={<>Số điện thoại</>}

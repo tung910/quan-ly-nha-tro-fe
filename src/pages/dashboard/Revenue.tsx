@@ -100,12 +100,12 @@ const Revenue = (props: Props) => {
             labels: [...revenueForTheMonth.map((a) => `Tháng ${a.month}`)],
             datasets: [
                 {
-                    label: 'Doanh thu tháng (VNĐ)',
+                    label: 'Doanh thu tháng (VND)',
                     data: [...revenueForTheMonth.map((a) => a.value)],
                     backgroundColor: '#1890ff',
                 },
                 {
-                    label: 'Chưa thanh toán trong tháng (VNĐ)',
+                    label: 'Chưa thanh toán trong tháng (VND)',
                     data: [...unpaidInTheMonth.map((a) => a.value)],
                     backgroundColor: '#f5222d',
                 },
@@ -115,7 +115,7 @@ const Revenue = (props: Props) => {
     );
 
     return (
-        <Card title='Doanh thu hàng tháng (VNĐ)' bordered={true}>
+        <Card title='Doanh thu hàng tháng (VND)' bordered={true}>
             <Row gutter={[8, 8]}>
                 <Col span={6}>
                     <Form.Item

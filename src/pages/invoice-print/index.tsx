@@ -57,13 +57,13 @@ const Invoice = () => {
                                     {generatePriceToVND(
                                         dataInvoicePrint[0].totalAmount
                                     )}{' '}
-                                    VNĐ
+                                    VND
                                 </td>
                                 <td className='col2'>
                                     {generatePriceToVND(
                                         dataInvoicePrint[0].totalAmount
                                     )}{' '}
-                                    VNĐ
+                                    VND
                                 </td>
                             </tr>
                         </tbody>
@@ -76,7 +76,7 @@ const Invoice = () => {
                                     {generatePriceToVND(
                                         dataInvoicePrint[0].payAmount
                                     )}{' '}
-                                    VNĐ
+                                    VND
                                 </td>
                             </tr>
                             <tr>
@@ -87,7 +87,7 @@ const Invoice = () => {
                                     {generatePriceToVND(
                                         dataInvoicePrint[0].remainAmount
                                     )}{' '}
-                                    VNĐ
+                                    VND
                                 </td>
                             </tr>
                             <tr>
@@ -99,7 +99,7 @@ const Invoice = () => {
                                         {generatePriceToVND(
                                             dataInvoicePrint[0].remainAmount
                                         )}{' '}
-                                        VNĐ
+                                        VND
                                     </span>
                                 </td>
                             </tr>

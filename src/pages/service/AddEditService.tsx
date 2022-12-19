@@ -178,7 +178,7 @@ const AddEditService = () => {
                                 parser={(value: any) =>
                                     value.replace(/\$\s?|(,*)/g, '')
                                 }
-                                addonAfter='VNĐ'
+                                addonAfter='VND'
                                 style={{ width: 380 }}
                                 maxLength={8}
                                 min={0}

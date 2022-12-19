@@ -22,5 +22,4 @@ export type TypeCustomer = {
     dateLate: string;
     coinNumber: string;
     timeCoin: string;
-    lateDate: string;
 };

@@ -26,7 +26,7 @@ const columnsOweRoomFees: ColumnsType = [
         key: 'month',
     },
     {
-        title: 'Số tiền (VNĐ)',
+        title: 'Số tiền (VND)',
         dataIndex: 'remainAmount',
         key: 'remainAmount',
         render: (remainAmount: any) => {
