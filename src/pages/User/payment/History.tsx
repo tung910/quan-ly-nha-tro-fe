@@ -31,6 +31,7 @@ const History = () => {
     const [orderInfo] = useGetParam('vnp_OrderInfo');
     const [amount] = useGetParam('vnp_Amount');
     const [cardType] = useGetParam('vnp_CardType');
+    const [orderId] = useGetParam('vnp_TxnRef');
     const { user } = useAppSelector((state) => state.user);
     const dispatch = useAppDispatch();
 
@@ -82,6 +83,7 @@ const History = () => {
                             moment(Date.now()).format('M') +
                             '/' +
                             moment(Date.now()).format('Y'),
+                        orderId,
                     };
                     await sendEmailPayment(payload);
                     await notification({
