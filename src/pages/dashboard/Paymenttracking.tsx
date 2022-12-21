@@ -151,7 +151,7 @@ const PaymentTracking = ({ newDataPaymentChecking, setDate }: Props) => {
                 <Table
                     dataSource={dataPayment}
                     columns={columnsPaymentHistory}
-                    rowKey='title'
+                    rowKey='_id'
                 />
             </Modal>
         </div>
