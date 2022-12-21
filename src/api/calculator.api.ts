@@ -13,6 +13,9 @@ export const listCalculator = (month?: any, roomId?: string) => {
     }
     return instance.post('/calculator-money/list' + url, options);
 };
+export const detailPaymentHistory = (data: any) => {
+    return instance.post('/calculator-money/list', { data });
+};
 export const getCalculator = (id: string) => {
     return instance.get(`/calculator-money/detail/${id}`);
 };

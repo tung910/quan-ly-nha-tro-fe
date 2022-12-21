@@ -1,7 +1,8 @@
-import { Card, DatePicker, Form, Row } from 'antd';
+import { Card, DatePicker, Form, Modal, Row } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
 import { memo, useEffect, useState } from 'react';
+import { detailPaymentHistory } from '~/api/calculator.api';
 import Table from '~/components/table';
 import { DateFormat } from '~/constants/const';
 import { generatePriceToVND } from '~/utils/helper';
@@ -11,7 +12,10 @@ type Props = {
     setDate: any;
 };
 const PaymentTracking = ({ newDataPaymentChecking, setDate }: Props) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataSource, setdataSource] = useState([]);
+    const [dataPayment, setdataPayment] = useState<any>([]);
+
     useEffect(() => {
         const array: any = [];
 
@@ -19,17 +23,53 @@ const PaymentTracking = ({ newDataPaymentChecking, setDate }: Props) => {
             title: 'Tổng số hóa đơn đã thanh toán',
             newTotalBill: newDataPaymentChecking?.totalBillPaid,
             newTotalAmout: newDataPaymentChecking?.totalPaymentAmount,
+            paymentStatus: true,
         });
 
         array.push({
             title: 'Tổng số hóa đơn chưa thanh toán',
             newTotalBill: newDataPaymentChecking?.totalBillUnpaid,
             newTotalAmout: newDataPaymentChecking?.totalPaymentUnpaid,
+            paymentStatus: false,
         });
 
         setdataSource(array);
     }, [newDataPaymentChecking]);
+    const onDetailPaymentHistory = async (paymentStatus: any) => {
+        const { data } = await detailPaymentHistory({
+            month: newDataPaymentChecking.month,
+            year: newDataPaymentChecking.year,
+            paymentStatus,
+        });
+        setdataPayment(data);
 
+        setIsModalOpen(true);
+    };
+    const columnsPaymentHistory: ColumnsType = [
+        {
+            title: 'Nhà',
+            dataIndex: ['motelID', 'name'],
+            key: 'name',
+        },
+        {
+            title: 'Phòng',
+            dataIndex: ['roomRentalDetailID', 'roomName'],
+            key: 'roomName',
+        },
+        {
+            title: 'Khách thuê',
+            dataIndex: ['roomRentalDetailID', 'customerName'],
+            key: 'customerName',
+        },
+        {
+            title: 'Số tiền',
+            dataIndex: 'totalAmount',
+            key: 'totalAmount',
+            render: (totalAmount: number) => {
+                return <>{generatePriceToVND(+totalAmount)}</>;
+            },
+        },
+    ];
     const columnsPaymentTracking: ColumnsType = [
         {
             title: 'Nội dung',
@@ -49,6 +89,14 @@ const PaymentTracking = ({ newDataPaymentChecking, setDate }: Props) => {
                 return <>{generatePriceToVND(+newTotalAmout)}</>;
             },
         },
+        {
+            title: '',
+            dataIndex: 'paymentStatus',
+            key: 'paymentStatus',
+            render: (paymentStatus) => (
+                <a onClick={() => onDetailPaymentHistory(paymentStatus)}>Xem</a>
+            ),
+        },
     ];
 
     return (
@@ -64,11 +112,11 @@ const PaymentTracking = ({ newDataPaymentChecking, setDate }: Props) => {
                         >
                             <DatePicker
                                 picker='month'
-                                onChange={(e: any) =>
+                                onChange={(e: any) => {
                                     setDate(
                                         moment(e).format(DateFormat.DATE_M_Y)
-                                    )
-                                }
+                                    );
+                                }}
                                 clearIcon={null}
                                 format={DateFormat.DATE_M_Y}
                             />
@@ -81,6 +129,19 @@ const PaymentTracking = ({ newDataPaymentChecking, setDate }: Props) => {
                     rowKey='title'
                 />
             </Card>
+            <Modal
+                open={isModalOpen}
+                title='Chi tiết'
+                onOk={() => setIsModalOpen(false)}
+                onCancel={() => setIsModalOpen(false)}
+                width={1000}
+            >
+                <Table
+                    dataSource={dataPayment}
+                    columns={columnsPaymentHistory}
+                    rowKey='title'
+                />
+            </Modal>
         </div>
     );
 };

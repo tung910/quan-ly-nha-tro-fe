@@ -573,7 +573,7 @@ const Calculate = () => {
                                 <Table.Summary.Row
                                     style={{ fontWeight: 'bold' }}
                                 >
-                                    <Table.Summary.Cell index={0} colSpan={6}>
+                                    <Table.Summary.Cell index={0} colSpan={7}>
                                         <Text>Tổng</Text>
                                     </Table.Summary.Cell>
 
