@@ -75,6 +75,22 @@ const PaymentTracking = ({ newDataPaymentChecking, setDate }: Props) => {
                 return <>{generatePriceToVND(+totalAmount)}</>;
             },
         },
+        {
+            title: 'Đã trả',
+            dataIndex: 'payAmount',
+            key: 'payAmount',
+            render: (payAmount: number) => {
+                return <>{generatePriceToVND(+payAmount)}</>;
+            },
+        },
+        {
+            title: 'Còn nợ',
+            dataIndex: 'remainAmount',
+            key: 'remainAmount',
+            render: (remainAmount: number) => {
+                return <>{generatePriceToVND(+remainAmount)}</>;
+            },
+        },
     ];
     const columnsPaymentTracking: ColumnsType = [
         {
