@@ -15,6 +15,12 @@ const PaymentTracking = ({ newDataPaymentChecking, setDate }: Props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataSource, setdataSource] = useState([]);
     const [dataPayment, setdataPayment] = useState<any>([]);
+    const [month, setMonth] = useState(
+        moment(new Date()).format(DateFormat.DATE_M)
+    );
+    const [year, setYear] = useState(
+        moment(new Date()).format(DateFormat.DATE_Y)
+    );
 
     useEffect(() => {
         const array: any = [];
@@ -35,14 +41,14 @@ const PaymentTracking = ({ newDataPaymentChecking, setDate }: Props) => {
 
         setdataSource(array);
     }, [newDataPaymentChecking]);
+
     const onDetailPaymentHistory = async (paymentStatus: any) => {
         const { data } = await detailPaymentHistory({
-            month: newDataPaymentChecking.month,
-            year: newDataPaymentChecking.year,
+            month,
+            year,
             paymentStatus,
         });
         setdataPayment(data);
-
         setIsModalOpen(true);
     };
     const columnsPaymentHistory: ColumnsType = [
@@ -115,6 +121,12 @@ const PaymentTracking = ({ newDataPaymentChecking, setDate }: Props) => {
                                 onChange={(e: any) => {
                                     setDate(
                                         moment(e).format(DateFormat.DATE_M_Y)
+                                    );
+                                    setMonth(
+                                        moment(e).format(DateFormat.DATE_M)
+                                    );
+                                    setYear(
+                                        moment(e).format(DateFormat.DATE_Y)
                                     );
                                 }}
                                 clearIcon={null}
