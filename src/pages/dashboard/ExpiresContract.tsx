@@ -50,7 +50,11 @@ const ExpiresContract = () => {
     return (
         <div>
             <Card title='Danh sách khách hàng' bordered={true}>
-                <Table columns={ColumnsData} dataSource={listAccount} />
+                <Table
+                    columns={ColumnsData}
+                    dataSource={listAccount}
+                    pagination={{ pageSize: 5 }}
+                />
             </Card>
         </div>
     );

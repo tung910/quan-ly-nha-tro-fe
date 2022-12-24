@@ -29,6 +29,7 @@ import { IBooking } from '~/types/Booking.type';
 import { MotelType } from '~/types/MotelType';
 import { RoomType } from '~/types/RoomType';
 import { convertDate, useGetParam } from '~/utils/helper';
+
 import styles from './Booking.module.scss';
 
 const cx = classNames.bind(styles);
@@ -74,7 +75,6 @@ const AddEditBooking = () => {
                               DateFormat.DATE_M_D_Y
                           )
                         : undefined,
-                    telephone: +values.telephone,
                 },
                 isUpdate: true,
             };
@@ -94,7 +94,6 @@ const AddEditBooking = () => {
                 dateOfArrival: values.dateOfArrival
                     ? convertDate(values.dateOfArrival, DateFormat.DATE_M_D_Y)
                     : undefined,
-                telephone: +values.telephone,
             },
             isUpdate: false,
         };
@@ -134,7 +133,7 @@ const AddEditBooking = () => {
                     bookingAmount: data.bookingAmount,
                     motelId: data.motelId,
                     motelRoomId: data.motelRoomId,
-                    telephone: +data.telephone,
+                    telephone: data.telephone,
                     fullName: data.fullName,
                     dateOfArrival: moment(data.dateOfArrival),
                     hasCancel: data.hasCancel,

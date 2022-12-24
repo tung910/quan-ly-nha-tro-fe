@@ -1,5 +1,4 @@
-import { LockOutlined } from '@ant-design/icons';
-import { Button, Modal, PageHeader, Space } from 'antd';
+import { Modal, PageHeader, Tag } from 'antd';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { getAllAccount } from '~/api/auth.api';
@@ -40,6 +39,20 @@ const TenantAccount = () => {
             key: 'phone',
         },
         {
+            title: 'Trạng thái',
+            dataIndex: '_id',
+            key: '_id',
+            render: (_: string, item: any) => {
+                const tag = {
+                    message: !item.status ? item.message : 'Đang ở',
+                    color: !item.status ? 'red' : 'green',
+                };
+
+                return <Tag color={tag.color}>{tag.message}</Tag>;
+            },
+            width: '5%',
+        },
+        /*   {
             title: '',
             dataIndex: '_id',
             key: '_id',
@@ -57,16 +70,16 @@ const TenantAccount = () => {
                     </Space>
                 );
             },
-        },
+        }, */
     ];
-    const handleLockAccount = async (id: string) => {
+    /*   const handleLockAccount = async (id: string) => {
         Modal.confirm({
             centered: true,
             title: `Khi khóa tài khoản thì tài khoản này không thể đăng nhập được nữa. Bạn có muốn khóa không?`,
             cancelText: 'Hủy',
             okText: 'Khóa',
         });
-    };
+    }; */
     useEffect(() => {
         const getAccount = async () => {
             const acc: any = [];
