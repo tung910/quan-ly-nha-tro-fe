@@ -18,6 +18,7 @@ import {
     Select,
     Space,
     Table,
+    Tag,
     Tooltip,
     Typography,
 } from 'antd';
@@ -164,6 +165,24 @@ const Calculate = () => {
                 return <>{generatePriceToVND(+remainAmount)}</>;
             },
         },
+        /*   {
+            title: 'Trạng thái',
+            dataIndex: '_id',
+            key: '_id',
+            render: (_: string, item: any) => {
+                const tag = {
+                    message: !item?.roomRentalDetailID?.userID?.status
+                        ? item?.roomRentalDetailID?.userID?.message
+                        : 'Đang ở',
+                    color: !item?.roomRentalDetailID?.userID?.status
+                        ? 'red'
+                        : 'green',
+                };
+
+                return <Tag color={tag.color}>{tag.message}</Tag>;
+            },
+            width: '5%',
+        }, */
     ];
 
     const showModal = () => {
@@ -710,13 +729,12 @@ const Calculate = () => {
                                                 ','
                                             )
                                         }
-                                        parser={(value) =>
-                                            ` ${value}`.replace(
-                                                /\$\s?|(,*)/g,
-                                                ''
-                                            )
+                                        parser={(value: any) =>
+                                            value.replace(/\$\s?|(,*)/g, '')
                                         }
                                         addonAfter='VND'
+                                        maxLength={10}
+                                        min={0}
                                     />
                                 </Form.Item>
                                 {payer && (

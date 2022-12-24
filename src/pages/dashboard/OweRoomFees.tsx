@@ -60,6 +60,7 @@ const OweRoomFees = ({ dataOwe }: Props) => {
                     dataSource={dataSource}
                     columns={columnsOweRoomFees}
                     rowKey='_id'
+                    pagination={{ pageSize: 5 }}
                 />
             </Card>
         </div>

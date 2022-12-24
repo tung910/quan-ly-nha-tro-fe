@@ -24,16 +24,15 @@ const PaymentTracking = ({ newDataPaymentChecking, setDate }: Props) => {
 
     useEffect(() => {
         const array: any = [];
-
         array.push({
-            title: 'Tổng số hóa đơn đã thanh toán',
+            title: 'Tổng số hóa đơn đã thanh toán hết',
             newTotalBill: newDataPaymentChecking?.totalBillPaid,
             newTotalAmout: newDataPaymentChecking?.totalPaymentAmount,
             paymentStatus: true,
         });
 
         array.push({
-            title: 'Tổng số hóa đơn chưa thanh toán',
+            title: 'Tổng số hóa đơn chưa thanh toán và còn thiếu',
             newTotalBill: newDataPaymentChecking?.totalBillUnpaid,
             newTotalAmout: newDataPaymentChecking?.totalPaymentUnpaid,
             paymentStatus: false,

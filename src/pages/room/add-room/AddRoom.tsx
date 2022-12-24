@@ -173,14 +173,12 @@ const AddRoom = () => {
                                                 ','
                                             )
                                         }
-                                        parser={(value) =>
-                                            ` ${value}`.replace(
-                                                /\$\s?|(,*)/g,
-                                                ''
-                                            )
+                                        parser={(value: any) =>
+                                            value.replace(/\$\s?|(,*)/g, '')
                                         }
                                         addonAfter='VND'
                                         maxLength={11}
+                                        min={0}
                                     />
                                 </Form.Item>
                             </Col>

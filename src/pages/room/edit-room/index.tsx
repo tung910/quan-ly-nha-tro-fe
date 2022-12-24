@@ -181,13 +181,11 @@ const EditRoom = () => {
                                                 ','
                                             )
                                         }
-                                        parser={(value) =>
-                                            ` ${value}`.replace(
-                                                /\$\s?|(,*)/g,
-                                                ''
-                                            )
+                                        parser={(value: any) =>
+                                            value.replace(/\$\s?|(,*)/g, '')
                                         }
                                         addonAfter='VND'
+                                        min={0}
                                     />
                                 </Form.Item>
                             </Col>
